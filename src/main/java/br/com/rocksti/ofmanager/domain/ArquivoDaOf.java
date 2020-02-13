@@ -32,7 +32,7 @@ public class ArquivoDaOf implements Serializable {
     @JsonIgnoreProperties("arquivoDaOfs")
     private ServicoOf servicoOf;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE})
     @JsonIgnoreProperties("arquivoDaOfs")
     private Arquivo arquivo;
 

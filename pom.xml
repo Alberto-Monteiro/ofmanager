@@ -5,7 +5,7 @@
 
     <groupId>br.com.rocksti.ofmanager</groupId>
     <artifactId>ofmanager</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.5-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>Ofmanager</name>
 
@@ -329,6 +329,12 @@
             <scope>test</scope>
         </dependency>
         <!-- jhipster-needle-maven-add-dependency -->
+
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>3.11</version>
+        </dependency>
     </dependencies>
 
     <build>

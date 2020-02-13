@@ -6,7 +6,7 @@
     <!--
         Added the constraints for entity ArquivoDaOf.
     -->
-    <changeSet id="20200213170405-2" author="jhipster">
+    <changeSet id="20200210200427-2" author="jhipster">
         
         <addForeignKeyConstraint baseColumnNames="servico_of_id"
                                  baseTableName="arquivo_da_of"

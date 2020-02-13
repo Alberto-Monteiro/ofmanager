@@ -1,0 +1,101 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate [formGroup]="editForm">
+            <h2 id="of-servico-of-heading" jhiTranslate="ofmanagerApp.servicoOf.home.createOrEditLabel">Create or edit a
+                Servico Of</h2>
+            <div>
+                <of-alert-error></of-alert-error>
+                <of-alert></of-alert>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="ofmanagerApp.servicoOf.numero" for="field_numero">Numero</label>
+                    <input type="number" class="form-control" name="numero" id="field_numero" formControlName="numero"/>
+                    <div
+                        *ngIf="editForm.get('numero')!.invalid && (editForm.get('numero')!.dirty || editForm.get('numero')!.touched)">
+                        <small class="form-text text-danger" *ngIf="editForm.get('numero')?.errors?.required"
+                               jhiTranslate="entity.validation.required">
+                            This field is required.
+                        </small>
+                        <small class="form-text text-danger" [hidden]="!editForm.get('numero')?.errors?.number"
+                               jhiTranslate="entity.validation.number">
+                            This field should be a number.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_lista_arquivo">Listas dos arquivos</label>
+                    <textarea rows="10" class="form-control" name="listaDeAqruivos" id="field_lista_arquivo"
+                              formControlName="listaDeArquivo"></textarea>
+                </div>
+                <button type="button" id="cancel-save" class="btn btn-secondary form-group" (click)="previousState()">
+                    <fa-icon icon="chevron-left"></fa-icon>&nbsp;<span>Voltar</span>
+                </button>
+                <button type="button" id="processar" class="btn btn-primary form-group" (click)="processar()"
+                        [disabled]="editForm.invalid">
+                    <fa-icon icon="sync"></fa-icon>&nbsp;<span>Processar</span>
+                </button>
+                <button type="button" id="download" class="btn btn-success form-group" (click)="download()"
+                        [disabled]="!ordemFornecimento!.id">
+                    <fa-icon icon="download"></fa-icon>&nbsp;<span>Download</span>
+                </button>
+                <div *ngFor="let mapArquivoDaOf of ordemFornecimento!.mapArquivoDaOf! | keyvalue"
+                     class="card form-group">
+                    <div class="card-header">
+                        {{mapArquivoDaOf.key}}
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li *ngFor="let arquivoDaOf of mapArquivoDaOf!.value!" class="list-group-item">
+                            <div class="row">
+                                <div class="col"
+                                     [ngStyle]="{'background-color':arquivoDaOf.estadoArquivo === 'CRIANDO'?'#b3ff99':'#b9e2ff'}">
+                                    {{arquivoDaOf.arquivo.caminhoDoArquivo}}
+                                </div>
+                                <div class="col-md-3">
+                                    <div ngbDropdown class="d-inline-block">
+                                        <button style="width: 140px" class="btn btn-outline-primary"
+                                                [attr.id]="'dropdownMenuButtonComplexidade'+arquivoDaOf.id"
+                                                ngbDropdownToggle>{{arquivoDaOf.arquivo.complexidade}}</button>
+                                        <div ngbDropdownMenu
+                                             [attr.aria-labelledby]="'dropdownMenuButtonComplexidade'+arquivoDaOf.id">
+                                            <button ngbDropdownItem
+                                                    (click)="atualizaComplexidade(arquivoDaOf.arquivo, 'MUITO_BAIXA')">
+                                                Muito Baixa
+                                            </button>
+                                            <button ngbDropdownItem
+                                                    (click)="atualizaComplexidade(arquivoDaOf.arquivo, 'BAIXA')">Baixa
+                                            </button>
+                                            <button ngbDropdownItem
+                                                    (click)="atualizaComplexidade(arquivoDaOf.arquivo, 'MEDIA')">Media
+                                            </button>
+                                            <button ngbDropdownItem
+                                                    (click)="atualizaComplexidade(arquivoDaOf.arquivo, 'ALTA')">Alta
+                                            </button>
+                                            <button ngbDropdownItem
+                                                    (click)="atualizaComplexidade(arquivoDaOf.arquivo, 'MUITO_ALTA')">
+                                                Muito Alta
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div ngbDropdown class="d-inline-block">
+                                        <button style="width: 120px" class="btn btn-outline-primary"
+                                                [attr.id]="'dropdownMenuButtonSituacaoArquivo'+arquivoDaOf.id"
+                                                ngbDropdownToggle>{{arquivoDaOf.estadoArquivo === 'CRIANDO' ? 'Criando' : 'Editando'}}</button>
+                                        <div ngbDropdownMenu
+                                             [attr.aria-labelledby]="'dropdownMenuButtonSituacaoArquivo'+arquivoDaOf.id">
+                                            <button ngbDropdownItem
+                                                    (click)="atualizaEstadoArquivo(arquivoDaOf, 'CRIANDO')">Criando
+                                            </button>
+                                            <button ngbDropdownItem
+                                                    (click)="atualizaEstadoArquivo(arquivoDaOf, 'ALTERANDO')">Editando
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

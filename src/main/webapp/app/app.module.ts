@@ -7,6 +7,7 @@ import { OfmanagerCoreModule } from 'app/core/core.module';
 import { OfmanagerAppRoutingModule } from './app-routing.module';
 import { OfmanagerHomeModule } from './home/home.module';
 import { OfmanagerEntityModule } from './entities/entity.module';
+import {OfmanagerGerenciadorDeOfsModule} from "app/gerenciadordeofs/gerenciador-de-ofs.module";
 // jhipster-needle-angular-add-module-import JHipster will add new module here
 import { MainComponent } from './layouts/main/main.component';
 import { NavbarComponent } from './layouts/navbar/navbar.component';
@@ -21,6 +22,7 @@ import { ErrorComponent } from './layouts/error/error.component';
     OfmanagerSharedModule,
     OfmanagerCoreModule,
     OfmanagerHomeModule,
+    OfmanagerGerenciadorDeOfsModule,
     // jhipster-needle-angular-add-module JHipster will add new module here
     OfmanagerEntityModule,
     OfmanagerAppRoutingModule

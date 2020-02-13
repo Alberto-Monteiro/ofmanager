@@ -32,7 +32,7 @@ public class ServicoOf implements Serializable {
     @Column(name = "numero", nullable = false)
     private Integer numero;
 
-    @OneToMany(mappedBy = "servicoOf")
+    @OneToMany(mappedBy = "servicoOf", cascade = {CascadeType.ALL}, orphanRemoval = true)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<ArquivoDaOf> arquivoDaOfs = new HashSet<>();
 

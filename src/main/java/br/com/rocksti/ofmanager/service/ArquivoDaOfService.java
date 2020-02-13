@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Service Implementation for managing {@link ArquivoDaOf}.
@@ -79,5 +80,17 @@ public class ArquivoDaOfService {
     public void delete(Long id) {
         log.debug("Request to delete ArquivoDaOf : {}", id);
         arquivoDaOfRepository.deleteById(id);
+    }
+
+    public ArquivoDaOfDTO updateEstadoArquivo(ArquivoDaOfDTO arquivoDaOfDTO) {
+        AtomicReference<ArquivoDaOfDTO> arquivoDaOfDTO1 = new AtomicReference<>(null);
+
+        arquivoDaOfRepository.findById(arquivoDaOfDTO.getId()).ifPresent(arquivoDaOf -> {
+            arquivoDaOf.setEstadoArquivo(arquivoDaOfDTO.getEstadoArquivo());
+            arquivoDaOfRepository.save(arquivoDaOf);
+            arquivoDaOfDTO1.set(arquivoDaOfMapper.toDto(arquivoDaOf));
+        });
+
+        return arquivoDaOfDTO1.get();
     }
 }
