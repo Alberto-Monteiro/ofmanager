@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <!--
+        Added the constraints for entity ArquivoDaOf.
+    -->
+    <changeSet id="20200213170405-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="servico_of_id"
+                                 baseTableName="arquivo_da_of"
+                                 constraintName="fk_arquivo_da_of_servico_of_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="servico_of"/>
+
+        <addForeignKeyConstraint baseColumnNames="arquivo_id"
+                                 baseTableName="arquivo_da_of"
+                                 constraintName="fk_arquivo_da_of_arquivo_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="arquivo"/>
+
+    </changeSet>
+</databaseChangeLog>

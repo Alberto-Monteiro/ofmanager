@@ -1,0 +1,39 @@
+{
+    "name": "ServicoOf",
+    "fields": [
+        {
+            "fieldName": "userid",
+            "fieldType": "Long",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "numero",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "arquivoDaOf",
+            "otherEntityRelationshipName": "servicoOf",
+            "relationshipName": "arquivoDaOf"
+        }
+    ],
+    "changelogDate": "20200213170305",
+    "entityTableName": "servico_of",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "readOnly": false,
+    "clientRootFolder": "",
+    "applications": [
+        "ofmanager"
+    ]
+}

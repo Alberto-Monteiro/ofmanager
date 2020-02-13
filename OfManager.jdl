@@ -1,0 +1,50 @@
+application {
+  config {
+    baseName ofmanager,
+    packageName br.com.rocksti.ofmanager,
+    jhiPrefix of,
+    nativeLanguage pt-br,
+    languages [pt-br, en],
+    testFrameworks [protractor, cucumber, gatling]
+  }
+  entities all
+}
+
+relationship OneToMany {
+	ServicoOf to ArquivoDaOf
+    Arquivo to ArquivoDaOf
+}
+
+entity ServicoOf {
+	userid Long required
+	numero Integer required
+}
+
+entity ArquivoDaOf {
+	estadoArquivo EstadoArquivo
+}
+
+entity Arquivo {
+	caminhoDoArquivo String required
+    extensao String required
+    complexidade Complexidade
+}
+
+enum EstadoArquivo {
+	CRIANDO,
+    ALTERANDO
+}
+
+enum Complexidade {
+	MUITO_BAIXA,
+	BAIXA,
+	MEDIA,
+	ALTA,
+	MUITO_ALTA
+}
+
+dto all with mapstruct
+service all with serviceClass
+paginate all with pagination
+
+

@@ -1,0 +1,24 @@
+{
+  "ofmanagerApp": {
+    "servicoOf": {
+      "home": {
+        "title": "Servico Ofs",
+        "createLabel": "Create a new Servico Of",
+        "createOrEditLabel": "Create or edit a Servico Of",
+        "notFound": "No Servico Ofs found"
+      },
+      "created": "A new Servico Of is created with identifier {{ param }}",
+      "updated": "A Servico Of is updated with identifier {{ param }}",
+      "deleted": "A Servico Of is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Servico Of {{ id }}?"
+      },
+      "detail": {
+        "title": "Servico Of"
+      },
+      "userid": "Userid",
+      "numero": "Numero",
+      "arquivoDaOf": "Arquivo Da Of"
+    }
+  }
+}

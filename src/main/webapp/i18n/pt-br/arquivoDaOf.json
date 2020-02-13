@@ -1,0 +1,24 @@
+{
+  "ofmanagerApp": {
+    "arquivoDaOf": {
+      "home": {
+        "title": "Arquivo Da Ofs",
+        "createLabel": "Criar novo Arquivo Da Of",
+        "createOrEditLabel": "Criar ou editar Arquivo Da Of",
+        "notFound": "Nenhum Arquivo Da Of encontrado"
+      },
+      "created": "Um novo Arquivo Da Of foi criado com o identificador {{ param }}",
+      "updated": "Um Arquivo Da Of foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Arquivo Da Of foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Arquivo Da Of {{ id }}?"
+      },
+      "detail": {
+        "title": "Arquivo Da Of"
+      },
+      "estadoArquivo": "Estado Arquivo",
+      "servicoOf": "Servico Of",
+      "arquivo": "Arquivo"
+    }
+  }
+}

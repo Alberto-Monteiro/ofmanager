@@ -1,0 +1,73 @@
+<div>
+    <h2 id="page-heading">
+        <span jhiTranslate="ofmanagerApp.servicoOf.home.title">Servico Ofs</span>
+
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-servico-of" [routerLink]="['/servico-of/new']">
+            <fa-icon icon="plus"></fa-icon>
+            <span  jhiTranslate="ofmanagerApp.servicoOf.home.createLabel">
+            Create a new Servico Of
+            </span>
+        </button>
+    </h2>
+
+    <of-alert-error></of-alert-error>
+
+    <of-alert></of-alert>
+
+    <div class="alert alert-warning" id="no-result" *ngIf="servicoOfs?.length === 0">
+        <span jhiTranslate="ofmanagerApp.servicoOf.home.notFound">No servicoOfs found</span>
+    </div>
+
+    <div class="table-responsive" id="entities" *ngIf="servicoOfs?.length > 0">
+        <table class="table table-striped" aria-describedby="page-heading">
+            <thead>
+                <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="loadPage.bind(this)">
+                    <th scope="col"  jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="userid"><span jhiTranslate="ofmanagerApp.servicoOf.userid">Userid</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="numero"><span jhiTranslate="ofmanagerApp.servicoOf.numero">Numero</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let servicoOf of servicoOfs ;trackBy: trackId">
+                    <td><a [routerLink]="['/servico-of', servicoOf.id, 'view']">{{ servicoOf.id }}</a></td>
+                    <td>{{ servicoOf.userid }}</td>
+                    <td>{{ servicoOf.numero }}</td>
+                    <td class="text-right">
+                        <div class="btn-group">
+                            <button type="submit"
+                                    [routerLink]="['/servico-of', servicoOf.id, 'view']"
+                                    class="btn btn-info btn-sm">
+                                <fa-icon icon="eye"></fa-icon>
+                                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                            </button>
+
+                            <button type="submit"
+                                    [routerLink]="['/servico-of', servicoOf.id, 'edit']"
+                                    class="btn btn-primary btn-sm">
+                                <fa-icon icon="pencil-alt"></fa-icon>
+                                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                            </button>
+
+                            <button type="submit" (click)="delete(servicoOf)"
+                                    class="btn btn-danger btn-sm">
+                                <fa-icon icon="times"></fa-icon>
+                                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div *ngIf="servicoOfs?.length > 0">
+        <div class="row justify-content-center">
+            <jhi-item-count [page]="page" [total]="totalItems" [itemsPerPage]="itemsPerPage"></jhi-item-count>
+        </div>
+
+        <div class="row justify-content-center">
+            <ngb-pagination [collectionSize]="totalItems" [(page)]="ngbPaginationPage" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="loadPage($event)"></ngb-pagination>
+        </div>
+    </div>
+</div>

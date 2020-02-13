@@ -1,0 +1,61 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+            <h2 id="of-arquivo-heading" jhiTranslate="ofmanagerApp.arquivo.home.createOrEditLabel">Create or edit a Arquivo</h2>
+
+            <div>
+                <of-alert-error></of-alert-error>
+
+                <div class="form-group" [hidden]="!editForm.get('id')!.value">
+                    <label for="id" jhiTranslate="global.field.id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id" formControlName="id" readonly />
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="ofmanagerApp.arquivo.caminhoDoArquivo" for="field_caminhoDoArquivo">Caminho Do Arquivo</label>
+                    <input type="text" class="form-control" name="caminhoDoArquivo" id="field_caminhoDoArquivo"
+                           formControlName="caminhoDoArquivo"/>
+                    <div *ngIf="editForm.get('caminhoDoArquivo')!.invalid && (editForm.get('caminhoDoArquivo')!.dirty || editForm.get('caminhoDoArquivo')!.touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('caminhoDoArquivo')?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="ofmanagerApp.arquivo.extensao" for="field_extensao">Extensao</label>
+                    <input type="text" class="form-control" name="extensao" id="field_extensao"
+                           formControlName="extensao"/>
+                    <div *ngIf="editForm.get('extensao')!.invalid && (editForm.get('extensao')!.dirty || editForm.get('extensao')!.touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('extensao')?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="ofmanagerApp.arquivo.complexidade" for="field_complexidade">Complexidade</label>
+                    <select class="form-control" name="complexidade" formControlName="complexidade" id="field_complexidade">
+                        <option value="MUITO_BAIXA">{{ 'ofmanagerApp.Complexidade.MUITO_BAIXA' | translate }}</option>
+                        <option value="BAIXA">{{ 'ofmanagerApp.Complexidade.BAIXA' | translate }}</option>
+                        <option value="MEDIA">{{ 'ofmanagerApp.Complexidade.MEDIA' | translate }}</option>
+                        <option value="ALTA">{{ 'ofmanagerApp.Complexidade.ALTA' | translate }}</option>
+                        <option value="MUITO_ALTA">{{ 'ofmanagerApp.Complexidade.MUITO_ALTA' | translate }}</option>
+                    </select>
+                </div>
+            </div>
+
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary" (click)="previousState()">
+                    <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                </button>
+
+                <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

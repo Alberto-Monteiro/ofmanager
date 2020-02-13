@@ -1,0 +1,50 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+            <h2 id="of-arquivo-da-of-heading" jhiTranslate="ofmanagerApp.arquivoDaOf.home.createOrEditLabel">Create or edit a Arquivo Da Of</h2>
+
+            <div>
+                <of-alert-error></of-alert-error>
+
+                <div class="form-group" [hidden]="!editForm.get('id')!.value">
+                    <label for="id" jhiTranslate="global.field.id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id" formControlName="id" readonly />
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="ofmanagerApp.arquivoDaOf.estadoArquivo" for="field_estadoArquivo">Estado Arquivo</label>
+                    <select class="form-control" name="estadoArquivo" formControlName="estadoArquivo" id="field_estadoArquivo">
+                        <option value="CRIANDO">{{ 'ofmanagerApp.EstadoArquivo.CRIANDO' | translate }}</option>
+                        <option value="ALTERANDO">{{ 'ofmanagerApp.EstadoArquivo.ALTERANDO' | translate }}</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="ofmanagerApp.arquivoDaOf.servicoOf" for="field_servicoOf">Servico Of</label>
+                    <select class="form-control" id="field_servicoOf" name="servicoOf" formControlName="servicoOfId">
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="servicoOfOption.id" *ngFor="let servicoOfOption of servicoofs; trackBy: trackById">{{ servicoOfOption.id }}</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="ofmanagerApp.arquivoDaOf.arquivo" for="field_arquivo">Arquivo</label>
+                    <select class="form-control" id="field_arquivo" name="arquivo" formControlName="arquivoId">
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="arquivoOption.id" *ngFor="let arquivoOption of arquivos; trackBy: trackById">{{ arquivoOption.id }}</option>
+                    </select>
+                </div>
+            </div>
+
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary" (click)="previousState()">
+                    <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                </button>
+
+                <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

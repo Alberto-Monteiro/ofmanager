@@ -1,0 +1,38 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="arquivo">
+            <h2><span jhiTranslate="ofmanagerApp.arquivo.detail.title">Arquivo</span> {{ arquivo.id }}</h2>
+
+            <hr>
+
+            <of-alert-error></of-alert-error>
+
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="ofmanagerApp.arquivo.caminhoDoArquivo">Caminho Do Arquivo</span></dt>
+                <dd>
+                    <span>{{ arquivo.caminhoDoArquivo }}</span>
+                </dd>
+                <dt><span jhiTranslate="ofmanagerApp.arquivo.extensao">Extensao</span></dt>
+                <dd>
+                    <span>{{ arquivo.extensao }}</span>
+                </dd>
+                <dt><span jhiTranslate="ofmanagerApp.arquivo.complexidade">Complexidade</span></dt>
+                <dd>
+                    <span jhiTranslate="{{ 'ofmanagerApp.Complexidade.' + arquivo.complexidade }}">{{ arquivo.complexidade }}</span>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/arquivo', arquivo.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

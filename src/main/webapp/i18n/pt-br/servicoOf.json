@@ -1,0 +1,24 @@
+{
+  "ofmanagerApp": {
+    "servicoOf": {
+      "home": {
+        "title": "Servico Ofs",
+        "createLabel": "Criar novo Servico Of",
+        "createOrEditLabel": "Criar ou editar Servico Of",
+        "notFound": "Nenhum Servico Of encontrado"
+      },
+      "created": "Um novo Servico Of foi criado com o identificador {{ param }}",
+      "updated": "Um Servico Of foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Servico Of foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Servico Of {{ id }}?"
+      },
+      "detail": {
+        "title": "Servico Of"
+      },
+      "userid": "Userid",
+      "numero": "Numero",
+      "arquivoDaOf": "Arquivo Da Of"
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "ofmanagerApp": {
+    "arquivo": {
+      "home": {
+        "title": "Arquivos",
+        "createLabel": "Criar novo Arquivo",
+        "createOrEditLabel": "Criar ou editar Arquivo",
+        "notFound": "Nenhum Arquivo encontrado"
+      },
+      "created": "Um novo Arquivo foi criado com o identificador {{ param }}",
+      "updated": "Um Arquivo foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Arquivo foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Arquivo {{ id }}?"
+      },
+      "detail": {
+        "title": "Arquivo"
+      },
+      "caminhoDoArquivo": "Caminho Do Arquivo",
+      "extensao": "Extensao",
+      "complexidade": "Complexidade",
+      "arquivoDaOf": "Arquivo Da Of"
+    }
+  }
+}

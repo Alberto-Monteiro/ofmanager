@@ -1,0 +1,44 @@
+{
+    "name": "Arquivo",
+    "fields": [
+        {
+            "fieldName": "caminhoDoArquivo",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "extensao",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "complexidade",
+            "fieldType": "Complexidade",
+            "fieldValues": "MUITO_BAIXA,BAIXA,MEDIA,ALTA,MUITO_ALTA"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "arquivoDaOf",
+            "otherEntityRelationshipName": "arquivo",
+            "relationshipName": "arquivoDaOf"
+        }
+    ],
+    "changelogDate": "20200213170505",
+    "entityTableName": "arquivo",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "readOnly": false,
+    "clientRootFolder": "",
+    "applications": [
+        "ofmanager"
+    ]
+}

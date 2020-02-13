@@ -1,0 +1,34 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="servicoOf">
+            <h2><span jhiTranslate="ofmanagerApp.servicoOf.detail.title">Servico Of</span> {{ servicoOf.id }}</h2>
+
+            <hr>
+
+            <of-alert-error></of-alert-error>
+
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="ofmanagerApp.servicoOf.userid">Userid</span></dt>
+                <dd>
+                    <span>{{ servicoOf.userid }}</span>
+                </dd>
+                <dt><span jhiTranslate="ofmanagerApp.servicoOf.numero">Numero</span></dt>
+                <dd>
+                    <span>{{ servicoOf.numero }}</span>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/servico-of', servicoOf.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+            </button>
+        </div>
+    </div>
+</div>
