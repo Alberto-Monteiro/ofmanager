@@ -46,6 +46,7 @@
                         <li *ngFor="let arquivoDaOf of mapArquivoDaOf!.value!" class="list-group-item">
                             <div class="row">
                                 <div class="col"
+                                     style="word-break: break-all; word-wrap: break-word;"
                                      [ngStyle]="{'background-color':arquivoDaOf.estadoArquivo === 'CRIANDO'?'#b3ff99':'#b9e2ff'}">
                                     {{arquivoDaOf.arquivo.caminhoDoArquivo}}
                                 </div>

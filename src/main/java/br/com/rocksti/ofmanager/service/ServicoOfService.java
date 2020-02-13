@@ -26,7 +26,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.Spliterator;
+import java.util.Spliterators;
+import java.util.StringJoiner;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -304,7 +310,7 @@ public class ServicoOfService {
     public static class EstruturaDoArquivo {
 
         private String disciplina = "IMPLEMENTAÇÃO DE SOFTWARE";
-        private String atividade = "Plataforma Distribuída ";
+        private String atividade = "Plataforma Distribuída";
         private String descricaoArtefato = DescricaoArtefato.ALTERAR_JAVA.getDescricao();
         private String complexidade = Complexidade.BAIXA.getDescricao();
         private String componenteItem = "N/A";
@@ -391,8 +397,8 @@ public class ServicoOfService {
         CRIAR_JAVA("Criação de objetos de Integração e Negócio Java  "),
         ALTERAR_JAVA("Alteração de Objetos de Integração e Negócio Java "),
         ALTERAR_JAVA2("Alteração de pacote de Objetos de Integração e Negócio Java "),
-        CRIAR_HTML("Criação de tela HTML ou XHTML ou JSP ou XML ou VTL ou XSL ou Swing ou AWT ou XUI "),
-        ALTERAR_HTML("Alteração de tela HTML ou XHTML ou JSP ou XML ou VTL ou XSL ou Swing ou AWT ou XUI "),
+        CRIAR_HTML("Criação de tela HTML ou XHTML ou JSP ou XML ou VTL ou XSL ou Swing ou \r\nAWT ou XUI "),
+        ALTERAR_HTML("Alteração de tela HTML ou XHTML ou JSP ou XML ou VTL ou XSL ou Swing ou \r\nAWT ou XUI "),
         CRIAR_CSS("Criação CSS ou SCSS "),
         ALTERAR_CSS("Alteração CSS ou SCSS "),
         CRIAR_JS("Criação JavaScript "),
