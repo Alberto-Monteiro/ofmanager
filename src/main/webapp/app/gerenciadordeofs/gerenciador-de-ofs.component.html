@@ -22,12 +22,16 @@
                 <th scope="col" jhiSortBy="numero"><span jhiTranslate="ofmanagerApp.servicoOf.numero">Numero</span>
                     <fa-icon [icon]="'sort'"></fa-icon>
                 </th>
+                <th *ofHasAnyAuthority="'ROLE_ADMIN'" scope="col" jhiSortBy="userid"><span>Usuário</span>
+                    <fa-icon [icon]="'sort'"></fa-icon>
+                </th>
                 <th scope="col"></th>
             </tr>
             </thead>
             <tbody>
             <tr *ngFor="let servicoOf of servicoOfs ;trackBy: trackId">
                 <td>{{servicoOf.numero}}</td>
+                <td *ofHasAnyAuthority="'ROLE_ADMIN'">{{servicoOf.userName}}</td>
                 <td class="text-right">
                     <div class="btn-group">
                         <button type="submit"

@@ -20,7 +20,7 @@ describe('Service Tests', () => {
       service = injector.get(ServicoOfService);
       httpMock = injector.get(HttpTestingController);
 
-      elemDefault = new ServicoOf(0, 0, 0);
+      elemDefault = new ServicoOf(0, 0, '', 0);
     });
 
     describe('Service methods', () => {

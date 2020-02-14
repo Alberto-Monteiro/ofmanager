@@ -1,6 +1,6 @@
 package br.com.rocksti.ofmanager.service.dto;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -17,6 +17,7 @@ public class ServicoOfDTO implements Serializable {
     @NotNull
     private Integer numero;
 
+    private String userName;
 
     public Long getId() {
         return id;
@@ -40,6 +41,14 @@ public class ServicoOfDTO implements Serializable {
 
     public void setNumero(Integer numero) {
         this.numero = numero;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     @Override

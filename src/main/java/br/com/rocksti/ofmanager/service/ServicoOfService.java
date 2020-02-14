@@ -131,7 +131,16 @@ public class ServicoOfService {
         return userService.getUserWithAuthorities()
             .filter(user -> user.getAuthorities().stream().noneMatch(authority -> authority.getName().equals(AuthoritiesConstants.ADMIN)))
             .map(user -> servicoOfRepository.findAllByUseridEquals(pageable, user.getId()).map(servicoOfMapper::toDto))
-            .orElse(servicoOfRepository.findAll(pageable).map(servicoOfMapper::toDto));
+            .orElse(servicoOfRepository.findAll(pageable)
+                .map(servicoOf -> userService.getUserWithAuthorities(servicoOf.getUserid())
+                    .map(user -> {
+                        ServicoOfDTO servicoOfDTO = servicoOfMapper.toDto(servicoOf);
+                        servicoOfDTO.setUserName(user.getLogin());
+                        return servicoOfDTO;
+                    })
+                    .get()
+                )
+            );
     }
 
     public Optional<OrdemFornecimentoDTO> findOneOrdemFornecimento(Long id) {
