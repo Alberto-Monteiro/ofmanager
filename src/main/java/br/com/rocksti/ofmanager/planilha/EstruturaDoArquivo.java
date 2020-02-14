@@ -9,7 +9,7 @@ import java.util.StringJoiner;
 public class EstruturaDoArquivo {
 
     private String disciplina = "IMPLEMENTAÇÃO DE SOFTWARE";
-    private String atividade = "Plataforma Distribuída";
+    private String atividade = "Plataforma Distribuída ";
     private String descricaoArtefato = DescricaoArtefato.ALTERAR_JAVA.getDescricao();
     private String complexidade = Complexidade.BAIXA.getDescricao();
     private String componenteItem = "N/A";
