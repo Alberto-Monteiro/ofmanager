@@ -26,13 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.Spliterator;
-import java.util.Spliterators;
-import java.util.StringJoiner;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -180,7 +174,10 @@ public class ServicoOfService {
 
     private void montarServicoOf(OrdemFornecimentoDTO ordemFornecimentoDTO, AtomicReference<ServicoOf> servicoOf) {
         if (ordemFornecimentoDTO.getId() != null) {
-            servicoOf.set(servicoOfRepository.findById(ordemFornecimentoDTO.getId()).orElseGet(ServicoOf::new));
+            servicoOf.set(servicoOfRepository.findById(ordemFornecimentoDTO.getId()).map(servicoOf1 -> {
+                servicoOf1.setNumero(ordemFornecimentoDTO.getNumero());
+                return servicoOf1;
+            }).orElseGet(ServicoOf::new));
         } else {
             servicoOf.get().setNumero(ordemFornecimentoDTO.getNumero());
             userService.getUserWithAuthorities().ifPresent(user -> servicoOf.get().setUserid(user.getId()));
@@ -397,8 +394,8 @@ public class ServicoOfService {
         CRIAR_JAVA("Criação de objetos de Integração e Negócio Java  "),
         ALTERAR_JAVA("Alteração de Objetos de Integração e Negócio Java "),
         ALTERAR_JAVA2("Alteração de pacote de Objetos de Integração e Negócio Java "),
-        CRIAR_HTML("Criação de tela HTML ou XHTML ou JSP ou XML ou VTL ou XSL ou Swing ou \r\nAWT ou XUI "),
-        ALTERAR_HTML("Alteração de tela HTML ou XHTML ou JSP ou XML ou VTL ou XSL ou Swing ou \r\nAWT ou XUI "),
+        CRIAR_HTML("Criação de tela HTML ou XHTML ou JSP ou XML ou VTL ou XSL ou Swing ou \nAWT ou XUI "),
+        ALTERAR_HTML("Alteração de tela HTML ou XHTML ou JSP ou XML ou VTL ou XSL ou Swing ou \nAWT ou XUI "),
         CRIAR_CSS("Criação CSS ou SCSS "),
         ALTERAR_CSS("Alteração CSS ou SCSS "),
         CRIAR_JS("Criação JavaScript "),
@@ -446,6 +443,8 @@ public class ServicoOfService {
                 case "xml":
                     return EstadoArquivo.CRIANDO.equals(estadoArquivo) ? CRIAR_XML.getDescricao() : ALTERAR_XML.getDescricao();
                 case "yml":
+                    return EstadoArquivo.CRIANDO.equals(estadoArquivo) ? CRIAR_XML.getDescricao() : ALTERAR_XML.getDescricao();
+                case "sql":
                     return EstadoArquivo.CRIANDO.equals(estadoArquivo) ? CRIAR_XML.getDescricao() : ALTERAR_XML.getDescricao();
             }
 
