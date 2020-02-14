@@ -57,7 +57,7 @@
                                                 ngbDropdownToggle>{{arquivoDaOf.arquivo.complexidade}}</button>
                                         <div ngbDropdownMenu
                                              [attr.aria-labelledby]="'dropdownMenuButtonComplexidade'+arquivoDaOf.id">
-                                            <button ngbDropdownItem
+                                            <button *ngIf="(mapArquivoDaOf!.key === 'java')" ngbDropdownItem
                                                     (click)="atualizaComplexidade(arquivoDaOf.arquivo, 'MUITO_BAIXA')">
                                                 Muito Baixa
                                             </button>
@@ -70,7 +70,7 @@
                                             <button ngbDropdownItem
                                                     (click)="atualizaComplexidade(arquivoDaOf.arquivo, 'ALTA')">Alta
                                             </button>
-                                            <button ngbDropdownItem
+                                            <button *ngIf="(mapArquivoDaOf!.key === 'java')" ngbDropdownItem
                                                     (click)="atualizaComplexidade(arquivoDaOf.arquivo, 'MUITO_ALTA')">
                                                 Muito Alta
                                             </button>

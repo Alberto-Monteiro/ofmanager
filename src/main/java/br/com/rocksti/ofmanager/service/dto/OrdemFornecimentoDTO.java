@@ -5,7 +5,11 @@ import com.google.common.base.Objects;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class OrdemFornecimentoDTO implements Serializable {
 
@@ -13,6 +17,7 @@ public class OrdemFornecimentoDTO implements Serializable {
 
     @NotNull
     private Integer numero;
+
     @NotNull
     private String listaDosArquivos;
 

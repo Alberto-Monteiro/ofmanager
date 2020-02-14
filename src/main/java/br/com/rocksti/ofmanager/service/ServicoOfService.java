@@ -3,8 +3,9 @@ package br.com.rocksti.ofmanager.service;
 import br.com.rocksti.ofmanager.domain.Arquivo;
 import br.com.rocksti.ofmanager.domain.ArquivoDaOf;
 import br.com.rocksti.ofmanager.domain.ServicoOf;
-import br.com.rocksti.ofmanager.domain.enumeration.Complexidade;
 import br.com.rocksti.ofmanager.domain.enumeration.EstadoArquivo;
+import br.com.rocksti.ofmanager.planilha.DescricaoArtefato;
+import br.com.rocksti.ofmanager.planilha.EstruturaDoArquivo;
 import br.com.rocksti.ofmanager.repository.ArquivoRepository;
 import br.com.rocksti.ofmanager.repository.ServicoOfRepository;
 import br.com.rocksti.ofmanager.security.AuthoritiesConstants;
@@ -26,7 +27,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.Spliterator;
+import java.util.Spliterators;
+import java.util.StringJoiner;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -143,6 +150,7 @@ public class ServicoOfService {
             );
     }
 
+    @Transactional(readOnly = true)
     public Optional<OrdemFornecimentoDTO> findOneOrdemFornecimento(Long id) {
         return servicoOfRepository.findById(id).map(servicoOf1 -> {
             OrdemFornecimentoDTO ordemFornecimentoDTO = new OrdemFornecimentoDTO();
@@ -174,11 +182,11 @@ public class ServicoOfService {
 
         popularArquivosNovos(servicoOf, listaArquivosNovos);
 
-        retirarArquivosQueNaoEstemMaisNalista(servicoOf, listaArquivosQueExistem, listaArquivosNovos);
+        retirarArquivosInexistente(servicoOf, listaArquivosQueExistem, listaArquivosNovos);
 
         servicoOfRepository.save(servicoOf.get());
 
-        return findOneOrdemFornecimento(servicoOf.get().getId()).get();
+        return findOneOrdemFornecimento(servicoOf.get().getId()).orElseGet(OrdemFornecimentoDTO::new);
     }
 
     private void montarServicoOf(OrdemFornecimentoDTO ordemFornecimentoDTO, AtomicReference<ServicoOf> servicoOf) {
@@ -207,7 +215,7 @@ public class ServicoOfService {
             .map(caminhoDoArquivo -> {
                 Arquivo arquivo = new Arquivo();
                 arquivo.setCaminhoDoArquivo(caminhoDoArquivo);
-                arquivo.setExtensao(FilenameUtils.getExtension(caminhoDoArquivo));
+                arquivo.setExtensao(FilenameUtils.getExtension(caminhoDoArquivo).toLowerCase());
                 return arquivo;
             })
             .collect(Collectors.toList());
@@ -241,7 +249,7 @@ public class ServicoOfService {
             });
     }
 
-    private void retirarArquivosQueNaoEstemMaisNalista(AtomicReference<ServicoOf> servicoOf, List<Arquivo> listaArquivosQueExistem, List<Arquivo> listaArquivosNovos) {
+    private void retirarArquivosInexistente(AtomicReference<ServicoOf> servicoOf, List<Arquivo> listaArquivosQueExistem, List<Arquivo> listaArquivosNovos) {
         List<ArquivoDaOf> arquivosParaRemover = servicoOf.get().getArquivoDaOfs()
             .stream()
             .filter(arquivoDaOf -> !(listaArquivosNovos.contains(arquivoDaOf.getArquivo()) || listaArquivosQueExistem.contains(arquivoDaOf.getArquivo())))
@@ -250,7 +258,7 @@ public class ServicoOfService {
     }
 
     public XSSFWorkbook produzirConteudoDaPlanilha(InputStream planilha, OrdemFornecimentoDTO ordemFornecimento) throws IOException {
-        validarDados(ordemFornecimento);
+        validarAntesDeProduzirConteudoDaPlanilha(ordemFornecimento);
 
         XSSFWorkbook workbook = new XSSFWorkbook(planilha);
 
@@ -278,7 +286,7 @@ public class ServicoOfService {
         return workbook;
     }
 
-    private void validarDados(OrdemFornecimentoDTO ordemFornecimentoDTO) {
+    private void validarAntesDeProduzirConteudoDaPlanilha(OrdemFornecimentoDTO ordemFornecimentoDTO) {
         if (ordemFornecimentoDTO.getArquivoDaOfs()
             .stream()
             .anyMatch(arquivoDaOf -> arquivoDaOf.getArquivo().getComplexidade() == null)) {
@@ -303,161 +311,13 @@ public class ServicoOfService {
                     return estruturaDoArquivo1;
                 })
                 .orElseGet(() -> {
-                    estruturaDoArquivoList.add(estruturaDoArquivo);
+                    if (estruturaDoArquivo.getDescricaoArtefato() != null) {
+                        estruturaDoArquivoList.add(estruturaDoArquivo);
+                    }
                     return estruturaDoArquivo;
                 });
         });
 
-        return estruturaDoArquivoList.stream()
-            .filter(estruturaDoArquivo -> estruturaDoArquivo.getDescricaoArtefato() != null)
-            .collect(Collectors.toList());
-    }
-
-    public static class EstruturaDoArquivo {
-
-        private String disciplina = "IMPLEMENTAÇÃO DE SOFTWARE";
-        private String atividade = "Plataforma Distribuída";
-        private String descricaoArtefato = DescricaoArtefato.ALTERAR_JAVA.getDescricao();
-        private String complexidade = Complexidade.BAIXA.getDescricao();
-        private String componenteItem = "N/A";
-        private List<String> nomeDoArtefato = new ArrayList<>();
-
-        public String getDisciplina() {
-            return disciplina;
-        }
-
-        public void setDisciplina(String disciplina) {
-            this.disciplina = disciplina;
-        }
-
-        public String getAtividade() {
-            return atividade;
-        }
-
-        public void setAtividade(String atividade) {
-            this.atividade = atividade;
-        }
-
-        public String getDescricaoArtefato() {
-            return descricaoArtefato;
-        }
-
-        public void setDescricaoArtefato(String descricaoArtefato) {
-            this.descricaoArtefato = descricaoArtefato;
-        }
-
-        public String getComplexidade() {
-            return complexidade;
-        }
-
-        public void setComplexidade(String complexidade) {
-            this.complexidade = complexidade;
-        }
-
-        public String getComponenteItem() {
-            return componenteItem;
-        }
-
-        public void setComponenteItem(String componenteItem) {
-            this.componenteItem = componenteItem;
-        }
-
-        public String getQtd() {
-            return String.valueOf(nomeDoArtefato.size());
-        }
-
-        public List<String> getNomeDoArtefato() {
-            return nomeDoArtefato;
-        }
-
-        public void setNomeDoArtefato(List<String> nomeDoArtefato) {
-            this.nomeDoArtefato = nomeDoArtefato;
-        }
-
-        public String getStringNomeDoArtefato() {
-            StringJoiner stringJoiner = new StringJoiner("\n");
-            nomeDoArtefato.forEach(stringJoiner::add);
-            return stringJoiner.toString();
-        }
-
-        public void addNomeDoArtefato(String nomeDoArtefato) {
-            this.nomeDoArtefato.add(nomeDoArtefato);
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (!(o instanceof EstruturaDoArquivo)) return false;
-            EstruturaDoArquivo that = (EstruturaDoArquivo) o;
-            return com.google.common.base.Objects.equal(descricaoArtefato, that.descricaoArtefato) &&
-                com.google.common.base.Objects.equal(complexidade, that.complexidade);
-        }
-
-        @Override
-        public int hashCode() {
-            return com.google.common.base.Objects.hashCode(descricaoArtefato, complexidade);
-        }
-    }
-
-    public enum DescricaoArtefato {
-        CRIAR_JAVA("Criação de objetos de Integração e Negócio Java  "),
-        ALTERAR_JAVA("Alteração de Objetos de Integração e Negócio Java "),
-        ALTERAR_JAVA2("Alteração de pacote de Objetos de Integração e Negócio Java "),
-        CRIAR_HTML("Criação de tela HTML ou XHTML ou JSP ou XML ou VTL ou XSL ou Swing ou \nAWT ou XUI "),
-        ALTERAR_HTML("Alteração de tela HTML ou XHTML ou JSP ou XML ou VTL ou XSL ou Swing ou \nAWT ou XUI "),
-        CRIAR_CSS("Criação CSS ou SCSS "),
-        ALTERAR_CSS("Alteração CSS ou SCSS "),
-        CRIAR_JS("Criação JavaScript "),
-        ALTERAR_JS("Alteração JavaScript "),
-        CRIAR_XML("Criação de arquivo chave/valor ou tipo xml "),
-        ALTERAR_XML("Alteração de arquivo chave/valor ou tipo xml "),
-        CRIAR_C("Criação de objetos de Integração e Negócio C, C# e C++"),
-        ALTERAR_C("Criação de objetos de Integração e Negócio C, C# e C++"),
-        ALTERAR_C2("Alteração de pacote de Objetos de Integração e Negócio C, C# e C++"),
-        CRIAR_NET("Criação de objetos de Integração e Negócio .Net "),
-        ALTERAR_NET("Alteração de Objetos de Integração e Negócio .Net "),
-        ALTERAR_NET2("Alteração de pacote de Objetos de Integração e Negócio .Net "),
-        CRIAR_TEST("Criação de objeto de teste automatizado (não considerar o teste unitário previsto no PDSTI) ");
-
-        private String descricao;
-
-        DescricaoArtefato(String descricao) {
-            this.descricao = descricao;
-        }
-
-        public String getDescricao() {
-            return descricao;
-        }
-
-        public static String get(String extensao, EstadoArquivo estadoArquivo) {
-            if (extensao == null || estadoArquivo == null) {
-                return null;
-            }
-
-            switch (extensao.toLowerCase()) {
-                case "java":
-                    return EstadoArquivo.CRIANDO.equals(estadoArquivo) ? CRIAR_JAVA.getDescricao() : ALTERAR_JAVA.getDescricao();
-                case "html":
-                    return EstadoArquivo.CRIANDO.equals(estadoArquivo) ? CRIAR_HTML.getDescricao() : ALTERAR_HTML.getDescricao();
-                case "ts":
-                    return EstadoArquivo.CRIANDO.equals(estadoArquivo) ? CRIAR_JS.getDescricao() : ALTERAR_JS.getDescricao();
-                case "js":
-                    return EstadoArquivo.CRIANDO.equals(estadoArquivo) ? CRIAR_JS.getDescricao() : ALTERAR_JS.getDescricao();
-                case "css":
-                    return EstadoArquivo.CRIANDO.equals(estadoArquivo) ? CRIAR_CSS.getDescricao() : ALTERAR_CSS.getDescricao();
-                case "scss":
-                    return EstadoArquivo.CRIANDO.equals(estadoArquivo) ? CRIAR_CSS.getDescricao() : ALTERAR_CSS.getDescricao();
-                case "json":
-                    return EstadoArquivo.CRIANDO.equals(estadoArquivo) ? CRIAR_XML.getDescricao() : ALTERAR_XML.getDescricao();
-                case "xml":
-                    return EstadoArquivo.CRIANDO.equals(estadoArquivo) ? CRIAR_XML.getDescricao() : ALTERAR_XML.getDescricao();
-                case "yml":
-                    return EstadoArquivo.CRIANDO.equals(estadoArquivo) ? CRIAR_XML.getDescricao() : ALTERAR_XML.getDescricao();
-                case "sql":
-                    return EstadoArquivo.CRIANDO.equals(estadoArquivo) ? CRIAR_XML.getDescricao() : ALTERAR_XML.getDescricao();
-            }
-
-            return null;
-        }
+        return estruturaDoArquivoList;
     }
 }
