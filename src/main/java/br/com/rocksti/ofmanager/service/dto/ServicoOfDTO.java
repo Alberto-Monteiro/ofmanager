@@ -1,7 +1,10 @@
 package br.com.rocksti.ofmanager.service.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.Objects;
 
 /**
@@ -18,6 +21,8 @@ public class ServicoOfDTO implements Serializable {
     private Integer numero;
 
     private String userName;
+
+    private Instant createdDate;
 
     public Long getId() {
         return id;
@@ -49,6 +54,14 @@ public class ServicoOfDTO implements Serializable {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public Instant getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Instant createdDate) {
+        this.createdDate = createdDate;
     }
 
     @Override

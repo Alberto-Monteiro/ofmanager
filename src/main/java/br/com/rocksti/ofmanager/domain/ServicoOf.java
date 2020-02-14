@@ -2,11 +2,19 @@ package br.com.rocksti.ofmanager.domain;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.springframework.data.annotation.CreatedDate;
 
-import javax.persistence.*;
-import javax.validation.constraints.*;
-
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -35,6 +43,10 @@ public class ServicoOf implements Serializable {
     @OneToMany(mappedBy = "servicoOf", cascade = {CascadeType.ALL}, orphanRemoval = true)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<ArquivoDaOf> arquivoDaOfs = new HashSet<>();
+
+    @CreatedDate
+    @Column(name = "created_date", updatable = false)
+    private Instant createdDate = Instant.now();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -95,6 +107,15 @@ public class ServicoOf implements Serializable {
     public void setArquivoDaOfs(Set<ArquivoDaOf> arquivoDaOfs) {
         this.arquivoDaOfs = arquivoDaOfs;
     }
+
+    public Instant getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Instant created_date) {
+        this.createdDate = created_date;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override

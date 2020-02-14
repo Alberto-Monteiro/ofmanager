@@ -15,6 +15,7 @@ public interface ServicoOfMapper extends EntityMapper<ServicoOfDTO, ServicoOf> {
 
     @Mapping(target = "arquivoDaOfs", ignore = true)
     @Mapping(target = "removeArquivoDaOf", ignore = true)
+    @Mapping(target = "createdDate", ignore = true)
     ServicoOf toEntity(ServicoOfDTO servicoOfDTO);
 
     default ServicoOf fromId(Long id) {
