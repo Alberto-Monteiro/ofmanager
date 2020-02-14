@@ -10,6 +10,7 @@ import java.util.Objects;
 /**
  * A DTO for the {@link br.com.rocksti.ofmanager.domain.ServicoOf} entity.
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ServicoOfDTO implements Serializable {
 
     private Long id;
