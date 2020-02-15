@@ -6,6 +6,7 @@ import { IOrdemFornecimento, OrdemFornecimento } from 'app/shared/model/ordem-fo
 import { Arquivo } from 'app/shared/model/arquivo.model';
 import { ArquivoDaOf } from 'app/shared/model/arquivo-da-of.model';
 import * as fileSaver from 'file-saver';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'of-gerenciador-de-ofs-update',
@@ -24,7 +25,8 @@ export class GerenciadorDeOfsUpdateComponent implements OnInit {
   constructor(
     protected gerenciadorDeOfsService: GerenciadorDeOfsService,
     protected activatedRoute: ActivatedRoute,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private toastrService: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -66,7 +68,9 @@ export class GerenciadorDeOfsUpdateComponent implements OnInit {
     const complexidadeAnterior = arquivo.complexidade;
     arquivo.complexidade = complexidade;
     this.gerenciadorDeOfsService.updateComplexidade(arquivo).subscribe(
-      () => {},
+      () => {
+        this.toastrService.success('A complexidade foi atualizada', 'OK');
+      },
       () => {
         arquivo.complexidade = complexidadeAnterior;
       }
@@ -77,7 +81,9 @@ export class GerenciadorDeOfsUpdateComponent implements OnInit {
     const estadoArquivoAnterior = arquivoDaOf.estadoArquivo;
     arquivoDaOf.estadoArquivo = estadoArquivo;
     this.gerenciadorDeOfsService.updateEstadoArquivo(arquivoDaOf).subscribe(
-      () => {},
+      () => {
+        this.toastrService.success('O estado do arquivo foi atualizada', 'OK');
+      },
       () => {
         arquivoDaOf.estadoArquivo = estadoArquivoAnterior;
       }
