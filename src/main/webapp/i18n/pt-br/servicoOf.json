@@ -4,7 +4,7 @@
       "home": {
         "title": "Servico Ofs",
         "createLabel": "Criar novo Servico Of",
-        "createOrEditLabel": "Criar ou editar Servico Of",
+        "createOrEditLabel": "Criar ou editar Of",
         "notFound": "Nenhum Servico Of encontrado"
       },
       "created": "Um novo Servico Of foi criado com o identificador {{ param }}",

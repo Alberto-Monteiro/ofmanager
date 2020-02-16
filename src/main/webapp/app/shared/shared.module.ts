@@ -7,13 +7,12 @@ import { LoginModalComponent } from './login/login.component';
 import { HasAnyAuthorityDirective } from './auth/has-any-authority.directive';
 import { ServicoOfDeleteDialogComponent } from 'app/entities/servico-of/servico-of-delete-dialog.component';
 import { IConfig, NgxMaskModule } from 'ngx-mask';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
 
 @NgModule({
-  imports: [OfmanagerSharedLibsModule, NgxMaskModule.forRoot(options), BrowserAnimationsModule, ToastrModule.forRoot()],
+  imports: [OfmanagerSharedLibsModule, NgxMaskModule.forRoot(options), ToastrModule.forRoot()],
   declarations: [
     FindLanguageFromKeyPipe,
     AlertComponent,
