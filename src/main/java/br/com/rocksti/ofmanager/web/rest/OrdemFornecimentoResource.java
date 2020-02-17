@@ -1,10 +1,6 @@
 package br.com.rocksti.ofmanager.web.rest;
 
-import br.com.rocksti.ofmanager.security.AuthoritiesConstants;
-import br.com.rocksti.ofmanager.service.ArquivoDaOfService;
-import br.com.rocksti.ofmanager.service.ArquivoService;
-import br.com.rocksti.ofmanager.service.ServicoOfService;
-import br.com.rocksti.ofmanager.service.UserService;
+import br.com.rocksti.ofmanager.service.OrdemFornecimentoService;
 import br.com.rocksti.ofmanager.service.dto.ArquivoDTO;
 import br.com.rocksti.ofmanager.service.dto.ArquivoDaOfDTO;
 import br.com.rocksti.ofmanager.service.dto.OrdemFornecimentoDTO;
@@ -38,45 +34,29 @@ public class OrdemFornecimentoResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final ServicoOfService servicoOfService;
+    private final OrdemFornecimentoService ordemFornecimentoService;
 
-    private final UserService userService;
-
-    private final ArquivoService arquivoService;
-
-    private final ArquivoDaOfService arquivoDaOfService;
-
-    public OrdemFornecimentoResource(ServicoOfService servicoOfService,
-                                     UserService userService,
-                                     ArquivoService arquivoService,
-                                     ArquivoDaOfService arquivoDaOfService) {
-        this.servicoOfService = servicoOfService;
-        this.userService = userService;
-        this.arquivoService = arquivoService;
-        this.arquivoDaOfService = arquivoDaOfService;
+    public OrdemFornecimentoResource(OrdemFornecimentoService ordemFornecimentoService) {
+        this.ordemFornecimentoService = ordemFornecimentoService;
     }
 
     @GetMapping("/gerenciador_de_ofs/queryByUser")
     public ResponseEntity<List<ServicoOfDTO>> getAllServicoOfsByUser(Pageable pageable) {
-        Page<ServicoOfDTO> page = servicoOfService.findAllByUser(pageable);
+        Page<ServicoOfDTO> page = ordemFornecimentoService.findAllByUser(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
     @GetMapping("/gerenciador_de_ofs/{id}")
     public ResponseEntity<OrdemFornecimentoDTO> getOrdemFornecimento(@PathVariable Long id) {
-        validarOfPertencenteDeUsuario(id);
-
-        return ResponseUtil.wrapOrNotFound(servicoOfService.findOneOrdemFornecimento(id));
+        return ResponseUtil.wrapOrNotFound(ordemFornecimentoService.findOneOrdemFornecimento(id));
     }
 
     @PutMapping("/gerenciador_de_ofs/processar")
     public ResponseEntity<OrdemFornecimentoDTO> processar(@Valid @RequestBody OrdemFornecimentoDTO ordemFornecimentoDTO) {
-        validarOfPertencenteDeUsuario(ordemFornecimentoDTO.getId());
-
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, ordemFornecimentoDTO.toString()))
-            .body(servicoOfService.processar(ordemFornecimentoDTO));
+            .body(ordemFornecimentoService.processar(ordemFornecimentoDTO));
     }
 
     @PutMapping("/gerenciador_de_ofs/updateComplexidade")
@@ -85,7 +65,7 @@ public class OrdemFornecimentoResource {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
 
-        ArquivoDTO result = arquivoService.updateComplexidade(arquivoDTO);
+        ArquivoDTO result = ordemFornecimentoService.updateComplexidade(arquivoDTO);
 
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, arquivoDTO.getId().toString()))
@@ -98,31 +78,22 @@ public class OrdemFornecimentoResource {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
 
-        ArquivoDaOfDTO result = arquivoDaOfService.updateEstadoArquivo(arquivoDaOfDTO);
+        ArquivoDaOfDTO result = ordemFornecimentoService.updateEstadoArquivo(arquivoDaOfDTO);
 
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, arquivoDaOfDTO.getId().toString()))
             .body(result);
     }
 
-    private void validarOfPertencenteDeUsuario(Long idServicoOf) {
-        if (idServicoOf != null) {
-            userService.getUserWithAuthorities()
-                .filter(user -> user.getAuthorities().stream().noneMatch(authority -> authority.getName().equals(AuthoritiesConstants.ADMIN)))
-                .ifPresent(user -> {
-                    servicoOfService.findOne(idServicoOf).ifPresent(servicoOfDTO -> {
-                        if (!servicoOfDTO.getUserid().equals(user.getId())) {
-                            throw new BadRequestAlertException("Of pertencente a outro usuário", "servicoOf", "servicoOfNaoPertencente");
-                        }
-                    });
-                });
-        }
+    @DeleteMapping("/gerenciador_de_ofs/deletarArquivoDaOf/{id}")
+    public ResponseEntity<OrdemFornecimentoDTO> deletarArquivoDaOf(@PathVariable Long id) {
+        return ResponseEntity.ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, id.toString()))
+            .body(ordemFornecimentoService.deletarArquivoDaOf(id));
     }
 
     @GetMapping("/gerenciador_de_ofs/downloadPlanilha/{idServicoOf}")
     public void downloadPlanilha(HttpServletResponse response, @PathVariable Long idServicoOf) {
-        validarOfPertencenteDeUsuario(idServicoOf);
-
         try {
             String localDoArquivo =
                 Optional.of(System.getProperty("os.name"))
@@ -132,8 +103,8 @@ public class OrdemFornecimentoResource {
 
             InputStream planilha = new FileInputStream(localDoArquivo);
 
-            servicoOfService
-                .produzirConteudoDaPlanilha(planilha, servicoOfService.findOneOrdemFornecimento(idServicoOf).get())
+            ordemFornecimentoService
+                .produzirConteudoDaPlanilha(planilha, ordemFornecimentoService.findOneOrdemFornecimento(idServicoOf).get())
                 .write(response.getOutputStream());
 
             //org.apache.commons.io.IOUtils.copy(planilha, response.getOutputStream());

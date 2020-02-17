@@ -49,7 +49,7 @@
                                      [ngStyle]="{'background-color':arquivoDaOf.estadoArquivo === 'CRIANDO'?'#b3ff99':'#b9e2ff'}">
                                     {{arquivoDaOf.arquivo.caminhoDoArquivo}}
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     <div ngbDropdown class="d-inline-block">
                                         <button style="width: 130px" class="btn btn-outline-primary"
                                                 [attr.id]="'dropdownMenuButtonComplexidade'+arquivoDaOf.id"
@@ -90,6 +90,11 @@
                                             </button>
                                         </div>
                                     </div>
+
+                                    <button type="button" class="btn btn-danger" title="Apagar linha"
+                                            (click)="deletarArquivoDaOf(arquivoDaOf)">
+                                        <fa-icon [icon]="'times'"></fa-icon>
+                                    </button>
                                 </div>
                             </div>
                         </li>

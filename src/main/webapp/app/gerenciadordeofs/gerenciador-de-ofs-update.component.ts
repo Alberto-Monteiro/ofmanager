@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { GerenciadorDeOfsService } from './gerenciador-de-ofs.service';
 import { IOrdemFornecimento, OrdemFornecimento } from 'app/shared/model/ordem-fornecimento.model';
 import { Arquivo } from 'app/shared/model/arquivo.model';
-import { ArquivoDaOf } from 'app/shared/model/arquivo-da-of.model';
+import { ArquivoDaOf, IArquivoDaOf } from 'app/shared/model/arquivo-da-of.model';
 import * as fileSaver from 'file-saver';
 
 @Component({
@@ -82,6 +82,13 @@ export class GerenciadorDeOfsUpdateComponent implements OnInit {
         arquivoDaOf.estadoArquivo = estadoArquivoAnterior;
       }
     );
+  }
+
+  deletarArquivoDaOf(arquivoDaOf: IArquivoDaOf): void {
+    this.gerenciadorDeOfsService.deletarArquivoDaOf(arquivoDaOf).subscribe(ordemFornecimento => {
+      this.ordemFornecimento = ordemFornecimento.body!;
+      this.updateForm(this.ordemFornecimento);
+    });
   }
 
   download(): void {

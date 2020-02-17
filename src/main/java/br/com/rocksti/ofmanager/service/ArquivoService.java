@@ -6,14 +6,12 @@ import br.com.rocksti.ofmanager.service.dto.ArquivoDTO;
 import br.com.rocksti.ofmanager.service.mapper.ArquivoMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Service Implementation for managing {@link Arquivo}.
@@ -80,17 +78,5 @@ public class ArquivoService {
     public void delete(Long id) {
         log.debug("Request to delete Arquivo : {}", id);
         arquivoRepository.deleteById(id);
-    }
-
-    public ArquivoDTO updateComplexidade(ArquivoDTO arquivoDTO) {
-        AtomicReference<ArquivoDTO> arquivoDTO1 = new AtomicReference<>(null);
-
-        arquivoRepository.findById(arquivoDTO.getId()).ifPresent(arquivo -> {
-            arquivo.setComplexidade(arquivoDTO.getComplexidade());
-            arquivoRepository.save(arquivo);
-            arquivoDTO1.set(arquivoMapper.toDto(arquivo));
-        });
-
-        return arquivoDTO1.get();
     }
 }
