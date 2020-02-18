@@ -43,78 +43,45 @@
                     </div>
                     <ul class="list-group list-group-flush">
                         <li *ngFor="let arquivoDaOf of mapArquivoDaOf!.value!" class="list-group-item">
-                            <div class="row">
-                                <div class="col-xl-8"
-                                     style="word-break: break-all; word-wrap: break-word;"
-                                     [ngStyle]="{'background-color':arquivoDaOf.estadoArquivo === 'CRIANDO'?'#b3ff99':'#b9e2ff'}">
+
+                            <mat-grid-list cols="12" rowHeight="100px">
+                                <mat-grid-tile
+                                    [colspan]="6"
+                                    style="word-break: break-all; word-wrap: break-word;"
+                                    [ngStyle]="{'background-color':arquivoDaOf.estadoArquivo === 'CRIANDO'?'#b3ff99':'#b9e2ff'}">
                                     {{arquivoDaOf.arquivo.caminhoDoArquivo}}
-                                </div>
-                                <div class="col-xl-4">
-                                    <div class="row justify-content-end">
-                                        <div class="col-md-2 text-center">
-                                            <mat-checkbox
-                                                *ngIf="(mapArquivoDaOf!.key === 'java'
-                                                ||mapArquivoDaOf!.key === 'js'
-                                                ||mapArquivoDaOf!.key === 'ts')">
-                                            </mat-checkbox>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div ngbDropdown class="d-inline-block">
-                                                <button style="width: 130px" class="btn btn-outline-primary"
-                                                        [attr.id]="'dropdownMenuButtonComplexidade'+arquivoDaOf.id"
-                                                        ngbDropdownToggle>{{arquivoDaOf.arquivo.complexidade}}</button>
-                                                <div ngbDropdownMenu
-                                                     [attr.aria-labelledby]="'dropdownMenuButtonComplexidade'+arquivoDaOf.id">
-                                                    <button *ngIf="(mapArquivoDaOf!.key === 'java')" ngbDropdownItem
-                                                            (click)="atualizaComplexidade(arquivoDaOf.arquivo, 'MUITO_BAIXA')">
-                                                        Muito Baixa
-                                                    </button>
-                                                    <button ngbDropdownItem
-                                                            (click)="atualizaComplexidade(arquivoDaOf.arquivo, 'BAIXA')">
-                                                        Baixa
-                                                    </button>
-                                                    <button ngbDropdownItem
-                                                            (click)="atualizaComplexidade(arquivoDaOf.arquivo, 'MEDIA')">
-                                                        Media
-                                                    </button>
-                                                    <button ngbDropdownItem
-                                                            (click)="atualizaComplexidade(arquivoDaOf.arquivo, 'ALTA')">
-                                                        Alta
-                                                    </button>
-                                                    <button *ngIf="(mapArquivoDaOf!.key === 'java')" ngbDropdownItem
-                                                            (click)="atualizaComplexidade(arquivoDaOf.arquivo, 'MUITO_ALTA')">
-                                                        Muito Alta
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div ngbDropdown class="d-inline-block">
-                                                <button style="width: 130px" class="btn btn-outline-primary"
-                                                        [attr.id]="'dropdownMenuButtonSituacaoArquivo'+arquivoDaOf.id"
-                                                        ngbDropdownToggle>{{arquivoDaOf.estadoArquivo === 'CRIANDO' ? 'Criando' : 'Editando'}}</button>
-                                                <div ngbDropdownMenu
-                                                     [attr.aria-labelledby]="'dropdownMenuButtonSituacaoArquivo'+arquivoDaOf.id">
-                                                    <button ngbDropdownItem
-                                                            (click)="atualizaEstadoArquivo(arquivoDaOf, 'CRIANDO')">
-                                                        Criando
-                                                    </button>
-                                                    <button ngbDropdownItem
-                                                            (click)="atualizaEstadoArquivo(arquivoDaOf, 'ALTERANDO')">
-                                                        Editando
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <button type="button" class="btn btn-danger" title="Apagar linha"
-                                                    (click)="deletarArquivoDaOf(arquivoDaOf)">
-                                                <fa-icon [icon]="'times'"></fa-icon>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                                </mat-grid-tile>
+                                <mat-grid-tile>
+                                    <mat-checkbox *ngIf="podeSerArquivoDeTest(mapArquivoDaOf!.key)"></mat-checkbox>
+                                </mat-grid-tile>
+                                <mat-grid-tile [colspan]="2">
+                                    <mat-form-field>
+                                        <mat-label>Complexidade</mat-label>
+                                        <mat-select [(value)]="arquivoDaOf.arquivo.complexidade">
+                                            <mat-option (click)="atualizaComplexidade(arquivoDaOf.arquivo, 'MUITO_BAIXA')" [value]="'MUITO_BAIXA'">Muito Baixa</mat-option>
+                                            <mat-option (click)="atualizaComplexidade(arquivoDaOf.arquivo, 'BAIXA')" [value]="'BAIXA'">Baixa</mat-option>
+                                            <mat-option (click)="atualizaComplexidade(arquivoDaOf.arquivo, 'MEDIA')" [value]="'MEDIA'">Media</mat-option>
+                                            <mat-option (click)="atualizaComplexidade(arquivoDaOf.arquivo, 'ALTA')" [value]="'ALTA'">Alta</mat-option>
+                                            <mat-option (click)="atualizaComplexidade(arquivoDaOf.arquivo, 'MUITO_ALTA')" [value]="'MUITO_ALTA'">Muito Alta</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </mat-grid-tile>
+                                <mat-grid-tile [colspan]="2">
+                                    <mat-form-field>
+                                        <mat-label>Finalidade</mat-label>
+                                        <mat-select [(value)]="arquivoDaOf.estadoArquivo">
+                                            <mat-option (click)="atualizaEstadoArquivo(arquivoDaOf, 'CRIANDO')" [value]="'CRIANDO'">Criando</mat-option>
+                                            <mat-option (click)="atualizaEstadoArquivo(arquivoDaOf, 'ALTERANDO')" [value]="'ALTERANDO'">Editando</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </mat-grid-tile>
+                                <mat-grid-tile>
+                                    <button type="button" class="btn btn-danger" title="Apagar linha"
+                                            (click)="deletarArquivoDaOf(arquivoDaOf)">
+                                        <fa-icon [icon]="'times'"></fa-icon>
+                                    </button>
+                                </mat-grid-tile>
+                            </mat-grid-list>
                         </li>
                     </ul>
                 </div>
