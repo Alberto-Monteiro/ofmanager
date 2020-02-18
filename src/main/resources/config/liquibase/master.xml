@@ -19,6 +19,7 @@
     <include file="config/liquibase/changelog/20200210200527_added_entity_Arquivo.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200206125516_insert_dados_entity_Arquivo.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200214192707_added_colum_createDate_in_servico_of.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200218124007_added_colum_arquivoDeTest_in_Arquivo.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20200210200427_added_entity_constraints_ArquivoDaOf.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->

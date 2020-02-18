@@ -1,5 +1,5 @@
-import { IArquivoDaOf } from 'app/shared/model/arquivo-da-of.model';
-import { Complexidade } from 'app/shared/model/enumerations/complexidade.model';
+import {IArquivoDaOf} from 'app/shared/model/arquivo-da-of.model';
+import {Complexidade} from 'app/shared/model/enumerations/complexidade.model';
 
 export interface IArquivo {
   id?: number;
@@ -7,6 +7,7 @@ export interface IArquivo {
   extensao?: string;
   complexidade?: Complexidade;
   arquivoDaOfs?: IArquivoDaOf[];
+  arquivoDeTest?: boolean;
 }
 
 export class Arquivo implements IArquivo {
@@ -15,6 +16,8 @@ export class Arquivo implements IArquivo {
     public caminhoDoArquivo?: string,
     public extensao?: string,
     public complexidade?: Complexidade,
-    public arquivoDaOfs?: IArquivoDaOf[]
-  ) {}
+    public arquivoDaOfs?: IArquivoDaOf[],
+    public arquivoDeTest?: boolean
+  ) {
+  }
 }

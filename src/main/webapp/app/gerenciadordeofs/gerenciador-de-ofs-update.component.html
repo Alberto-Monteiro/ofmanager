@@ -52,7 +52,7 @@
                                     {{arquivoDaOf.arquivo.caminhoDoArquivo}}
                                 </mat-grid-tile>
                                 <mat-grid-tile>
-                                    <mat-checkbox *ngIf="podeSerArquivoDeTest(mapArquivoDaOf!.key)"></mat-checkbox>
+                                    <mat-checkbox *ngIf="podeSerArquivoDeTest(mapArquivoDaOf!.key)" (change)="isArquivoTest(arquivoDaOf!.arquivo)" [checked]="arquivoDaOf!.arquivo.arquivoDeTest">Test</mat-checkbox>
                                 </mat-grid-tile>
                                 <mat-grid-tile [colspan]="2">
                                     <mat-form-field>

@@ -30,7 +30,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.Spliterator;
+import java.util.Spliterators;
+import java.util.StringJoiner;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -216,6 +222,18 @@ public class OrdemFornecimentoService {
             .filter(arquivoDaOf -> !(listaArquivosNovos.contains(arquivoDaOf.getArquivo()) || listaArquivosQueExistem.contains(arquivoDaOf.getArquivo())))
             .collect(Collectors.toList());
         arquivosParaRemover.forEach(arquivoDaOf -> servicoOf.get().removeArquivoDaOf(arquivoDaOf));
+    }
+
+    public ArquivoDTO updateIsTestArquivo(ArquivoDTO arquivoDTO) {
+        AtomicReference<Arquivo> arquivoReference = new AtomicReference<>();
+
+        arquivoRepository.findById(arquivoDTO.getId()).ifPresent(arquivo -> {
+            arquivo.setArquivoDeTest(arquivoDTO.getArquivoDeTest());
+            arquivoRepository.save(arquivo);
+            arquivoReference.set(arquivo);
+        });
+
+        return arquivoMapper.toDto(arquivoReference.get());
     }
 
     public ArquivoDTO updateComplexidade(ArquivoDTO arquivoDTO) {

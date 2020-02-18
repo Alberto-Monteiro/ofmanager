@@ -3,7 +3,7 @@ import {FormBuilder, Validators} from '@angular/forms';
 import {ActivatedRoute} from '@angular/router';
 import {GerenciadorDeOfsService} from './gerenciador-de-ofs.service';
 import {IOrdemFornecimento, OrdemFornecimento} from 'app/shared/model/ordem-fornecimento.model';
-import {Arquivo} from 'app/shared/model/arquivo.model';
+import {Arquivo, IArquivo} from 'app/shared/model/arquivo.model';
 import {ArquivoDaOf, IArquivoDaOf} from 'app/shared/model/arquivo-da-of.model';
 import * as fileSaver from 'file-saver';
 
@@ -61,6 +61,17 @@ export class GerenciadorDeOfsUpdateComponent implements OnInit {
       this.ordemFornecimento = ordemFornecimento.body!;
       this.updateForm(this.ordemFornecimento);
     });
+  }
+
+  isArquivoTest(arquivo: IArquivo): void {
+    arquivo.arquivoDeTest = !arquivo.arquivoDeTest;
+    this.gerenciadorDeOfsService.updateIsTestArquivo(arquivo).subscribe(
+      () => {
+      },
+      () => {
+        arquivo.arquivoDeTest = !arquivo.arquivoDeTest;
+      }
+    );
   }
 
   atualizaComplexidade(arquivo: Arquivo, complexidade: any): void {
