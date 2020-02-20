@@ -153,4 +153,13 @@
             <column name="local_date" type="date"/>
         </createTable>
     </changeSet>
+
+    <changeSet author="Alberto Monteiro" id="insert role de gestor de OF">
+        <sql dbms="h2, mysql"
+             endDelimiter="\nGO"
+             splitStatements="true"
+             stripComments="true">
+            INSERT INTO of_authority (name) VALUES ('ROLE_GESTOR_OF')
+        </sql>
+    </changeSet>
 </databaseChangeLog>
