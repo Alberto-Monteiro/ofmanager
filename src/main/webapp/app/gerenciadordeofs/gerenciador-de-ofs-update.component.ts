@@ -6,6 +6,8 @@ import {IOrdemFornecimento, OrdemFornecimento} from 'app/shared/model/ordem-forn
 import {Arquivo, IArquivo} from 'app/shared/model/arquivo.model';
 import {ArquivoDaOf, IArquivoDaOf} from 'app/shared/model/arquivo-da-of.model';
 import * as fileSaver from 'file-saver';
+import {IUser} from "app/core/user/user.model";
+import {ServicoOf} from "app/shared/model/servico-of.model";
 
 @Component({
   selector: 'of-gerenciador-de-ofs-update',
@@ -14,9 +16,9 @@ import * as fileSaver from 'file-saver';
 export class GerenciadorDeOfsUpdateComponent implements OnInit {
   isSaving = false;
   ordemFornecimento?: IOrdemFornecimento;
+  usuariosGestor?: IUser[] | null;
 
   editForm = this.fb.group({
-    id: [null],
     numero: [null, [Validators.required, Validators.max(999999999), Validators.min(100)]],
     listaDeArquivo: [null, [Validators.required]]
   });
@@ -33,23 +35,30 @@ export class GerenciadorDeOfsUpdateComponent implements OnInit {
       this.ordemFornecimento = ordemFornecimento;
       this.updateForm(ordemFornecimento);
     });
+
+    this.gerenciadorDeOfsService.getUsuariosGestor().subscribe(usuarios => {
+      this.usuariosGestor = usuarios.body;
+    });
   }
 
   updateForm(ordemFornecimento: IOrdemFornecimento): void {
     this.editForm.patchValue({
-      id: ordemFornecimento.id,
-      numero: ordemFornecimento.numero,
+      id: ordemFornecimento.servicoOf!.id,
+      numero: ordemFornecimento.servicoOf!.numero,
       listaDeArquivo: ordemFornecimento.listaDosArquivos
     });
   }
 
   private createFromForm(): IOrdemFornecimento {
-    return {
-      ...new OrdemFornecimento(),
-      id: this.editForm.get(['id'])!.value,
-      numero: this.editForm.get(['numero'])!.value,
-      listaDosArquivos: this.editForm.get(['listaDeArquivo'])!.value
-    };
+    const servicoOf = new ServicoOf();
+    servicoOf.id = this.editForm.get(['id'])!.value;
+    servicoOf.numero = this.editForm.get(['numero'])!.value;
+
+    const of = new OrdemFornecimento();
+    of.servicoOf = servicoOf;
+    of.listaDosArquivos = this.editForm.get(['listaDeArquivo'])!.value;
+
+    return of;
   }
 
   previousState(): void {
@@ -106,13 +115,17 @@ export class GerenciadorDeOfsUpdateComponent implements OnInit {
   }
 
   download(): void {
-    this.gerenciadorDeOfsService.downloadPlanilha(this.ordemFornecimento!.id).subscribe(response => {
+    this.gerenciadorDeOfsService.downloadPlanilha(this.ordemFornecimento!.servicoOf!.id).subscribe(response => {
       const blob: any = new Blob([response], {type: 'text/xlsx'});
-      fileSaver.saveAs(blob, `OF-${this.ordemFornecimento!.numero}.xlsx`);
+      fileSaver.saveAs(blob, `OF-${this.ordemFornecimento!.servicoOf!.numero}.xlsx`);
     });
   }
 
   podeSerArquivoDeTest(extensao: string): boolean {
     return (extensao === 'java' || extensao === 'js' || extensao === 'ts');
   }
+
+  // atualizarUsuarioGestor(usuarioGestor: IUser): void {
+  //    this.gerenciadorDeOfsService.atualizarUsuarioGestor(usuarioGestor).subscribe()
+  // }
 }

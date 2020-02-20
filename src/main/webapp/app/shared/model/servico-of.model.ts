@@ -1,10 +1,11 @@
 import {IArquivoDaOf} from 'app/shared/model/arquivo-da-of.model';
 import {Moment} from 'moment';
+import {IUser} from "app/core/user/user.model";
 
 export interface IServicoOf {
   id?: number;
-  userid?: number;
-  userName?: string;
+  gestorDaOf?: IUser;
+  donoDaOf?: IUser;
   numero?: number;
   createdDate?: Moment;
   arquivoDaOfs?: IArquivoDaOf[];
@@ -13,8 +14,8 @@ export interface IServicoOf {
 export class ServicoOf implements IServicoOf {
   constructor(
     public id?: number,
-    public userid?: number,
-    public userName?: string,
+    public gestorDaOf?: IUser,
+    public donoDaOf?: IUser,
     public numero?: number,
     public createdDate?: Moment,
     public arquivoDaOfs?: IArquivoDaOf[]

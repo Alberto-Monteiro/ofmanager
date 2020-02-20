@@ -22,7 +22,8 @@
                 <th scope="col" jhiSortBy="numero"><span jhiTranslate="ofmanagerApp.servicoOf.numero">Numero</span>
                     <fa-icon [icon]="'sort'"></fa-icon>
                 </th>
-                <th *ofHasAnyAuthority="'ROLE_ADMIN'" scope="col" jhiSortBy="userid"><span>Usuário</span>
+                <th *ofHasAnyAuthority="['ROLE_ADMIN', 'ROLE_GESTOR_OF']" scope="col" jhiSortBy="donoDaOf.firstName">
+                    <span>Usuário</span>
                     <fa-icon [icon]="'sort'"></fa-icon>
                 </th>
                 <th scope="col" jhiSortBy="createdDate"><span>Criado em</span>
@@ -34,7 +35,7 @@
             <tbody>
             <tr *ngFor="let servicoOf of servicoOfs ;trackBy: trackId">
                 <td>{{servicoOf.numero}}</td>
-                <td *ofHasAnyAuthority="'ROLE_ADMIN'">{{servicoOf.userName}}</td>
+                <td *ofHasAnyAuthority="['ROLE_ADMIN', 'ROLE_GESTOR_OF']">{{servicoOf.userName}}</td>
                 <td>{{servicoOf.createdDate | date:'dd/MM/yy HH:mm'}}</td>
                 <td class="text-right">
                     <div class="btn-group">

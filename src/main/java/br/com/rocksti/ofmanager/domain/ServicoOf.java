@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -47,6 +48,12 @@ public class ServicoOf implements Serializable {
     @CreatedDate
     @Column(name = "created_date", updatable = false)
     private Instant createdDate = Instant.now();
+
+    @ManyToOne()
+    private User gestorDaOf;
+
+    @ManyToOne()
+    private User donoDaOf;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {

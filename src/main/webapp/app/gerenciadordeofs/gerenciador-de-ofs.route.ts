@@ -41,20 +41,8 @@ export const gerenciadorDeOfsRoute: Routes = [
       pagingParams: JhiResolvePagingParams
     },
     data: {
-      authorities: ['ROLE_USER'],
+      authorities: ['ROLE_USER', 'ROLE_GESTOR_OF'],
       defaultSort: 'id,asc',
-      pageTitle: 'ofmanagerApp.servicoOf.home.title'
-    },
-    canActivate: [UserRouteAccessService]
-  },
-  {
-    path: 'gerenciador_de_ofs/new',
-    component: GerenciadorDeOfsUpdateComponent,
-    resolve: {
-      ordemFornecimento: GerenciadorDeOfsResolve
-    },
-    data: {
-      authorities: ['ROLE_USER'],
       pageTitle: 'ofmanagerApp.servicoOf.home.title'
     },
     canActivate: [UserRouteAccessService]
@@ -66,7 +54,7 @@ export const gerenciadorDeOfsRoute: Routes = [
       ordemFornecimento: GerenciadorDeOfsResolve
     },
     data: {
-      authorities: ['ROLE_USER'],
+      authorities: ['ROLE_USER', 'ROLE_GESTOR_OF'],
       pageTitle: 'ofmanagerApp.servicoOf.home.title'
     },
     canActivate: [UserRouteAccessService]

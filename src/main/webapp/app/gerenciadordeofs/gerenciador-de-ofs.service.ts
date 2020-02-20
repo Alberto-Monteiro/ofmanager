@@ -8,6 +8,7 @@ import {IServicoOf} from 'app/shared/model/servico-of.model';
 import {IOrdemFornecimento} from 'app/shared/model/ordem-fornecimento.model';
 import {IArquivo} from 'app/shared/model/arquivo.model';
 import {IArquivoDaOf} from 'app/shared/model/arquivo-da-of.model';
+import {IUser} from "app/core/user/user.model";
 
 type EntityResponseType = HttpResponse<IOrdemFornecimento>;
 
@@ -49,5 +50,9 @@ export class GerenciadorDeOfsService {
 
   deletarArquivoDaOf(arquivoDaOf: IArquivoDaOf): Observable<EntityResponseType> {
     return this.http.delete(`${this.resourceUrl}/deletarArquivoDaOf/${arquivoDaOf.id}`, {observe: 'response'});
+  }
+
+  getUsuariosGestor(): Observable<HttpResponse<IUser[]>> {
+    return this.http.get<IUser[]>(`${this.resourceUrl}/getUsuariosGestor`, {observe: 'response'});
   }
 }

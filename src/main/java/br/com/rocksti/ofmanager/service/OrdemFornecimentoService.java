@@ -14,6 +14,7 @@ import br.com.rocksti.ofmanager.service.dto.ArquivoDTO;
 import br.com.rocksti.ofmanager.service.dto.ArquivoDaOfDTO;
 import br.com.rocksti.ofmanager.service.dto.OrdemFornecimentoDTO;
 import br.com.rocksti.ofmanager.service.dto.ServicoOfDTO;
+import br.com.rocksti.ofmanager.service.dto.UserDTO;
 import br.com.rocksti.ofmanager.service.mapper.ArquivoDaOfMapper;
 import br.com.rocksti.ofmanager.service.mapper.ArquivoMapper;
 import br.com.rocksti.ofmanager.service.mapper.ServicoOfMapper;
@@ -77,7 +78,7 @@ public class OrdemFornecimentoService {
     }
 
     private void validarAntesDeProduzirConteudoDaPlanilha(OrdemFornecimentoDTO ordemFornecimentoDTO) {
-        if (ordemFornecimentoDTO.getArquivoDaOfs()
+        if (ordemFornecimentoDTO.getServicoOf().getArquivoDaOfs()
             .stream()
             .anyMatch(arquivoDaOf -> arquivoDaOf.getArquivo().getComplexidade() == null)) {
             throw new BadRequestAlertException("Todos os arquivos devem ter a complexidade selecionada.", "servicoOf", "arquivosDevemTerComplexidadeSelecionada");
@@ -87,7 +88,8 @@ public class OrdemFornecimentoService {
     private void validarOfPertencenteDeUsuario(Long idServicoOf) {
         if (idServicoOf != null) {
             userService.getUserWithAuthorities()
-                .filter(user -> user.getAuthorities().stream().noneMatch(authority -> authority.getName().equals(AuthoritiesConstants.ADMIN)))
+                .filter(user -> user.getAuthorities().stream().noneMatch(authority -> authority.getName().equals(AuthoritiesConstants.ADMIN)
+                    || authority.getName().equals(AuthoritiesConstants.GESTOR_OF)))
                 .ifPresent(user -> servicoOfRepository.findById(idServicoOf).ifPresent(servicoOf -> {
                     if (!servicoOf.getUserid().equals(user.getId())) {
                         throw new BadRequestAlertException("Of pertencente a outro usuário", "servicoOf", "servicoOfNaoPertencente");
@@ -99,7 +101,8 @@ public class OrdemFornecimentoService {
     @Transactional(readOnly = true)
     public Page<ServicoOfDTO> findAllByUser(Pageable pageable) {
         return userService.getUserWithAuthorities()
-            .filter(user -> user.getAuthorities().stream().noneMatch(authority -> authority.getName().equals(AuthoritiesConstants.ADMIN)))
+            .filter(user -> user.getAuthorities().stream().noneMatch(authority -> authority.getName().equals(AuthoritiesConstants.ADMIN)
+                || authority.getName().equals(AuthoritiesConstants.GESTOR_OF)))
             .map(user -> servicoOfRepository.findAllByUseridEquals(pageable, user.getId()).map(servicoOfMapper::toDto))
             .orElse(servicoOfRepository.findAll(pageable)
                 .map(servicoOf -> userService.getUserWithAuthorities(servicoOf.getUserid())
@@ -117,23 +120,21 @@ public class OrdemFornecimentoService {
         validarOfPertencenteDeUsuario(id);
 
         return servicoOfRepository.findById(id)
-            .map(servicoOf1 -> {
+            .map(servicoOf -> {
                 OrdemFornecimentoDTO ordemFornecimentoDTO = new OrdemFornecimentoDTO();
-                ordemFornecimentoDTO.setId(servicoOf1.getId());
-                ordemFornecimentoDTO.setNumero(servicoOf1.getNumero());
+                ordemFornecimentoDTO.setServicoOf(servicoOf);
                 StringJoiner stringJoiner = new StringJoiner("\n");
-                servicoOf1.getArquivoDaOfs()
+                servicoOf.getArquivoDaOfs()
                     .stream()
                     .map(arquivoDaOf -> arquivoDaOf.getArquivo().getCaminhoDoArquivo())
                     .forEach(stringJoiner::add);
                 ordemFornecimentoDTO.setListaDosArquivos(stringJoiner.toString());
-                ordemFornecimentoDTO.setArquivoDaOfs(servicoOf1.getArquivoDaOfs());
                 return ordemFornecimentoDTO;
             });
     }
 
     public OrdemFornecimentoDTO processar(OrdemFornecimentoDTO ordemFornecimentoDTO) {
-        validarOfPertencenteDeUsuario(ordemFornecimentoDTO.getId());
+        validarOfPertencenteDeUsuario(ordemFornecimentoDTO.getServicoOf().getId());
 
         final AtomicReference<ServicoOf> servicoOf = new AtomicReference<>(new ServicoOf());
 
@@ -157,13 +158,13 @@ public class OrdemFornecimentoService {
     }
 
     private void montarServicoOf(OrdemFornecimentoDTO ordemFornecimentoDTO, AtomicReference<ServicoOf> servicoOf) {
-        if (ordemFornecimentoDTO.getId() != null) {
-            servicoOf.set(servicoOfRepository.findById(ordemFornecimentoDTO.getId()).map(servicoOf1 -> {
-                servicoOf1.setNumero(ordemFornecimentoDTO.getNumero());
+        if (ordemFornecimentoDTO.getServicoOf().getId() != null) {
+            servicoOf.set(servicoOfRepository.findById(ordemFornecimentoDTO.getServicoOf().getId()).map(servicoOf1 -> {
+                servicoOf1.setNumero(ordemFornecimentoDTO.getServicoOf().getNumero());
                 return servicoOf1;
             }).orElseGet(ServicoOf::new));
         } else {
-            servicoOf.get().setNumero(ordemFornecimentoDTO.getNumero());
+            servicoOf.get().setNumero(ordemFornecimentoDTO.getServicoOf().getNumero());
             userService.getUserWithAuthorities().ifPresent(user -> servicoOf.get().setUserid(user.getId()));
         }
     }
@@ -303,7 +304,7 @@ public class OrdemFornecimentoService {
     public List<EstruturaDoArquivo> getEstruturaDoNegocioArquivoDaOf(OrdemFornecimentoDTO ordemFornecimento) {
         List<EstruturaDoArquivo> estruturaDoArquivoList = new ArrayList<>();
 
-        ordemFornecimento.getArquivoDaOfs().forEach(arquivoDaOf -> {
+        ordemFornecimento.getServicoOf().getArquivoDaOfs().forEach(arquivoDaOf -> {
             EstruturaDoArquivo estruturaDoArquivo = new EstruturaDoArquivo();
             estruturaDoArquivo.setDescricaoArtefato(DescricaoArtefato.get(arquivoDaOf.getArquivo().getExtensao(), arquivoDaOf.getEstadoArquivo()));
             estruturaDoArquivo.setComplexidade(arquivoDaOf.getArquivo().getComplexidade().getDescricao());
@@ -325,5 +326,17 @@ public class OrdemFornecimentoService {
         });
 
         return estruturaDoArquivoList;
+    }
+
+    public List<UserDTO> getUsuariosGestor() {
+        return userService.getUsersByAuthorities(AuthoritiesConstants.GESTOR_OF)
+            .stream()
+            .map(user -> {
+                UserDTO userDTO = new UserDTO();
+                userDTO.setId(user.getId());
+                userDTO.setFirstName(user.getFirstName());
+                return userDTO;
+            })
+            .collect(Collectors.toList());
     }
 }
