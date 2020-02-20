@@ -195,3 +195,7 @@ ui bootstrap tweaks
 }
 
 /* jhipster-needle-scss-add-main JHipster will add new css style */
+
+.no-ng-invalid:not(ng-invalid) {
+  border-left: 0px solid red;
+}
