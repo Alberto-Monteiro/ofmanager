@@ -15,9 +15,9 @@
                     <mat-form-field>
                         <mat-label>Gestor da OF</mat-label>
                         <mat-select>
-                            <mat-option *ngFor="let usuarioGestor of usuariosGestor" [value]="usuarioGestor.firstName"
-                                        (selectionChange)="atualizarUsuarioGestor(usuarioGestor)">
-                                {{usuarioGestor.firstName}}
+                            <mat-option *ngFor="let usuarioGestor of usuariosGestor" [value]="usuarioGestor!.firstName">
+<!--                                        (selectionChange)="atualizarUsuarioGestor(usuarioGestor)">-->
+                                {{usuarioGestor!.firstName}}
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
@@ -35,11 +35,11 @@
                     <fa-icon icon="chevron-left"></fa-icon>&nbsp;<span>Voltar</span>
                 </button>
                 <button type="button" id="processar" class="btn btn-primary form-group" (click)="processar()"
-                        [disabled]="editForm.invalid">
+                        [disabled]="editForm!.invalid">
                     <fa-icon icon="sync"></fa-icon>&nbsp;<span>Processar</span>
                 </button>
                 <button type="button" id="download" class="btn btn-success form-group" (click)="download()"
-                        [disabled]="!ordemFornecimento.servicoOf!.id">
+                        [disabled]="!ordemFornecimento!.servicoOf!.id">
                     <fa-icon icon="download"></fa-icon>&nbsp;<span>Download</span>
                 </button>
                 <div *ngFor="let mapArquivoDaOf of ordemFornecimento!.mapArquivoDaOf! | keyvalue"
@@ -48,7 +48,7 @@
                         {{mapArquivoDaOf.key}}
                     </div>
                     <ul class="list-group list-group-flush">
-                        <li *ngFor="let arquivoDaOf of mapArquivoDaOf!.value!" class="list-group-item">
+                        <li *ngFor="let arquivoDaOf of mapArquivoDaOf!.value" class="list-group-item">
 
                             <mat-grid-list cols="12" rowHeight="100px">
                                 <mat-grid-tile

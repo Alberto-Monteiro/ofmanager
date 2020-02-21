@@ -10,11 +10,7 @@ import br.com.rocksti.ofmanager.repository.ArquivoDaOfRepository;
 import br.com.rocksti.ofmanager.repository.ArquivoRepository;
 import br.com.rocksti.ofmanager.repository.ServicoOfRepository;
 import br.com.rocksti.ofmanager.security.AuthoritiesConstants;
-import br.com.rocksti.ofmanager.service.dto.ArquivoDTO;
-import br.com.rocksti.ofmanager.service.dto.ArquivoDaOfDTO;
-import br.com.rocksti.ofmanager.service.dto.OrdemFornecimentoDTO;
-import br.com.rocksti.ofmanager.service.dto.ServicoOfDTO;
-import br.com.rocksti.ofmanager.service.dto.UserDTO;
+import br.com.rocksti.ofmanager.service.dto.*;
 import br.com.rocksti.ofmanager.service.mapper.ArquivoDaOfMapper;
 import br.com.rocksti.ofmanager.service.mapper.ArquivoMapper;
 import br.com.rocksti.ofmanager.service.mapper.ServicoOfMapper;
@@ -31,13 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.Spliterator;
-import java.util.Spliterators;
-import java.util.StringJoiner;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -101,18 +91,12 @@ public class OrdemFornecimentoService {
     @Transactional(readOnly = true)
     public Page<ServicoOfDTO> findAllByUser(Pageable pageable) {
         return userService.getUserWithAuthorities()
-            .filter(user -> user.getAuthorities().stream().noneMatch(authority -> authority.getName().equals(AuthoritiesConstants.ADMIN)
-                || authority.getName().equals(AuthoritiesConstants.GESTOR_OF)))
+            .filter(user -> user.getAuthorities()
+                .stream()
+                .noneMatch(authority -> authority.getName().equals(AuthoritiesConstants.ADMIN)
+                    || authority.getName().equals(AuthoritiesConstants.GESTOR_OF)))
             .map(user -> servicoOfRepository.findAllByUseridEquals(pageable, user.getId()).map(servicoOfMapper::toDto))
-            .orElse(servicoOfRepository.findAll(pageable)
-                .map(servicoOf -> userService.getUserWithAuthorities(servicoOf.getUserid())
-                    .map(user -> {
-                        ServicoOfDTO servicoOfDTO = servicoOfMapper.toDto(servicoOf);
-                        servicoOfDTO.setUserName(user.getLogin());
-                        return servicoOfDTO;
-                    }).get()
-                )
-            );
+            .orElse(servicoOfRepository.findAll(pageable).map(servicoOfMapper::toDto));
     }
 
     @Transactional(readOnly = true)
@@ -229,7 +213,7 @@ public class OrdemFornecimentoService {
         AtomicReference<Arquivo> arquivoReference = new AtomicReference<>();
 
         arquivoRepository.findById(arquivoDTO.getId()).ifPresent(arquivo -> {
-            arquivo.setArquivoDeTest(arquivoDTO.getArquivoDeTest());
+            arquivo.setArquivoDeTest(arquivoDTO.isArquivoDeTest());
             arquivoRepository.save(arquivo);
             arquivoReference.set(arquivo);
         });

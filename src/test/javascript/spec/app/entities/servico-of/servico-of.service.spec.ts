@@ -1,4 +1,4 @@
-import { TestBed, getTestBed } from '@angular/core/testing';
+import { getTestBed, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import * as moment from 'moment';
 import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
@@ -24,7 +24,7 @@ describe('Service Tests', () => {
       httpMock = injector.get(HttpTestingController);
       currentDate = moment();
 
-      elemDefault = new ServicoOf(0, 0, 0, currentDate);
+      elemDefault = new ServicoOf(0, 0, {}, {}, 0, currentDate, [{}], 0, 0);
     });
 
     describe('Service methods', () => {
