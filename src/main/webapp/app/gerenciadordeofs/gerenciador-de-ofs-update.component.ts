@@ -20,6 +20,7 @@ export class GerenciadorDeOfsUpdateComponent implements OnInit {
 
   editForm = this.fb.group({
     numero: [null, [Validators.required, Validators.max(999999999), Validators.min(100)]],
+    usuarioGestor: [null, [Validators.required]],
     listaDeArquivo: [null, [Validators.required]]
   });
 
@@ -32,32 +33,31 @@ export class GerenciadorDeOfsUpdateComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ ordemFornecimento }) => {
       this.ordemFornecimento = ordemFornecimento;
-      this.updateForm(ordemFornecimento);
-    });
-
-    this.gerenciadorDeOfsService.getUsuariosGestor().subscribe(usuarios => {
-      this.usuariosGestor = usuarios.body;
+      this.gerenciadorDeOfsService.getUsuariosGestor().subscribe(usuarios => {
+        this.usuariosGestor = usuarios.body;
+        this.updateForm(ordemFornecimento);
+      });
     });
   }
 
   updateForm(ordemFornecimento: IOrdemFornecimento): void {
     this.editForm.patchValue({
-      id: ordemFornecimento.servicoOf!.id,
+      usuarioGestor: this.usuariosGestor!.filter(value => value.id === ordemFornecimento.servicoOf!.gestorDaOf!.id)![0],
       numero: ordemFornecimento.servicoOf!.numero,
       listaDeArquivo: ordemFornecimento.listaDosArquivos
     });
   }
 
   private createFromForm(): IOrdemFornecimento {
-    const servicoOf = new ServicoOf();
-    servicoOf.id = this.editForm.get(['id'])!.value;
-    servicoOf.numero = this.editForm.get(['numero'])!.value;
+    const servicoOf = new ServicoOf(
+      this.ordemFornecimento!.servicoOf!.id,
+      undefined,
+      this.editForm.get(['usuarioGestor'])!.value,
+      undefined,
+      this.editForm.get(['numero'])!.value
+    );
 
-    const of = new OrdemFornecimento();
-    of.servicoOf = servicoOf;
-    of.listaDosArquivos = this.editForm.get(['listaDeArquivo'])!.value;
-
-    return of;
+    return new OrdemFornecimento(this.editForm.get(['listaDeArquivo'])!.value, servicoOf);
   }
 
   previousState(): void {
@@ -120,8 +120,4 @@ export class GerenciadorDeOfsUpdateComponent implements OnInit {
   podeSerArquivoDeTest(extensao: string): boolean {
     return extensao === 'java' || extensao === 'js' || extensao === 'ts';
   }
-
-  // atualizarUsuarioGestor(usuarioGestor: IUser): void {
-  //    this.gerenciadorDeOfsService.atualizarUsuarioGestor(usuarioGestor).subscribe()
-  // }
 }

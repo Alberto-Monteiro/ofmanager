@@ -86,7 +86,10 @@ public class ServicoOfService {
         log.debug("Request to delete ServicoOf : {}", id);
 
         userService.getUserWithAuthorities()
-            .filter(user -> user.getAuthorities().stream().anyMatch(authority -> authority.getName().equals(AuthoritiesConstants.ADMIN)))
+            .filter(user -> user.getAuthorities()
+                .stream()
+                .anyMatch(authority -> authority.getName().equals(AuthoritiesConstants.ADMIN)
+                    || authority.getName().equals(AuthoritiesConstants.GESTOR_OF)))
             .map(user -> {
                 servicoOfRepository.deleteById(id);
                 return Optional.of(user);

@@ -9,6 +9,7 @@ import { GerenciadorDeOfsComponent } from './gerenciador-de-ofs.component';
 import { GerenciadorDeOfsUpdateComponent } from 'app/gerenciadordeofs/gerenciador-de-ofs-update.component';
 import { UserRouteAccessService } from 'app/core/auth/user-route-access-service';
 import { IOrdemFornecimento, OrdemFornecimento } from 'app/shared/model/ordem-fornecimento.model';
+import { ServicoOf } from 'app/shared/model/servico-of.model';
 
 @Injectable({ providedIn: 'root' })
 export class GerenciadorDeOfsResolve implements Resolve<IOrdemFornecimento> {
@@ -28,7 +29,7 @@ export class GerenciadorDeOfsResolve implements Resolve<IOrdemFornecimento> {
         })
       );
     }
-    return of(new OrdemFornecimento());
+    return of(new OrdemFornecimento('', new ServicoOf()));
   }
 }
 
@@ -42,6 +43,18 @@ export const gerenciadorDeOfsRoute: Routes = [
     data: {
       authorities: ['ROLE_USER', 'ROLE_GESTOR_OF'],
       defaultSort: 'id,asc',
+      pageTitle: 'ofmanagerApp.servicoOf.home.title'
+    },
+    canActivate: [UserRouteAccessService]
+  },
+  {
+    path: 'gerenciador_de_ofs/new',
+    component: GerenciadorDeOfsUpdateComponent,
+    resolve: {
+      ordemFornecimento: GerenciadorDeOfsResolve
+    },
+    data: {
+      authorities: ['ROLE_USER', 'ROLE_GESTOR_OF'],
       pageTitle: 'ofmanagerApp.servicoOf.home.title'
     },
     canActivate: [UserRouteAccessService]

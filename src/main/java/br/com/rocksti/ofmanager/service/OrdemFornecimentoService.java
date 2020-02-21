@@ -3,6 +3,7 @@ package br.com.rocksti.ofmanager.service;
 import br.com.rocksti.ofmanager.domain.Arquivo;
 import br.com.rocksti.ofmanager.domain.ArquivoDaOf;
 import br.com.rocksti.ofmanager.domain.ServicoOf;
+import br.com.rocksti.ofmanager.domain.User;
 import br.com.rocksti.ofmanager.domain.enumeration.EstadoArquivo;
 import br.com.rocksti.ofmanager.planilha.DescricaoArtefato;
 import br.com.rocksti.ofmanager.planilha.EstruturaDoArquivo;
@@ -105,6 +106,8 @@ public class OrdemFornecimentoService {
 
         return servicoOfRepository.findById(id)
             .map(servicoOf -> {
+                servicoOf.setDonoDaOf(limpaDadosUsuario(servicoOf.getDonoDaOf()));
+                servicoOf.setGestorDaOf(limpaDadosUsuario(servicoOf.getGestorDaOf()));
                 OrdemFornecimentoDTO ordemFornecimentoDTO = new OrdemFornecimentoDTO();
                 ordemFornecimentoDTO.setServicoOf(servicoOf);
                 StringJoiner stringJoiner = new StringJoiner("\n");
@@ -115,6 +118,16 @@ public class OrdemFornecimentoService {
                 ordemFornecimentoDTO.setListaDosArquivos(stringJoiner.toString());
                 return ordemFornecimentoDTO;
             });
+    }
+
+    private User limpaDadosUsuario(User donoDaOf) {
+        return Optional.of(donoDaOf).map(user -> {
+            User user1 = new User();
+            user1.setId(user.getId());
+            user1.setFirstName(user.getFirstName());
+            user1.setLogin(user.getLogin());
+            return user1;
+        }).get();
     }
 
     public OrdemFornecimentoDTO processar(OrdemFornecimentoDTO ordemFornecimentoDTO) {
@@ -143,13 +156,23 @@ public class OrdemFornecimentoService {
 
     private void montarServicoOf(OrdemFornecimentoDTO ordemFornecimentoDTO, AtomicReference<ServicoOf> servicoOf) {
         if (ordemFornecimentoDTO.getServicoOf().getId() != null) {
-            servicoOf.set(servicoOfRepository.findById(ordemFornecimentoDTO.getServicoOf().getId()).map(servicoOf1 -> {
-                servicoOf1.setNumero(ordemFornecimentoDTO.getServicoOf().getNumero());
-                return servicoOf1;
-            }).orElseGet(ServicoOf::new));
+            servicoOfRepository.findById(ordemFornecimentoDTO.getServicoOf().getId())
+                .ifPresent(servicoOf1 -> {
+                    servicoOf.set(servicoOf1);
+                    servicoOf.get().setNumero(ordemFornecimentoDTO.getServicoOf().getNumero());
+                    servicoOf.get().setGestorDaOf(ordemFornecimentoDTO.getServicoOf().getGestorDaOf());
+
+                    servicoOf.get().setUserid(0L);
+                });
         } else {
-            servicoOf.get().setNumero(ordemFornecimentoDTO.getServicoOf().getNumero());
-            userService.getUserWithAuthorities().ifPresent(user -> servicoOf.get().setUserid(user.getId()));
+            userService.getUserWithAuthorities()
+                .ifPresent(user -> {
+                    servicoOf.get().setDonoDaOf(user);
+                    servicoOf.get().setNumero(ordemFornecimentoDTO.getServicoOf().getNumero());
+                    servicoOf.get().setGestorDaOf(ordemFornecimentoDTO.getServicoOf().getGestorDaOf());
+
+                    servicoOf.get().setUserid(0L);
+                });
         }
     }
 
@@ -319,6 +342,7 @@ public class OrdemFornecimentoService {
                 UserDTO userDTO = new UserDTO();
                 userDTO.setId(user.getId());
                 userDTO.setFirstName(user.getFirstName());
+                userDTO.setLogin(user.getLogin());
                 return userDTO;
             })
             .collect(Collectors.toList());
