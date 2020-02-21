@@ -11,7 +11,11 @@ import br.com.rocksti.ofmanager.repository.ArquivoDaOfRepository;
 import br.com.rocksti.ofmanager.repository.ArquivoRepository;
 import br.com.rocksti.ofmanager.repository.ServicoOfRepository;
 import br.com.rocksti.ofmanager.security.AuthoritiesConstants;
-import br.com.rocksti.ofmanager.service.dto.*;
+import br.com.rocksti.ofmanager.service.dto.ArquivoDTO;
+import br.com.rocksti.ofmanager.service.dto.ArquivoDaOfDTO;
+import br.com.rocksti.ofmanager.service.dto.OrdemFornecimentoDTO;
+import br.com.rocksti.ofmanager.service.dto.ServicoOfDTO;
+import br.com.rocksti.ofmanager.service.dto.UserDTO;
 import br.com.rocksti.ofmanager.service.mapper.ArquivoDaOfMapper;
 import br.com.rocksti.ofmanager.service.mapper.ArquivoMapper;
 import br.com.rocksti.ofmanager.service.mapper.ServicoOfMapper;
@@ -28,7 +32,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.Spliterator;
+import java.util.Spliterators;
+import java.util.StringJoiner;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -143,11 +153,7 @@ public class OrdemFornecimentoService {
 
         List<Arquivo> listaArquivosNovos = getListaArquivosNovos(listaCaminhoDosArquivos, listaArquivosQueExistem);
 
-        popularArquivosExistentes(servicoOf, listaArquivosQueExistem);
-
-        popularArquivosNovos(servicoOf, listaArquivosNovos);
-
-        retirarArquivosInexistente(servicoOf, listaArquivosQueExistem, listaArquivosNovos);
+        prepararArquivosDaOf(servicoOf, listaCaminhoDosArquivos, listaArquivosQueExistem, listaArquivosNovos);
 
         servicoOfRepository.save(servicoOf.get());
 
@@ -196,40 +202,31 @@ public class OrdemFornecimentoService {
             .collect(Collectors.toList());
     }
 
-    private void popularArquivosExistentes(AtomicReference<ServicoOf> servicoOf, List<Arquivo> listaArquivosQueExistem) {
-        listaArquivosQueExistem.stream()
-            .filter(arquivo -> !servicoOf.get().getArquivoDaOfs().stream().map(ArquivoDaOf::getArquivo).collect(Collectors.toList()).contains(arquivo))
-            .forEach(arquivo -> {
-                ArquivoDaOf arquivoDaOf = new ArquivoDaOf();
-                arquivoDaOf.setArquivo(arquivo);
-                arquivoDaOf.setEstadoArquivo(EstadoArquivo.ALTERANDO);
-
-                arquivo.addArquivoDaOf(arquivoDaOf);
-
-                servicoOf.get().addArquivoDaOf(arquivoDaOf);
-            });
-    }
-
-    private void popularArquivosNovos(AtomicReference<ServicoOf> servicoOf, List<Arquivo> listaArquivosNovos) {
-        listaArquivosNovos.stream()
-            .filter(arquivo -> !servicoOf.get().getArquivoDaOfs().stream().map(ArquivoDaOf::getArquivo).collect(Collectors.toList()).contains(arquivo))
-            .forEach(arquivo -> {
-                ArquivoDaOf arquivoDaOf = new ArquivoDaOf();
-                arquivoDaOf.setArquivo(arquivo);
-                arquivoDaOf.setEstadoArquivo(EstadoArquivo.CRIANDO);
-
-                arquivo.addArquivoDaOf(arquivoDaOf);
-
-                servicoOf.get().addArquivoDaOf(arquivoDaOf);
-            });
-    }
-
-    private void retirarArquivosInexistente(AtomicReference<ServicoOf> servicoOf, List<Arquivo> listaArquivosQueExistem, List<Arquivo> listaArquivosNovos) {
-        List<ArquivoDaOf> arquivosParaRemover = servicoOf.get().getArquivoDaOfs()
+    private void prepararArquivosDaOf(AtomicReference<ServicoOf> servicoOf, List<String> listaCaminhoDosArquivos, List<Arquivo> listaArquivosQueExistem, List<Arquivo> listaArquivosNovos) {
+        List<Arquivo> listaArquivosPreparados = listaCaminhoDosArquivos
             .stream()
-            .filter(arquivoDaOf -> !(listaArquivosNovos.contains(arquivoDaOf.getArquivo()) || listaArquivosQueExistem.contains(arquivoDaOf.getArquivo())))
+            .map(s -> listaArquivosQueExistem
+                .stream()
+                .filter(arquivo -> arquivo.getCaminhoDoArquivo().equals(s))
+                .findFirst()
+                .orElseGet(() -> listaArquivosNovos
+                    .stream()
+                    .filter(arquivo -> arquivo.getCaminhoDoArquivo().equals(s))
+                    .findFirst()
+                    .get()))
             .collect(Collectors.toList());
-        arquivosParaRemover.forEach(arquivoDaOf -> servicoOf.get().removeArquivoDaOf(arquivoDaOf));
+
+        servicoOf.get().getArquivoDaOfs().clear();
+        listaArquivosPreparados
+            .forEach(arquivo -> {
+                ArquivoDaOf arquivoDaOf = new ArquivoDaOf();
+                arquivoDaOf.setArquivo(arquivo);
+                arquivoDaOf.setEstadoArquivo(arquivo.getId() == null ? EstadoArquivo.CRIANDO : EstadoArquivo.ALTERANDO);
+
+                arquivo.addArquivoDaOf(arquivoDaOf);
+
+                servicoOf.get().addArquivoDaOf(arquivoDaOf);
+            });
     }
 
     public ArquivoDTO updateIsTestArquivo(ArquivoDTO arquivoDTO) {
