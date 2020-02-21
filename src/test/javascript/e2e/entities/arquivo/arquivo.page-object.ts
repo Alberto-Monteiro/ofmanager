@@ -32,6 +32,7 @@ export class ArquivoUpdatePage {
   caminhoDoArquivoInput = element(by.id('field_caminhoDoArquivo'));
   extensaoInput = element(by.id('field_extensao'));
   complexidadeSelect = element(by.id('field_complexidade'));
+  arquivoDeTestInput = element(by.id('field_arquivoDeTest'));
 
   async getPageTitle(): Promise<string> {
     return this.pageTitle.getAttribute('jhiTranslate');
@@ -66,6 +67,10 @@ export class ArquivoUpdatePage {
       .all(by.tagName('option'))
       .last()
       .click();
+  }
+
+  getArquivoDeTestInput(): ElementFinder {
+    return this.arquivoDeTestInput;
   }
 
   async save(): Promise<void> {

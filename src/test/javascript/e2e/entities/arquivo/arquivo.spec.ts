@@ -51,6 +51,14 @@ describe('Arquivo e2e test', () => {
       'Expected CaminhoDoArquivo value to be equals to caminhoDoArquivo'
     );
     expect(await arquivoUpdatePage.getExtensaoInput()).to.eq('extensao', 'Expected Extensao value to be equals to extensao');
+    const selectedArquivoDeTest = arquivoUpdatePage.getArquivoDeTestInput();
+    if (await selectedArquivoDeTest.isSelected()) {
+      await arquivoUpdatePage.getArquivoDeTestInput().click();
+      expect(await arquivoUpdatePage.getArquivoDeTestInput().isSelected(), 'Expected arquivoDeTest not to be selected').to.be.false;
+    } else {
+      await arquivoUpdatePage.getArquivoDeTestInput().click();
+      expect(await arquivoUpdatePage.getArquivoDeTestInput().isSelected(), 'Expected arquivoDeTest to be selected').to.be.true;
+    }
 
     await arquivoUpdatePage.save();
     expect(await arquivoUpdatePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;

@@ -18,7 +18,10 @@
       },
       "userid": "Userid",
       "numero": "Numero",
-      "arquivoDaOf": "Arquivo Da Of"
+      "createdDate": "Created Date",
+      "arquivoDaOf": "Arquivo Da Of",
+      "gestorDaOf": "Gestor Da Of",
+      "donoDaOf": "Dono Da Of"
     }
   }
 }

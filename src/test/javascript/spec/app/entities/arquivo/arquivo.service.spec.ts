@@ -21,7 +21,7 @@ describe('Service Tests', () => {
       service = injector.get(ArquivoService);
       httpMock = injector.get(HttpTestingController);
 
-      elemDefault = new Arquivo(0, 'AAAAAAA', 'AAAAAAA', Complexidade.MUITO_BAIXA);
+      elemDefault = new Arquivo(0, 'AAAAAAA', 'AAAAAAA', Complexidade.MUITO_BAIXA, false);
     });
 
     describe('Service methods', () => {
@@ -57,7 +57,8 @@ describe('Service Tests', () => {
           {
             caminhoDoArquivo: 'BBBBBB',
             extensao: 'BBBBBB',
-            complexidade: 'BBBBBB'
+            complexidade: 'BBBBBB',
+            arquivoDeTest: true
           },
           elemDefault
         );
@@ -76,7 +77,8 @@ describe('Service Tests', () => {
           {
             caminhoDoArquivo: 'BBBBBB',
             extensao: 'BBBBBB',
-            complexidade: 'BBBBBB'
+            complexidade: 'BBBBBB',
+            arquivoDeTest: true
           },
           elemDefault
         );

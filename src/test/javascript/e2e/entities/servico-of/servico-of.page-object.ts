@@ -31,6 +31,10 @@ export class ServicoOfUpdatePage {
 
   useridInput = element(by.id('field_userid'));
   numeroInput = element(by.id('field_numero'));
+  createdDateInput = element(by.id('field_createdDate'));
+
+  gestorDaOfSelect = element(by.id('field_gestorDaOf'));
+  donoDaOfSelect = element(by.id('field_donoDaOf'));
 
   async getPageTitle(): Promise<string> {
     return this.pageTitle.getAttribute('jhiTranslate');
@@ -50,6 +54,52 @@ export class ServicoOfUpdatePage {
 
   async getNumeroInput(): Promise<string> {
     return await this.numeroInput.getAttribute('value');
+  }
+
+  async setCreatedDateInput(createdDate: string): Promise<void> {
+    await this.createdDateInput.sendKeys(createdDate);
+  }
+
+  async getCreatedDateInput(): Promise<string> {
+    return await this.createdDateInput.getAttribute('value');
+  }
+
+  async gestorDaOfSelectLastOption(): Promise<void> {
+    await this.gestorDaOfSelect
+      .all(by.tagName('option'))
+      .last()
+      .click();
+  }
+
+  async gestorDaOfSelectOption(option: string): Promise<void> {
+    await this.gestorDaOfSelect.sendKeys(option);
+  }
+
+  getGestorDaOfSelect(): ElementFinder {
+    return this.gestorDaOfSelect;
+  }
+
+  async getGestorDaOfSelectedOption(): Promise<string> {
+    return await this.gestorDaOfSelect.element(by.css('option:checked')).getText();
+  }
+
+  async donoDaOfSelectLastOption(): Promise<void> {
+    await this.donoDaOfSelect
+      .all(by.tagName('option'))
+      .last()
+      .click();
+  }
+
+  async donoDaOfSelectOption(option: string): Promise<void> {
+    await this.donoDaOfSelect.sendKeys(option);
+  }
+
+  getDonoDaOfSelect(): ElementFinder {
+    return this.donoDaOfSelect;
+  }
+
+  async getDonoDaOfSelectedOption(): Promise<string> {
+    return await this.donoDaOfSelect.element(by.css('option:checked')).getText();
   }
 
   async save(): Promise<void> {

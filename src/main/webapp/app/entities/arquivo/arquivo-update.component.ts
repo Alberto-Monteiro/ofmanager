@@ -19,7 +19,8 @@ export class ArquivoUpdateComponent implements OnInit {
     id: [],
     caminhoDoArquivo: [null, [Validators.required]],
     extensao: [null, [Validators.required]],
-    complexidade: []
+    complexidade: [],
+    arquivoDeTest: []
   });
 
   constructor(protected arquivoService: ArquivoService, protected activatedRoute: ActivatedRoute, private fb: FormBuilder) {}
@@ -35,7 +36,8 @@ export class ArquivoUpdateComponent implements OnInit {
       id: arquivo.id,
       caminhoDoArquivo: arquivo.caminhoDoArquivo,
       extensao: arquivo.extensao,
-      complexidade: arquivo.complexidade
+      complexidade: arquivo.complexidade,
+      arquivoDeTest: arquivo.arquivoDeTest
     });
   }
 
@@ -59,7 +61,8 @@ export class ArquivoUpdateComponent implements OnInit {
       id: this.editForm.get(['id'])!.value,
       caminhoDoArquivo: this.editForm.get(['caminhoDoArquivo'])!.value,
       extensao: this.editForm.get(['extensao'])!.value,
-      complexidade: this.editForm.get(['complexidade'])!.value
+      complexidade: this.editForm.get(['complexidade'])!.value,
+      arquivoDeTest: this.editForm.get(['arquivoDeTest'])!.value
     };
   }
 

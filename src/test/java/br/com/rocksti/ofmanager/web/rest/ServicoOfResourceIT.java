@@ -22,6 +22,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Validator;
 
 import javax.persistence.EntityManager;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import static br.com.rocksti.ofmanager.web.rest.TestUtil.createFormattingConversionService;
@@ -41,6 +43,9 @@ public class ServicoOfResourceIT {
 
     private static final Integer DEFAULT_NUMERO = 1;
     private static final Integer UPDATED_NUMERO = 2;
+
+    private static final Instant DEFAULT_CREATED_DATE = Instant.ofEpochMilli(0L);
+    private static final Instant UPDATED_CREATED_DATE = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
     @Autowired
     private ServicoOfRepository servicoOfRepository;
@@ -91,7 +96,8 @@ public class ServicoOfResourceIT {
     public static ServicoOf createEntity(EntityManager em) {
         ServicoOf servicoOf = new ServicoOf()
             .userid(DEFAULT_USERID)
-            .numero(DEFAULT_NUMERO);
+            .numero(DEFAULT_NUMERO)
+            .createdDate(DEFAULT_CREATED_DATE);
         return servicoOf;
     }
     /**
@@ -103,7 +109,8 @@ public class ServicoOfResourceIT {
     public static ServicoOf createUpdatedEntity(EntityManager em) {
         ServicoOf servicoOf = new ServicoOf()
             .userid(UPDATED_USERID)
-            .numero(UPDATED_NUMERO);
+            .numero(UPDATED_NUMERO)
+            .createdDate(UPDATED_CREATED_DATE);
         return servicoOf;
     }
 
@@ -130,6 +137,7 @@ public class ServicoOfResourceIT {
         ServicoOf testServicoOf = servicoOfList.get(servicoOfList.size() - 1);
         assertThat(testServicoOf.getUserid()).isEqualTo(DEFAULT_USERID);
         assertThat(testServicoOf.getNumero()).isEqualTo(DEFAULT_NUMERO);
+        assertThat(testServicoOf.getCreatedDate()).isEqualTo(DEFAULT_CREATED_DATE);
     }
 
     @Test
@@ -203,7 +211,8 @@ public class ServicoOfResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(servicoOf.getId().intValue())))
             .andExpect(jsonPath("$.[*].userid").value(hasItem(DEFAULT_USERID.intValue())))
-            .andExpect(jsonPath("$.[*].numero").value(hasItem(DEFAULT_NUMERO)));
+            .andExpect(jsonPath("$.[*].numero").value(hasItem(DEFAULT_NUMERO)))
+            .andExpect(jsonPath("$.[*].createdDate").value(hasItem(DEFAULT_CREATED_DATE.toString())));
     }
     
     @Test
@@ -218,7 +227,8 @@ public class ServicoOfResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(servicoOf.getId().intValue()))
             .andExpect(jsonPath("$.userid").value(DEFAULT_USERID.intValue()))
-            .andExpect(jsonPath("$.numero").value(DEFAULT_NUMERO));
+            .andExpect(jsonPath("$.numero").value(DEFAULT_NUMERO))
+            .andExpect(jsonPath("$.createdDate").value(DEFAULT_CREATED_DATE.toString()));
     }
 
     @Test
@@ -243,7 +253,8 @@ public class ServicoOfResourceIT {
         em.detach(updatedServicoOf);
         updatedServicoOf
             .userid(UPDATED_USERID)
-            .numero(UPDATED_NUMERO);
+            .numero(UPDATED_NUMERO)
+            .createdDate(UPDATED_CREATED_DATE);
         ServicoOfDTO servicoOfDTO = servicoOfMapper.toDto(updatedServicoOf);
 
         restServicoOfMockMvc.perform(put("/api/servico-ofs")
@@ -257,6 +268,7 @@ public class ServicoOfResourceIT {
         ServicoOf testServicoOf = servicoOfList.get(servicoOfList.size() - 1);
         assertThat(testServicoOf.getUserid()).isEqualTo(UPDATED_USERID);
         assertThat(testServicoOf.getNumero()).isEqualTo(UPDATED_NUMERO);
+        assertThat(testServicoOf.getCreatedDate()).isEqualTo(UPDATED_CREATED_DATE);
     }
 
     @Test

@@ -1,4 +1,4 @@
-import { browser, ExpectedConditions as ec, promise } from 'protractor';
+import { browser, ExpectedConditions as ec, protractor, promise } from 'protractor';
 import { NavBarPage, SignInPage } from '../../page-objects/jhi-page-objects';
 
 import { ServicoOfComponentsPage, ServicoOfDeleteDialog, ServicoOfUpdatePage } from './servico-of.page-object';
@@ -40,10 +40,20 @@ describe('ServicoOf e2e test', () => {
 
     await servicoOfComponentsPage.clickOnCreateButton();
 
-    await promise.all([servicoOfUpdatePage.setUseridInput('5'), servicoOfUpdatePage.setNumeroInput('5')]);
+    await promise.all([
+      servicoOfUpdatePage.setUseridInput('5'),
+      servicoOfUpdatePage.setNumeroInput('5'),
+      servicoOfUpdatePage.setCreatedDateInput('01/01/2001' + protractor.Key.TAB + '02:30AM'),
+      servicoOfUpdatePage.gestorDaOfSelectLastOption(),
+      servicoOfUpdatePage.donoDaOfSelectLastOption()
+    ]);
 
     expect(await servicoOfUpdatePage.getUseridInput()).to.eq('5', 'Expected userid value to be equals to 5');
     expect(await servicoOfUpdatePage.getNumeroInput()).to.eq('5', 'Expected numero value to be equals to 5');
+    expect(await servicoOfUpdatePage.getCreatedDateInput()).to.contain(
+      '2001-01-01T02:30',
+      'Expected createdDate value to be equals to 2000-12-31'
+    );
 
     await servicoOfUpdatePage.save();
     expect(await servicoOfUpdatePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;

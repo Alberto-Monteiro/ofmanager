@@ -9,13 +9,17 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link ServicoOf} and its DTO {@link ServicoOfDTO}.
  */
-@Mapper(componentModel = "spring", uses = {})
+@Mapper(componentModel = "spring", uses = {UserMapper.class})
 public interface ServicoOfMapper extends EntityMapper<ServicoOfDTO, ServicoOf> {
 
+    @Mapping(source = "gestorDaOf.id", target = "gestorDaOfId")
+    @Mapping(source = "donoDaOf.id", target = "donoDaOfId")
+    ServicoOfDTO toDto(ServicoOf servicoOf);
 
     @Mapping(target = "arquivoDaOfs", ignore = true)
     @Mapping(target = "removeArquivoDaOf", ignore = true)
-    @Mapping(target = "createdDate", ignore = true)
+    @Mapping(source = "gestorDaOfId", target = "gestorDaOf")
+    @Mapping(source = "donoDaOfId", target = "donoDaOf")
     ServicoOf toEntity(ServicoOfDTO servicoOfDTO);
 
     default ServicoOf fromId(Long id) {

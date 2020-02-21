@@ -26,6 +26,7 @@
                     <th scope="col"  jhiSortBy="caminhoDoArquivo"><span jhiTranslate="ofmanagerApp.arquivo.caminhoDoArquivo">Caminho Do Arquivo</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"  jhiSortBy="extensao"><span jhiTranslate="ofmanagerApp.arquivo.extensao">Extensao</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"  jhiSortBy="complexidade"><span jhiTranslate="ofmanagerApp.arquivo.complexidade">Complexidade</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="arquivoDeTest"><span jhiTranslate="ofmanagerApp.arquivo.arquivoDeTest">Arquivo De Test</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"></th>
                 </tr>
             </thead>
@@ -35,6 +36,7 @@
                     <td>{{ arquivo.caminhoDoArquivo }}</td>
                     <td>{{ arquivo.extensao }}</td>
                     <td jhiTranslate="{{ 'ofmanagerApp.Complexidade.' + arquivo.complexidade }}">{{ arquivo.complexidade }}</td>
+                    <td>{{ arquivo.arquivoDeTest }}</td>
                     <td class="text-right">
                         <div class="btn-group">
                             <button type="submit"

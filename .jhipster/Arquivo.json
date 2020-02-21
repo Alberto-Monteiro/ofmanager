@@ -19,6 +19,10 @@
             "fieldName": "complexidade",
             "fieldType": "Complexidade",
             "fieldValues": "MUITO_BAIXA,BAIXA,MEDIA,ALTA,MUITO_ALTA"
+        },
+        {
+            "fieldName": "arquivoDeTest",
+            "fieldType": "Boolean"
         }
     ],
     "relationships": [

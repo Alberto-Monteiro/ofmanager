@@ -14,6 +14,10 @@
             "fieldValidateRules": [
                 "required"
             ]
+        },
+        {
+            "fieldName": "createdDate",
+            "fieldType": "Instant"
         }
     ],
     "relationships": [
@@ -22,6 +26,20 @@
             "otherEntityName": "arquivoDaOf",
             "otherEntityRelationshipName": "servicoOf",
             "relationshipName": "arquivoDaOf"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "user",
+            "otherEntityRelationshipName": "servicoOf",
+            "relationshipName": "gestorDaOf",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "user",
+            "otherEntityRelationshipName": "servicoOf",
+            "relationshipName": "donoDaOf",
+            "otherEntityField": "id"
         }
     ],
     "changelogDate": "20200213170305",

@@ -75,6 +75,7 @@ class ArquivoGatlingTest extends Simulation {
                 , "caminhoDoArquivo":"SAMPLE_TEXT"
                 , "extensao":"SAMPLE_TEXT"
                 , "complexidade":"MUITO_BAIXA"
+                , "arquivoDeTest":null
                 }""")).asJson
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_arquivo_url"))).exitHereIfFailed

@@ -1,11 +1,11 @@
-id;caminho_do_arquivo;extensao;complexidade
-1;Ergonomic Ergonomic;Personal Loan Account;MUITO_ALTA
-2;green Paraguay;bypass Car;BAIXA
-3;Automotive Administrator;Tasty;MUITO_ALTA
-4;paradigms Concrete Practical Frozen Soap;Steel Metal Ergonomic Rubber Chicken;MUITO_BAIXA
-5;streamline parse;Generic Fantastic Rubber;ALTA
-6;Wisconsin pixel parsing;Licensed virtual;MUITO_ALTA
-7;online;Eritrea Cotton programming;MUITO_BAIXA
-8;Directives;Palladium Streamlined;MEDIA
-9;withdrawal;Station Burgs;MEDIA
-10;azure green;Sleek;BAIXA
+id;caminho_do_arquivo;extensao;complexidade;arquivo_de_test
+1;Ergonomic Ergonomic;Personal Loan Account;MUITO_ALTA;true
+2;Toys;payment Rustic Unbranded Cotton Sausages;MUITO_ALTA;true
+3;architecture Consultant;Outdoors SDD Liaison;MUITO_BAIXA;false
+4;Personal Loan Account Steel Metal;Awesome Metal Computer;MUITO_BAIXA;true
+5;bypassing Checking Account enable;encoding Metal;ALTA;false
+6;virtual world-class Ergonomic Granite Sausages;online;MUITO_ALTA;true
+7;hacking;Security User-centric Shoes;MEDIA;false
+8;reintermediate Station;Health Car;MUITO_ALTA;false
+9;attitude-oriented;Wyoming Engineer;MEDIA;true
+10;Branch B2C Granite;Arizona Decentralized;ALTA;false

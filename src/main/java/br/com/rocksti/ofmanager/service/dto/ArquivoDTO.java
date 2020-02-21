@@ -1,10 +1,9 @@
 package br.com.rocksti.ofmanager.service.dto;
 
-import br.com.rocksti.ofmanager.domain.enumeration.Complexidade;
-
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Objects;
+import br.com.rocksti.ofmanager.domain.enumeration.Complexidade;
 
 /**
  * A DTO for the {@link br.com.rocksti.ofmanager.domain.Arquivo} entity.
@@ -22,6 +21,7 @@ public class ArquivoDTO implements Serializable {
     private Complexidade complexidade;
 
     private Boolean arquivoDeTest;
+
 
     public Long getId() {
         return id;
@@ -55,7 +55,7 @@ public class ArquivoDTO implements Serializable {
         this.complexidade = complexidade;
     }
 
-    public Boolean getArquivoDeTest() {
+    public Boolean isArquivoDeTest() {
         return arquivoDeTest;
     }
 
@@ -91,6 +91,7 @@ public class ArquivoDTO implements Serializable {
             ", caminhoDoArquivo='" + getCaminhoDoArquivo() + "'" +
             ", extensao='" + getExtensao() + "'" +
             ", complexidade='" + getComplexidade() + "'" +
+            ", arquivoDeTest='" + isArquivoDeTest() + "'" +
             "}";
     }
 }

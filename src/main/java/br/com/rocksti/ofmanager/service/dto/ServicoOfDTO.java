@@ -1,16 +1,13 @@
 package br.com.rocksti.ofmanager.service.dto;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-
-import javax.validation.constraints.NotNull;
-import java.io.Serializable;
 import java.time.Instant;
+import javax.validation.constraints.*;
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
  * A DTO for the {@link br.com.rocksti.ofmanager.domain.ServicoOf} entity.
  */
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ServicoOfDTO implements Serializable {
 
     private Long id;
@@ -21,9 +18,12 @@ public class ServicoOfDTO implements Serializable {
     @NotNull
     private Integer numero;
 
-    private String userName;
-
     private Instant createdDate;
+
+
+    private Long gestorDaOfId;
+
+    private Long donoDaOfId;
 
     public Long getId() {
         return id;
@@ -49,20 +49,28 @@ public class ServicoOfDTO implements Serializable {
         this.numero = numero;
     }
 
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
     public Instant getCreatedDate() {
         return createdDate;
     }
 
     public void setCreatedDate(Instant createdDate) {
         this.createdDate = createdDate;
+    }
+
+    public Long getGestorDaOfId() {
+        return gestorDaOfId;
+    }
+
+    public void setGestorDaOfId(Long userId) {
+        this.gestorDaOfId = userId;
+    }
+
+    public Long getDonoDaOfId() {
+        return donoDaOfId;
+    }
+
+    public void setDonoDaOfId(Long userId) {
+        this.donoDaOfId = userId;
     }
 
     @Override
@@ -92,6 +100,9 @@ public class ServicoOfDTO implements Serializable {
             "id=" + getId() +
             ", userid=" + getUserid() +
             ", numero=" + getNumero() +
+            ", createdDate='" + getCreatedDate() + "'" +
+            ", gestorDaOfId=" + getGestorDaOfId() +
+            ", donoDaOfId=" + getDonoDaOfId() +
             "}";
     }
 }

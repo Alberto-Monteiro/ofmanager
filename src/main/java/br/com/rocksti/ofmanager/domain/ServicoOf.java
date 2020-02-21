@@ -1,17 +1,11 @@
 package br.com.rocksti.ofmanager.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.data.annotation.CreatedDate;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.Instant;
@@ -40,13 +34,21 @@ public class ServicoOf implements Serializable {
     @Column(name = "numero", nullable = false)
     private Integer numero;
 
+    @CreatedDate
+    @Column(name = "created_date", updatable = false)
+    private Instant createdDate = Instant.now();
+
     @OneToMany(mappedBy = "servicoOf", cascade = {CascadeType.ALL}, orphanRemoval = true)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<ArquivoDaOf> arquivoDaOfs = new HashSet<>();
 
-    @CreatedDate
-    @Column(name = "created_date", updatable = false)
-    private Instant createdDate = Instant.now();
+    @ManyToOne
+    @JsonIgnoreProperties("servicoOfs")
+    private User gestorDaOf;
+
+    @ManyToOne
+    @JsonIgnoreProperties("servicoOfs")
+    private User donoDaOf;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -83,6 +85,19 @@ public class ServicoOf implements Serializable {
         this.numero = numero;
     }
 
+    public Instant getCreatedDate() {
+        return createdDate;
+    }
+
+    public ServicoOf createdDate(Instant createdDate) {
+        this.createdDate = createdDate;
+        return this;
+    }
+
+    public void setCreatedDate(Instant createdDate) {
+        this.createdDate = createdDate;
+    }
+
     public Set<ArquivoDaOf> getArquivoDaOfs() {
         return arquivoDaOfs;
     }
@@ -108,14 +123,31 @@ public class ServicoOf implements Serializable {
         this.arquivoDaOfs = arquivoDaOfs;
     }
 
-    public Instant getCreatedDate() {
-        return createdDate;
+    public User getGestorDaOf() {
+        return gestorDaOf;
     }
 
-    public void setCreatedDate(Instant created_date) {
-        this.createdDate = created_date;
+    public ServicoOf gestorDaOf(User user) {
+        this.gestorDaOf = user;
+        return this;
     }
 
+    public void setGestorDaOf(User user) {
+        this.gestorDaOf = user;
+    }
+
+    public User getDonoDaOf() {
+        return donoDaOf;
+    }
+
+    public ServicoOf donoDaOf(User user) {
+        this.donoDaOf = user;
+        return this;
+    }
+
+    public void setDonoDaOf(User user) {
+        this.donoDaOf = user;
+    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override
@@ -140,6 +172,7 @@ public class ServicoOf implements Serializable {
             "id=" + getId() +
             ", userid=" + getUserid() +
             ", numero=" + getNumero() +
+            ", createdDate='" + getCreatedDate() + "'" +
             "}";
     }
 }

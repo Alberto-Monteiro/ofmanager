@@ -46,6 +46,9 @@ public class ArquivoResourceIT {
     private static final Complexidade DEFAULT_COMPLEXIDADE = Complexidade.MUITO_BAIXA;
     private static final Complexidade UPDATED_COMPLEXIDADE = Complexidade.BAIXA;
 
+    private static final Boolean DEFAULT_ARQUIVO_DE_TEST = false;
+    private static final Boolean UPDATED_ARQUIVO_DE_TEST = true;
+
     @Autowired
     private ArquivoRepository arquivoRepository;
 
@@ -96,7 +99,8 @@ public class ArquivoResourceIT {
         Arquivo arquivo = new Arquivo()
             .caminhoDoArquivo(DEFAULT_CAMINHO_DO_ARQUIVO)
             .extensao(DEFAULT_EXTENSAO)
-            .complexidade(DEFAULT_COMPLEXIDADE);
+            .complexidade(DEFAULT_COMPLEXIDADE)
+            .arquivoDeTest(DEFAULT_ARQUIVO_DE_TEST);
         return arquivo;
     }
     /**
@@ -109,7 +113,8 @@ public class ArquivoResourceIT {
         Arquivo arquivo = new Arquivo()
             .caminhoDoArquivo(UPDATED_CAMINHO_DO_ARQUIVO)
             .extensao(UPDATED_EXTENSAO)
-            .complexidade(UPDATED_COMPLEXIDADE);
+            .complexidade(UPDATED_COMPLEXIDADE)
+            .arquivoDeTest(UPDATED_ARQUIVO_DE_TEST);
         return arquivo;
     }
 
@@ -137,6 +142,7 @@ public class ArquivoResourceIT {
         assertThat(testArquivo.getCaminhoDoArquivo()).isEqualTo(DEFAULT_CAMINHO_DO_ARQUIVO);
         assertThat(testArquivo.getExtensao()).isEqualTo(DEFAULT_EXTENSAO);
         assertThat(testArquivo.getComplexidade()).isEqualTo(DEFAULT_COMPLEXIDADE);
+        assertThat(testArquivo.isArquivoDeTest()).isEqualTo(DEFAULT_ARQUIVO_DE_TEST);
     }
 
     @Test
@@ -211,7 +217,8 @@ public class ArquivoResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(arquivo.getId().intValue())))
             .andExpect(jsonPath("$.[*].caminhoDoArquivo").value(hasItem(DEFAULT_CAMINHO_DO_ARQUIVO)))
             .andExpect(jsonPath("$.[*].extensao").value(hasItem(DEFAULT_EXTENSAO)))
-            .andExpect(jsonPath("$.[*].complexidade").value(hasItem(DEFAULT_COMPLEXIDADE.toString())));
+            .andExpect(jsonPath("$.[*].complexidade").value(hasItem(DEFAULT_COMPLEXIDADE.toString())))
+            .andExpect(jsonPath("$.[*].arquivoDeTest").value(hasItem(DEFAULT_ARQUIVO_DE_TEST.booleanValue())));
     }
     
     @Test
@@ -227,7 +234,8 @@ public class ArquivoResourceIT {
             .andExpect(jsonPath("$.id").value(arquivo.getId().intValue()))
             .andExpect(jsonPath("$.caminhoDoArquivo").value(DEFAULT_CAMINHO_DO_ARQUIVO))
             .andExpect(jsonPath("$.extensao").value(DEFAULT_EXTENSAO))
-            .andExpect(jsonPath("$.complexidade").value(DEFAULT_COMPLEXIDADE.toString()));
+            .andExpect(jsonPath("$.complexidade").value(DEFAULT_COMPLEXIDADE.toString()))
+            .andExpect(jsonPath("$.arquivoDeTest").value(DEFAULT_ARQUIVO_DE_TEST.booleanValue()));
     }
 
     @Test
@@ -253,7 +261,8 @@ public class ArquivoResourceIT {
         updatedArquivo
             .caminhoDoArquivo(UPDATED_CAMINHO_DO_ARQUIVO)
             .extensao(UPDATED_EXTENSAO)
-            .complexidade(UPDATED_COMPLEXIDADE);
+            .complexidade(UPDATED_COMPLEXIDADE)
+            .arquivoDeTest(UPDATED_ARQUIVO_DE_TEST);
         ArquivoDTO arquivoDTO = arquivoMapper.toDto(updatedArquivo);
 
         restArquivoMockMvc.perform(put("/api/arquivos")
@@ -268,6 +277,7 @@ public class ArquivoResourceIT {
         assertThat(testArquivo.getCaminhoDoArquivo()).isEqualTo(UPDATED_CAMINHO_DO_ARQUIVO);
         assertThat(testArquivo.getExtensao()).isEqualTo(UPDATED_EXTENSAO);
         assertThat(testArquivo.getComplexidade()).isEqualTo(UPDATED_COMPLEXIDADE);
+        assertThat(testArquivo.isArquivoDeTest()).isEqualTo(UPDATED_ARQUIVO_DE_TEST);
     }
 
     @Test

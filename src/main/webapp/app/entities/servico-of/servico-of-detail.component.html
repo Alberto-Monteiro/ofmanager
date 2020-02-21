@@ -16,6 +16,18 @@
                 <dd>
                     <span>{{ servicoOf.numero }}</span>
                 </dd>
+                <dt><span jhiTranslate="ofmanagerApp.servicoOf.createdDate">Created Date</span></dt>
+                <dd>
+                    <span>{{ servicoOf.createdDate }}</span>
+                </dd>
+                <dt><span jhiTranslate="ofmanagerApp.servicoOf.gestorDaOf">Gestor Da Of</span></dt>
+                <dd>
+                    {{ servicoOf.gestorDaOfId }}
+                </dd>
+                <dt><span jhiTranslate="ofmanagerApp.servicoOf.donoDaOf">Dono Da Of</span></dt>
+                <dd>
+                    {{ servicoOf.donoDaOfId }}
+                </dd>
             </dl>
 
             <button type="submit"

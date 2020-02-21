@@ -10,6 +10,11 @@ application {
   entities all
 }
 
+relationship ManyToOne {
+	ServicoOf{gestorDaOf} to User
+    ServicoOf{donoDaOf} to User
+}
+
 relationship OneToMany {
 	ServicoOf to ArquivoDaOf
     Arquivo to ArquivoDaOf
@@ -18,6 +23,7 @@ relationship OneToMany {
 entity ServicoOf {
 	userid Long required
 	numero Integer required
+    createdDate Instant
 }
 
 entity ArquivoDaOf {
@@ -28,6 +34,7 @@ entity Arquivo {
 	caminhoDoArquivo String required
     extensao String required
     complexidade Complexidade
+    arquivoDeTest Boolean
 }
 
 enum EstadoArquivo {

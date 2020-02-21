@@ -1,22 +1,16 @@
 package br.com.rocksti.ofmanager.domain;
 
-import br.com.rocksti.ofmanager.domain.enumeration.Complexidade;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
+import javax.persistence.*;
+import javax.validation.constraints.*;
+
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
+
+import br.com.rocksti.ofmanager.domain.enumeration.Complexidade;
 
 /**
  * A Arquivo.
@@ -44,12 +38,12 @@ public class Arquivo implements Serializable {
     @Column(name = "complexidade")
     private Complexidade complexidade;
 
+    @Column(name = "arquivo_de_test")
+    private Boolean arquivoDeTest;
+
     @OneToMany(mappedBy = "arquivo")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<ArquivoDaOf> arquivoDaOfs = new HashSet<>();
-
-    @Column(name = "arquivo_de_test")
-    private Boolean arquivoDeTest;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -99,6 +93,19 @@ public class Arquivo implements Serializable {
         this.complexidade = complexidade;
     }
 
+    public Boolean isArquivoDeTest() {
+        return arquivoDeTest;
+    }
+
+    public Arquivo arquivoDeTest(Boolean arquivoDeTest) {
+        this.arquivoDeTest = arquivoDeTest;
+        return this;
+    }
+
+    public void setArquivoDeTest(Boolean arquivoDeTest) {
+        this.arquivoDeTest = arquivoDeTest;
+    }
+
     public Set<ArquivoDaOf> getArquivoDaOfs() {
         return arquivoDaOfs;
     }
@@ -123,15 +130,6 @@ public class Arquivo implements Serializable {
     public void setArquivoDaOfs(Set<ArquivoDaOf> arquivoDaOfs) {
         this.arquivoDaOfs = arquivoDaOfs;
     }
-
-    public Boolean getArquivoDeTest() {
-        return arquivoDeTest;
-    }
-
-    public void setArquivoDeTest(Boolean arquivoDeTest) {
-        this.arquivoDeTest = arquivoDeTest;
-    }
-
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override
@@ -157,6 +155,7 @@ public class Arquivo implements Serializable {
             ", caminhoDoArquivo='" + getCaminhoDoArquivo() + "'" +
             ", extensao='" + getExtensao() + "'" +
             ", complexidade='" + getComplexidade() + "'" +
+            ", arquivoDeTest='" + isArquivoDeTest() + "'" +
             "}";
     }
 }
