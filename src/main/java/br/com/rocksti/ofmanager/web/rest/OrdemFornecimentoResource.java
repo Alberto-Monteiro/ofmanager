@@ -5,6 +5,7 @@ import br.com.rocksti.ofmanager.service.dto.ArquivoDTO;
 import br.com.rocksti.ofmanager.service.dto.ArquivoDaOfDTO;
 import br.com.rocksti.ofmanager.service.dto.OrdemFornecimentoDTO;
 import br.com.rocksti.ofmanager.service.dto.ServicoOfDTO;
+import br.com.rocksti.ofmanager.service.dto.UserDTO;
 import br.com.rocksti.ofmanager.web.rest.errors.BadRequestAlertException;
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
@@ -131,5 +132,10 @@ public class OrdemFornecimentoResource {
         } catch (IOException ex) {
             throw new RuntimeException("IOError writing file to output stream");
         }
+    }
+
+    @GetMapping("/gerenciador_de_ofs/getUsuariosGestor")
+    public ResponseEntity<List<UserDTO>> getUsuariosGestor() {
+        return ResponseUtil.wrapOrNotFound(Optional.of(ordemFornecimentoService.getUsuariosGestor()));
     }
 }

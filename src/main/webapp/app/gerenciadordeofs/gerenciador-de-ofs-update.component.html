@@ -5,26 +5,32 @@
                 Servico Of</h2>
             <div>
                 <of-alert-error></of-alert-error>
+
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="ofmanagerApp.servicoOf.numero" for="field_numero">Numero</label>
-                    <input type="number" class="form-control" name="numero" id="field_numero" formControlName="numero"/>
-                    <div
-                        *ngIf="editForm.get('numero')!.invalid && (editForm.get('numero')!.dirty || editForm.get('numero')!.touched)">
-                        <small class="form-text text-danger" *ngIf="editForm.get('numero')?.errors?.required"
-                               jhiTranslate="entity.validation.required">
-                            This field is required.
-                        </small>
-                        <small class="form-text text-danger" [hidden]="!editForm.get('numero')?.errors?.number"
-                               jhiTranslate="entity.validation.number">
-                            This field should be a number.
-                        </small>
-                    </div>
+                    <mat-form-field class="no-ng-invalid">
+                        <input class="no-ng-invalid" matInput placeholder="Número da OF" id="field_numero" type="number"
+                               name="numero" formControlName="numero">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-label>Gestor da OF</mat-label>
+                        <mat-select>
+                            <mat-option *ngFor="let usuarioGestor of usuariosGestor" [value]="usuarioGestor.firstName"
+                                        (selectionChange)="atualizarUsuarioGestor(usuarioGestor)">
+                                {{usuarioGestor.firstName}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
                 </div>
+
                 <div class="form-group">
-                    <label class="form-control-label" for="field_lista_arquivo">Listas dos arquivos</label>
-                    <textarea rows="10" class="form-control" name="listaDeAqruivos" id="field_lista_arquivo"
-                              formControlName="listaDeArquivo"></textarea>
+                    <mat-form-field class="w-100 no-ng-invalid">
+                        <textarea class="no-ng-invalid" matInput placeholder="Listas dos arquivos" rows="10"
+                                  id="field_lista_arquivo" name="listaDeAqruivos"
+                                  formControlName="listaDeArquivo"></textarea>
+                    </mat-form-field>
                 </div>
+
                 <button type="button" id="cancel-save" class="btn btn-secondary form-group" (click)="previousState()">
                     <fa-icon icon="chevron-left"></fa-icon>&nbsp;<span>Voltar</span>
                 </button>
@@ -33,7 +39,7 @@
                     <fa-icon icon="sync"></fa-icon>&nbsp;<span>Processar</span>
                 </button>
                 <button type="button" id="download" class="btn btn-success form-group" (click)="download()"
-                        [disabled]="!ordemFornecimento!.id">
+                        [disabled]="!ordemFornecimento.servicoOf!.id">
                     <fa-icon icon="download"></fa-icon>&nbsp;<span>Download</span>
                 </button>
                 <div *ngFor="let mapArquivoDaOf of ordemFornecimento!.mapArquivoDaOf! | keyvalue"

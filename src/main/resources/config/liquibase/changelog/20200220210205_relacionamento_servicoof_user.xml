@@ -1,0 +1,19 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-3.8.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <changeSet author="C1298328 (generated)" id="1582232551874-5">
+        <addColumn tableName="servico_of">
+            <column name="dono_da_of_id" type="bigint"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="C1298328 (generated)" id="1582232551874-6">
+        <addColumn tableName="servico_of">
+            <column name="gestor_da_of_id" type="bigint"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="C1298328 (generated)" id="1582232551874-7">
+        <addForeignKeyConstraint baseColumnNames="dono_da_of_id" baseTableName="servico_of" constraintName="FKe734jh6nsaj4fkeemaisftvhr" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="of_user" validate="true"/>
+    </changeSet>
+    <changeSet author="C1298328 (generated)" id="1582232551874-8">
+        <addForeignKeyConstraint baseColumnNames="gestor_da_of_id" baseTableName="servico_of" constraintName="FKtmfqcuc132vh4o2otmuuon3pc" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="of_user" validate="true"/>
+    </changeSet>
+</databaseChangeLog>

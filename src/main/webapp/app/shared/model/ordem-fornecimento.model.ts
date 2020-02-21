@@ -1,19 +1,12 @@
 import { IArquivoDaOf } from 'app/shared/model/arquivo-da-of.model';
+import { IServicoOf } from 'app/shared/model/servico-of.model';
 
 export interface IOrdemFornecimento {
-  id?: number;
-  numero?: number;
   listaDosArquivos?: string;
-  arquivoDaOfs?: IArquivoDaOf;
+  servicoOf?: IServicoOf;
   mapArquivoDaOf?: Map<string, IArquivoDaOf[]>;
 }
 
 export class OrdemFornecimento implements IOrdemFornecimento {
-  constructor(
-    public id?: number,
-    public numero?: number,
-    public listaDosArquivos?: string,
-    public arquivoDaOfs?: IArquivoDaOf,
-    public mapArquivoDaOf?: Map<string, IArquivoDaOf[]>
-  ) {}
+  constructor(public listaDosArquivos?: string, public servicoOf?: IServicoOf, public mapArquivoDaOf?: Map<string, IArquivoDaOf[]>) {}
 }

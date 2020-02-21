@@ -1,7 +1,7 @@
 package br.com.rocksti.ofmanager.service.dto;
 
 import br.com.rocksti.ofmanager.domain.ArquivoDaOf;
-import com.google.common.base.Objects;
+import br.com.rocksti.ofmanager.domain.ServicoOf;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -9,35 +9,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class OrdemFornecimentoDTO implements Serializable {
-
-    private Long id;
-
-    @NotNull
-    private Integer numero;
 
     @NotNull
     private String listaDosArquivos;
 
-    private Set<ArquivoDaOf> arquivoDaOfs;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Integer getNumero() {
-        return numero;
-    }
-
-    public void setNumero(Integer numero) {
-        this.numero = numero;
-    }
+    private ServicoOf servicoOf;
 
     public String getListaDosArquivos() {
         return listaDosArquivos;
@@ -47,43 +25,20 @@ public class OrdemFornecimentoDTO implements Serializable {
         this.listaDosArquivos = listaDosArquivos;
     }
 
-    public Set<ArquivoDaOf> getArquivoDaOfs() {
-        return arquivoDaOfs;
+    public ServicoOf getServicoOf() {
+        return servicoOf;
     }
 
-    public void setArquivoDaOfs(Set<ArquivoDaOf> arquivoDaOfs) {
-        this.arquivoDaOfs = arquivoDaOfs;
+    public void setServicoOf(ServicoOf servicoOf) {
+        this.servicoOf = servicoOf;
     }
 
     public Map<String, List<ArquivoDaOf>> getMapArquivoDaOf() {
         Map<String, List<ArquivoDaOf>> map = new HashMap<>();
 
-        arquivoDaOfs.forEach(arquivoDaOf -> map.put(arquivoDaOf.getArquivo().getExtensao(), new ArrayList<>()));
-        arquivoDaOfs.forEach(arquivoDaOf -> map.get(arquivoDaOf.getArquivo().getExtensao()).add(arquivoDaOf));
+        servicoOf.getArquivoDaOfs().forEach(arquivoDaOf -> map.put(arquivoDaOf.getArquivo().getExtensao(), new ArrayList<>()));
+        servicoOf.getArquivoDaOfs().forEach(arquivoDaOf -> map.get(arquivoDaOf.getArquivo().getExtensao()).add(arquivoDaOf));
 
         return map;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof OrdemFornecimentoDTO)) return false;
-        OrdemFornecimentoDTO that = (OrdemFornecimentoDTO) o;
-        return Objects.equal(id, that.id) &&
-            Objects.equal(numero, that.numero);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(id, numero);
-    }
-
-    @Override
-    public String toString() {
-        return "OrdemFornecimentoDTO{" +
-            "id=" + id +
-            ", numero=" + numero +
-            ", listaDosArquivos='" + listaDosArquivos + '\'' +
-            '}';
     }
 }

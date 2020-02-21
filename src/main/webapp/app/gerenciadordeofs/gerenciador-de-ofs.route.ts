@@ -1,19 +1,18 @@
-import {Injectable} from '@angular/core';
-import {HttpResponse} from '@angular/common/http';
-import {ActivatedRouteSnapshot, Resolve, Router, Routes} from '@angular/router';
-import {JhiResolvePagingParams} from 'ng-jhipster';
-import {EMPTY, Observable, of} from 'rxjs';
-import {flatMap} from 'rxjs/operators';
-import {GerenciadorDeOfsService} from './gerenciador-de-ofs.service';
-import {GerenciadorDeOfsComponent} from './gerenciador-de-ofs.component';
-import {GerenciadorDeOfsUpdateComponent} from 'app/gerenciadordeofs/gerenciador-de-ofs-update.component';
-import {UserRouteAccessService} from 'app/core/auth/user-route-access-service';
-import {IOrdemFornecimento, OrdemFornecimento} from 'app/shared/model/ordem-fornecimento.model';
+import { Injectable } from '@angular/core';
+import { HttpResponse } from '@angular/common/http';
+import { ActivatedRouteSnapshot, Resolve, Router, Routes } from '@angular/router';
+import { JhiResolvePagingParams } from 'ng-jhipster';
+import { EMPTY, Observable, of } from 'rxjs';
+import { flatMap } from 'rxjs/operators';
+import { GerenciadorDeOfsService } from './gerenciador-de-ofs.service';
+import { GerenciadorDeOfsComponent } from './gerenciador-de-ofs.component';
+import { GerenciadorDeOfsUpdateComponent } from 'app/gerenciadordeofs/gerenciador-de-ofs-update.component';
+import { UserRouteAccessService } from 'app/core/auth/user-route-access-service';
+import { IOrdemFornecimento, OrdemFornecimento } from 'app/shared/model/ordem-fornecimento.model';
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class GerenciadorDeOfsResolve implements Resolve<IOrdemFornecimento> {
-  constructor(private gerenciadorDeOfsService: GerenciadorDeOfsService, private router: Router) {
-  }
+  constructor(private gerenciadorDeOfsService: GerenciadorDeOfsService, private router: Router) {}
 
   resolve(route: ActivatedRouteSnapshot): Observable<IOrdemFornecimento> | Observable<never> {
     const id = route.params['id'];
@@ -41,20 +40,8 @@ export const gerenciadorDeOfsRoute: Routes = [
       pagingParams: JhiResolvePagingParams
     },
     data: {
-      authorities: ['ROLE_USER'],
+      authorities: ['ROLE_USER', 'ROLE_GESTOR_OF'],
       defaultSort: 'id,asc',
-      pageTitle: 'ofmanagerApp.servicoOf.home.title'
-    },
-    canActivate: [UserRouteAccessService]
-  },
-  {
-    path: 'gerenciador_de_ofs/new',
-    component: GerenciadorDeOfsUpdateComponent,
-    resolve: {
-      ordemFornecimento: GerenciadorDeOfsResolve
-    },
-    data: {
-      authorities: ['ROLE_USER'],
       pageTitle: 'ofmanagerApp.servicoOf.home.title'
     },
     canActivate: [UserRouteAccessService]
@@ -66,7 +53,7 @@ export const gerenciadorDeOfsRoute: Routes = [
       ordemFornecimento: GerenciadorDeOfsResolve
     },
     data: {
-      authorities: ['ROLE_USER'],
+      authorities: ['ROLE_USER', 'ROLE_GESTOR_OF'],
       pageTitle: 'ofmanagerApp.servicoOf.home.title'
     },
     canActivate: [UserRouteAccessService]
