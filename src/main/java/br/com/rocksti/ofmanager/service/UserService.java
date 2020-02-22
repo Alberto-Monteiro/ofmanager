@@ -8,7 +8,9 @@ import br.com.rocksti.ofmanager.repository.UserRepository;
 import br.com.rocksti.ofmanager.security.AuthoritiesConstants;
 import br.com.rocksti.ofmanager.security.SecurityUtils;
 import br.com.rocksti.ofmanager.service.dto.UserDTO;
+
 import io.github.jhipster.security.RandomUtil;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.CacheManager;
@@ -21,12 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**

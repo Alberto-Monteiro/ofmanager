@@ -2,13 +2,6 @@
     "name": "ServicoOf",
     "fields": [
         {
-            "fieldName": "userid",
-            "fieldType": "Long",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
             "fieldName": "numero",
             "fieldType": "Integer",
             "fieldValidateRules": [
@@ -16,7 +9,29 @@
             ]
         },
         {
+            "fieldName": "estado",
+            "fieldType": "EstadoOf",
+            "fieldValues": "NOVA,ANALISE,ACEITA,REJEITADA"
+        },
+        {
+            "fieldName": "observacaoDoGestor",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
+        },
+        {
+            "fieldName": "createdBy",
+            "fieldType": "String"
+        },
+        {
             "fieldName": "createdDate",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "lastModifiedBy",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "lastModifiedDate",
             "fieldType": "Instant"
         }
     ],
@@ -32,14 +47,14 @@
             "otherEntityName": "user",
             "otherEntityRelationshipName": "servicoOf",
             "relationshipName": "gestorDaOf",
-            "otherEntityField": "id"
+            "otherEntityField": "login"
         },
         {
             "relationshipType": "many-to-one",
             "otherEntityName": "user",
             "otherEntityRelationshipName": "servicoOf",
             "relationshipName": "donoDaOf",
-            "otherEntityField": "id"
+            "otherEntityField": "login"
         }
     ],
     "changelogDate": "20200213170305",

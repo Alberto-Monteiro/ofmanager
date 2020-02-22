@@ -3,14 +3,21 @@ package br.com.rocksti.ofmanager.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
+
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
+
+import br.com.rocksti.ofmanager.domain.enumeration.EstadoOf;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
  * A ServicoOf.
@@ -18,6 +25,7 @@ import java.util.Set;
 @Entity
 @Table(name = "servico_of")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@EntityListeners(AuditingEntityListener.class)
 public class ServicoOf implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -27,16 +35,32 @@ public class ServicoOf implements Serializable {
     private Long id;
 
     @NotNull
-    @Column(name = "userid", nullable = false)
-    private Long userid;
-
-    @NotNull
     @Column(name = "numero", nullable = false)
     private Integer numero;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "estado")
+    private EstadoOf estado;
+
+    @Lob
+    @Column(name = "observacao_do_gestor")
+    private String observacaoDoGestor;
+
+    @CreatedBy
+    @Column(name = "created_by", length = 50, updatable = false)
+    private String createdBy;
 
     @CreatedDate
     @Column(name = "created_date", updatable = false)
     private Instant createdDate = Instant.now();
+
+    @LastModifiedBy
+    @Column(name = "last_modified_by", length = 50)
+    private String lastModifiedBy;
+
+    @LastModifiedDate
+    @Column(name = "last_modified_date")
+    private Instant lastModifiedDate = Instant.now();
 
     @OneToMany(mappedBy = "servicoOf", cascade = {CascadeType.ALL}, orphanRemoval = true)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -59,19 +83,6 @@ public class ServicoOf implements Serializable {
         this.id = id;
     }
 
-    public Long getUserid() {
-        return userid;
-    }
-
-    public ServicoOf userid(Long userid) {
-        this.userid = userid;
-        return this;
-    }
-
-    public void setUserid(Long userid) {
-        this.userid = userid;
-    }
-
     public Integer getNumero() {
         return numero;
     }
@@ -85,6 +96,45 @@ public class ServicoOf implements Serializable {
         this.numero = numero;
     }
 
+    public EstadoOf getEstado() {
+        return estado;
+    }
+
+    public ServicoOf estado(EstadoOf estado) {
+        this.estado = estado;
+        return this;
+    }
+
+    public void setEstado(EstadoOf estado) {
+        this.estado = estado;
+    }
+
+    public String getObservacaoDoGestor() {
+        return observacaoDoGestor;
+    }
+
+    public ServicoOf observacaoDoGestor(String observacaoDoGestor) {
+        this.observacaoDoGestor = observacaoDoGestor;
+        return this;
+    }
+
+    public void setObservacaoDoGestor(String observacaoDoGestor) {
+        this.observacaoDoGestor = observacaoDoGestor;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public ServicoOf createdBy(String createdBy) {
+        this.createdBy = createdBy;
+        return this;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
     public Instant getCreatedDate() {
         return createdDate;
     }
@@ -96,6 +146,32 @@ public class ServicoOf implements Serializable {
 
     public void setCreatedDate(Instant createdDate) {
         this.createdDate = createdDate;
+    }
+
+    public String getLastModifiedBy() {
+        return lastModifiedBy;
+    }
+
+    public ServicoOf lastModifiedBy(String lastModifiedBy) {
+        this.lastModifiedBy = lastModifiedBy;
+        return this;
+    }
+
+    public void setLastModifiedBy(String lastModifiedBy) {
+        this.lastModifiedBy = lastModifiedBy;
+    }
+
+    public Instant getLastModifiedDate() {
+        return lastModifiedDate;
+    }
+
+    public ServicoOf lastModifiedDate(Instant lastModifiedDate) {
+        this.lastModifiedDate = lastModifiedDate;
+        return this;
+    }
+
+    public void setLastModifiedDate(Instant lastModifiedDate) {
+        this.lastModifiedDate = lastModifiedDate;
     }
 
     public Set<ArquivoDaOf> getArquivoDaOfs() {
@@ -170,9 +246,13 @@ public class ServicoOf implements Serializable {
     public String toString() {
         return "ServicoOf{" +
             "id=" + getId() +
-            ", userid=" + getUserid() +
             ", numero=" + getNumero() +
+            ", estado='" + getEstado() + "'" +
+            ", observacaoDoGestor='" + getObservacaoDoGestor() + "'" +
+            ", createdBy='" + getCreatedBy() + "'" +
             ", createdDate='" + getCreatedDate() + "'" +
+            ", lastModifiedBy='" + getLastModifiedBy() + "'" +
+            ", lastModifiedDate='" + getLastModifiedDate() + "'" +
             "}";
     }
 }

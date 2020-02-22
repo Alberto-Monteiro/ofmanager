@@ -50,7 +50,8 @@ export class ServicoOfService {
 
   protected convertDateFromClient(servicoOf: IServicoOf): IServicoOf {
     const copy: IServicoOf = Object.assign({}, servicoOf, {
-      createdDate: servicoOf.createdDate && servicoOf.createdDate.isValid() ? servicoOf.createdDate.toJSON() : undefined
+      createdDate: servicoOf.createdDate && servicoOf.createdDate.isValid() ? servicoOf.createdDate.toJSON() : undefined,
+      lastModifiedDate: servicoOf.lastModifiedDate && servicoOf.lastModifiedDate.isValid() ? servicoOf.lastModifiedDate.toJSON() : undefined
     });
     return copy;
   }
@@ -58,6 +59,7 @@ export class ServicoOfService {
   protected convertDateFromServer(res: EntityResponseType): EntityResponseType {
     if (res.body) {
       res.body.createdDate = res.body.createdDate ? moment(res.body.createdDate) : undefined;
+      res.body.lastModifiedDate = res.body.lastModifiedDate ? moment(res.body.lastModifiedDate) : undefined;
     }
     return res;
   }
@@ -66,6 +68,7 @@ export class ServicoOfService {
     if (res.body) {
       res.body.forEach((servicoOf: IServicoOf) => {
         servicoOf.createdDate = servicoOf.createdDate ? moment(servicoOf.createdDate) : undefined;
+        servicoOf.lastModifiedDate = servicoOf.lastModifiedDate ? moment(servicoOf.lastModifiedDate) : undefined;
       });
     }
     return res;

@@ -8,25 +8,41 @@
             <of-alert-error></of-alert-error>
 
             <dl class="row-md jh-entity-details">
-                <dt><span jhiTranslate="ofmanagerApp.servicoOf.userid">Userid</span></dt>
-                <dd>
-                    <span>{{ servicoOf.userid }}</span>
-                </dd>
                 <dt><span jhiTranslate="ofmanagerApp.servicoOf.numero">Numero</span></dt>
                 <dd>
                     <span>{{ servicoOf.numero }}</span>
+                </dd>
+                <dt><span jhiTranslate="ofmanagerApp.servicoOf.estado">Estado</span></dt>
+                <dd>
+                    <span jhiTranslate="{{ 'ofmanagerApp.EstadoOf.' + servicoOf.estado }}">{{ servicoOf.estado }}</span>
+                </dd>
+                <dt><span jhiTranslate="ofmanagerApp.servicoOf.observacaoDoGestor">Observacao Do Gestor</span></dt>
+                <dd>
+                    <span>{{ servicoOf.observacaoDoGestor }}</span>
+                </dd>
+                <dt><span jhiTranslate="ofmanagerApp.servicoOf.createdBy">Created By</span></dt>
+                <dd>
+                    <span>{{ servicoOf.createdBy }}</span>
                 </dd>
                 <dt><span jhiTranslate="ofmanagerApp.servicoOf.createdDate">Created Date</span></dt>
                 <dd>
                     <span>{{ servicoOf.createdDate }}</span>
                 </dd>
+                <dt><span jhiTranslate="ofmanagerApp.servicoOf.lastModifiedBy">Last Modified By</span></dt>
+                <dd>
+                    <span>{{ servicoOf.lastModifiedBy }}</span>
+                </dd>
+                <dt><span jhiTranslate="ofmanagerApp.servicoOf.lastModifiedDate">Last Modified Date</span></dt>
+                <dd>
+                    <span>{{ servicoOf.lastModifiedDate }}</span>
+                </dd>
                 <dt><span jhiTranslate="ofmanagerApp.servicoOf.gestorDaOf">Gestor Da Of</span></dt>
                 <dd>
-                    {{ servicoOf.gestorDaOfId }}
+                    {{ servicoOf.gestorDaOfLogin }}
                 </dd>
                 <dt><span jhiTranslate="ofmanagerApp.servicoOf.donoDaOf">Dono Da Of</span></dt>
                 <dd>
-                    {{ servicoOf.donoDaOfId }}
+                    {{ servicoOf.donoDaOfLogin }}
                 </dd>
             </dl>
 

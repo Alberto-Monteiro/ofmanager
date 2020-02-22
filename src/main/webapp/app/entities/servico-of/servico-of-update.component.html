@@ -12,22 +12,6 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="ofmanagerApp.servicoOf.userid" for="field_userid">Userid</label>
-                    <input type="number" class="form-control" name="userid" id="field_userid"
-                           formControlName="userid"/>
-                    <div *ngIf="editForm.get('userid')!.invalid && (editForm.get('userid')!.dirty || editForm.get('userid')!.touched)">
-                        <small class="form-text text-danger"
-                               *ngIf="editForm.get('userid')?.errors?.required" jhiTranslate="entity.validation.required">
-                        This field is required.
-                        </small>
-                        <small class="form-text text-danger"
-                            [hidden]="!editForm.get('userid')?.errors?.number" jhiTranslate="entity.validation.number">
-                            This field should be a number.
-                        </small>
-                    </div>
-                </div>
-
-                <div class="form-group">
                     <label class="form-control-label" jhiTranslate="ofmanagerApp.servicoOf.numero" for="field_numero">Numero</label>
                     <input type="number" class="form-control" name="numero" id="field_numero"
                            formControlName="numero"/>
@@ -44,6 +28,28 @@
                 </div>
 
                 <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="ofmanagerApp.servicoOf.estado" for="field_estado">Estado</label>
+                    <select class="form-control" name="estado" formControlName="estado" id="field_estado">
+                        <option value="NOVA">{{ 'ofmanagerApp.EstadoOf.NOVA' | translate }}</option>
+                        <option value="ANALISE">{{ 'ofmanagerApp.EstadoOf.ANALISE' | translate }}</option>
+                        <option value="ACEITA">{{ 'ofmanagerApp.EstadoOf.ACEITA' | translate }}</option>
+                        <option value="REJEITADA">{{ 'ofmanagerApp.EstadoOf.REJEITADA' | translate }}</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="ofmanagerApp.servicoOf.observacaoDoGestor" for="field_observacaoDoGestor">Observacao Do Gestor</label>
+                    <textarea class="form-control" name="observacaoDoGestor" id="field_observacaoDoGestor"
+                              formControlName="observacaoDoGestor"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="ofmanagerApp.servicoOf.createdBy" for="field_createdBy">Created By</label>
+                    <input type="text" class="form-control" name="createdBy" id="field_createdBy"
+                           formControlName="createdBy"/>
+                </div>
+
+                <div class="form-group">
                     <label class="form-control-label" jhiTranslate="ofmanagerApp.servicoOf.createdDate" for="field_createdDate">Created Date</label>
                     <div class="d-flex">
                         <input id="field_createdDate" type="datetime-local" class="form-control" name="createdDate" formControlName="createdDate" placeholder="YYYY-MM-DD HH:mm"/>
@@ -51,10 +57,23 @@
                 </div>
 
                 <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="ofmanagerApp.servicoOf.lastModifiedBy" for="field_lastModifiedBy">Last Modified By</label>
+                    <input type="text" class="form-control" name="lastModifiedBy" id="field_lastModifiedBy"
+                           formControlName="lastModifiedBy"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="ofmanagerApp.servicoOf.lastModifiedDate" for="field_lastModifiedDate">Last Modified Date</label>
+                    <div class="d-flex">
+                        <input id="field_lastModifiedDate" type="datetime-local" class="form-control" name="lastModifiedDate" formControlName="lastModifiedDate" placeholder="YYYY-MM-DD HH:mm"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
                     <label class="form-control-label" jhiTranslate="ofmanagerApp.servicoOf.gestorDaOf" for="field_gestorDaOf">Gestor Da Of</label>
                     <select class="form-control" id="field_gestorDaOf" name="gestorDaOf" formControlName="gestorDaOfId">
                         <option [ngValue]="null"></option>
-                        <option [ngValue]="userOption.id" *ngFor="let userOption of users; trackBy: trackById">{{ userOption.id }}</option>
+                        <option [ngValue]="userOption.id" *ngFor="let userOption of users; trackBy: trackById">{{ userOption.login }}</option>
                     </select>
                 </div>
 
@@ -62,7 +81,7 @@
                     <label class="form-control-label" jhiTranslate="ofmanagerApp.servicoOf.donoDaOf" for="field_donoDaOf">Dono Da Of</label>
                     <select class="form-control" id="field_donoDaOf" name="donoDaOf" formControlName="donoDaOfId">
                         <option [ngValue]="null"></option>
-                        <option [ngValue]="userOption.id" *ngFor="let userOption of users; trackBy: trackById">{{ userOption.id }}</option>
+                        <option [ngValue]="userOption.id" *ngFor="let userOption of users; trackBy: trackById">{{ userOption.login }}</option>
                     </select>
                 </div>
             </div>

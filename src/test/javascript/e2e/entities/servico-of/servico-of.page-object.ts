@@ -29,23 +29,19 @@ export class ServicoOfUpdatePage {
   saveButton = element(by.id('save-entity'));
   cancelButton = element(by.id('cancel-save'));
 
-  useridInput = element(by.id('field_userid'));
   numeroInput = element(by.id('field_numero'));
+  estadoSelect = element(by.id('field_estado'));
+  observacaoDoGestorInput = element(by.id('field_observacaoDoGestor'));
+  createdByInput = element(by.id('field_createdBy'));
   createdDateInput = element(by.id('field_createdDate'));
+  lastModifiedByInput = element(by.id('field_lastModifiedBy'));
+  lastModifiedDateInput = element(by.id('field_lastModifiedDate'));
 
   gestorDaOfSelect = element(by.id('field_gestorDaOf'));
   donoDaOfSelect = element(by.id('field_donoDaOf'));
 
   async getPageTitle(): Promise<string> {
     return this.pageTitle.getAttribute('jhiTranslate');
-  }
-
-  async setUseridInput(userid: string): Promise<void> {
-    await this.useridInput.sendKeys(userid);
-  }
-
-  async getUseridInput(): Promise<string> {
-    return await this.useridInput.getAttribute('value');
   }
 
   async setNumeroInput(numero: string): Promise<void> {
@@ -56,12 +52,59 @@ export class ServicoOfUpdatePage {
     return await this.numeroInput.getAttribute('value');
   }
 
+  async setEstadoSelect(estado: string): Promise<void> {
+    await this.estadoSelect.sendKeys(estado);
+  }
+
+  async getEstadoSelect(): Promise<string> {
+    return await this.estadoSelect.element(by.css('option:checked')).getText();
+  }
+
+  async estadoSelectLastOption(): Promise<void> {
+    await this.estadoSelect
+      .all(by.tagName('option'))
+      .last()
+      .click();
+  }
+
+  async setObservacaoDoGestorInput(observacaoDoGestor: string): Promise<void> {
+    await this.observacaoDoGestorInput.sendKeys(observacaoDoGestor);
+  }
+
+  async getObservacaoDoGestorInput(): Promise<string> {
+    return await this.observacaoDoGestorInput.getAttribute('value');
+  }
+
+  async setCreatedByInput(createdBy: string): Promise<void> {
+    await this.createdByInput.sendKeys(createdBy);
+  }
+
+  async getCreatedByInput(): Promise<string> {
+    return await this.createdByInput.getAttribute('value');
+  }
+
   async setCreatedDateInput(createdDate: string): Promise<void> {
     await this.createdDateInput.sendKeys(createdDate);
   }
 
   async getCreatedDateInput(): Promise<string> {
     return await this.createdDateInput.getAttribute('value');
+  }
+
+  async setLastModifiedByInput(lastModifiedBy: string): Promise<void> {
+    await this.lastModifiedByInput.sendKeys(lastModifiedBy);
+  }
+
+  async getLastModifiedByInput(): Promise<string> {
+    return await this.lastModifiedByInput.getAttribute('value');
+  }
+
+  async setLastModifiedDateInput(lastModifiedDate: string): Promise<void> {
+    await this.lastModifiedDateInput.sendKeys(lastModifiedDate);
+  }
+
+  async getLastModifiedDateInput(): Promise<string> {
+    return await this.lastModifiedDateInput.getAttribute('value');
   }
 
   async gestorDaOfSelectLastOption(): Promise<void> {

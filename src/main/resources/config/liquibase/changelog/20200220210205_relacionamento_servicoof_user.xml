@@ -1,19 +1,52 @@
 <?xml version="1.1" encoding="UTF-8" standalone="no"?>
-<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-3.8.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-3.8.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
     <changeSet author="C1298328 (generated)" id="1582232551874-5">
+        <dropColumn tableName="servico_of">
+            <column name="created_date"/>
+            <column name="userid"/>
+        </dropColumn>
+
         <addColumn tableName="servico_of">
-            <column name="dono_da_of_id" type="bigint"/>
+            <column name="estado" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="observacao_do_gestor" type="${clobType}">
+                <constraints nullable="true"/>
+            </column>
+            <column name="created_by" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="created_date" type="datetime">
+                <constraints nullable="true"/>
+            </column>
+            <column name="last_modified_by" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="last_modified_date" type="datetime">
+                <constraints nullable="true"/>
+            </column>
+            <column name="gestor_da_of_id" type="bigint">
+                <constraints nullable="true"/>
+            </column>
+            <column name="dono_da_of_id" type="bigint">
+                <constraints nullable="true"/>
+            </column>
         </addColumn>
-    </changeSet>
-    <changeSet author="C1298328 (generated)" id="1582232551874-6">
-        <addColumn tableName="servico_of">
-            <column name="gestor_da_of_id" type="bigint"/>
-        </addColumn>
-    </changeSet>
-    <changeSet author="C1298328 (generated)" id="1582232551874-7">
-        <addForeignKeyConstraint baseColumnNames="dono_da_of_id" baseTableName="servico_of" constraintName="FKe734jh6nsaj4fkeemaisftvhr" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="of_user" validate="true"/>
-    </changeSet>
-    <changeSet author="C1298328 (generated)" id="1582232551874-8">
-        <addForeignKeyConstraint baseColumnNames="gestor_da_of_id" baseTableName="servico_of" constraintName="FKtmfqcuc132vh4o2otmuuon3pc" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="of_user" validate="true"/>
+
+        <dropDefaultValue tableName="servico_of" columnName="created_date" columnDataType="datetime"/>
+        <dropDefaultValue tableName="servico_of" columnName="last_modified_date" columnDataType="datetime"/>
+
+        <addForeignKeyConstraint baseColumnNames="dono_da_of_id" baseTableName="servico_of"
+                                 constraintName="fk_servico_of_gestor_da_of_id" deferrable="false"
+                                 initiallyDeferred="false" referencedColumnNames="id" referencedTableName="of_user"
+                                 validate="true"/>
+        <addForeignKeyConstraint baseColumnNames="gestor_da_of_id" baseTableName="servico_of"
+                                 constraintName="fk_servico_of_dono_da_of_id" deferrable="false"
+                                 initiallyDeferred="false" referencedColumnNames="id" referencedTableName="of_user"
+                                 validate="true"/>
     </changeSet>
 </databaseChangeLog>

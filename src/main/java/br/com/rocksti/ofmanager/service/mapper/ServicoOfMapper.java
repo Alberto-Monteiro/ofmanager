@@ -13,7 +13,9 @@ import org.mapstruct.*;
 public interface ServicoOfMapper extends EntityMapper<ServicoOfDTO, ServicoOf> {
 
     @Mapping(source = "gestorDaOf.id", target = "gestorDaOfId")
+    @Mapping(source = "gestorDaOf.login", target = "gestorDaOfLogin")
     @Mapping(source = "donoDaOf.id", target = "donoDaOfId")
+    @Mapping(source = "donoDaOf.login", target = "donoDaOfLogin")
     ServicoOfDTO toDto(ServicoOf servicoOf);
 
     @Mapping(target = "arquivoDaOfs", ignore = true)

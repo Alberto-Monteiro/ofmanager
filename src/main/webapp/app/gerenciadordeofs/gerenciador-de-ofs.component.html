@@ -39,8 +39,8 @@
             <tbody>
             <tr *ngFor="let servicoOf of servicoOfs ;trackBy: trackId">
                 <td>{{servicoOf.numero}}</td>
-                <td *ofHasAnyAuthority="['ROLE_ADMIN', 'ROLE_GESTOR_OF']">{{servicoOf!.donoDaOfId}}</td>
-                <td>{{servicoOf!.gestorDaOfId}}</td>
+                <td *ofHasAnyAuthority="['ROLE_ADMIN', 'ROLE_GESTOR_OF']">{{servicoOf!.donoDaOfLogin}}</td>
+                <td>{{servicoOf!.gestorDaOfLogin}}</td>
                 <td>{{servicoOf.createdDate | date:'dd/MM/yy HH:mm'}}</td>
                 <td class="text-right">
                     <div class="btn-group">

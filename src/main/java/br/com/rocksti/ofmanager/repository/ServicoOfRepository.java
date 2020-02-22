@@ -25,5 +25,5 @@ public interface ServicoOfRepository extends JpaRepository<ServicoOf, Long> {
 
     Optional<ServicoOf> findOneByNumeroEquals(Integer numeroOF);
 
-    Page<ServicoOf> findAllByUseridEquals(Pageable pageable, Long userId);
+    Page<ServicoOf> findAllByDonoDaOf_IdEquals(Pageable pageable, Long userId);
 }

@@ -96,7 +96,7 @@ public class ServicoOfService {
             })
             .orElseGet(() -> {
                 servicoOfRepository.findById(id)
-                    .filter(servicoOf -> userService.getUserWithAuthorities().filter(user -> user.getId().equals(servicoOf.getUserid())).isPresent())
+                    .filter(servicoOf -> userService.getUserWithAuthorities().filter(user -> user.getId().equals(servicoOf.getDonoDaOf().getId())).isPresent())
                     .map(servicoOf -> {
                         servicoOfRepository.deleteById(id);
                         return Optional.of(servicoOf);

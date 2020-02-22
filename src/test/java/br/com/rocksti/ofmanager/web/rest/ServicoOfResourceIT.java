@@ -19,6 +19,7 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Base64Utils;
 import org.springframework.validation.Validator;
 
 import javax.persistence.EntityManager;
@@ -32,20 +33,33 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import br.com.rocksti.ofmanager.domain.enumeration.EstadoOf;
 /**
  * Integration tests for the {@link ServicoOfResource} REST controller.
  */
 @SpringBootTest(classes = OfmanagerApp.class)
 public class ServicoOfResourceIT {
 
-    private static final Long DEFAULT_USERID = 1L;
-    private static final Long UPDATED_USERID = 2L;
-
     private static final Integer DEFAULT_NUMERO = 1;
     private static final Integer UPDATED_NUMERO = 2;
 
+    private static final EstadoOf DEFAULT_ESTADO = EstadoOf.NOVA;
+    private static final EstadoOf UPDATED_ESTADO = EstadoOf.ANALISE;
+
+    private static final String DEFAULT_OBSERVACAO_DO_GESTOR = "AAAAAAAAAA";
+    private static final String UPDATED_OBSERVACAO_DO_GESTOR = "BBBBBBBBBB";
+
+    private static final String DEFAULT_CREATED_BY = "AAAAAAAAAA";
+    private static final String UPDATED_CREATED_BY = "BBBBBBBBBB";
+
     private static final Instant DEFAULT_CREATED_DATE = Instant.ofEpochMilli(0L);
     private static final Instant UPDATED_CREATED_DATE = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+
+    private static final String DEFAULT_LAST_MODIFIED_BY = "AAAAAAAAAA";
+    private static final String UPDATED_LAST_MODIFIED_BY = "BBBBBBBBBB";
+
+    private static final Instant DEFAULT_LAST_MODIFIED_DATE = Instant.ofEpochMilli(0L);
+    private static final Instant UPDATED_LAST_MODIFIED_DATE = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
     @Autowired
     private ServicoOfRepository servicoOfRepository;
@@ -95,9 +109,13 @@ public class ServicoOfResourceIT {
      */
     public static ServicoOf createEntity(EntityManager em) {
         ServicoOf servicoOf = new ServicoOf()
-            .userid(DEFAULT_USERID)
             .numero(DEFAULT_NUMERO)
-            .createdDate(DEFAULT_CREATED_DATE);
+            .estado(DEFAULT_ESTADO)
+            .observacaoDoGestor(DEFAULT_OBSERVACAO_DO_GESTOR)
+            .createdBy(DEFAULT_CREATED_BY)
+            .createdDate(DEFAULT_CREATED_DATE)
+            .lastModifiedBy(DEFAULT_LAST_MODIFIED_BY)
+            .lastModifiedDate(DEFAULT_LAST_MODIFIED_DATE);
         return servicoOf;
     }
     /**
@@ -108,9 +126,13 @@ public class ServicoOfResourceIT {
      */
     public static ServicoOf createUpdatedEntity(EntityManager em) {
         ServicoOf servicoOf = new ServicoOf()
-            .userid(UPDATED_USERID)
             .numero(UPDATED_NUMERO)
-            .createdDate(UPDATED_CREATED_DATE);
+            .estado(UPDATED_ESTADO)
+            .observacaoDoGestor(UPDATED_OBSERVACAO_DO_GESTOR)
+            .createdBy(UPDATED_CREATED_BY)
+            .createdDate(UPDATED_CREATED_DATE)
+            .lastModifiedBy(UPDATED_LAST_MODIFIED_BY)
+            .lastModifiedDate(UPDATED_LAST_MODIFIED_DATE);
         return servicoOf;
     }
 
@@ -135,9 +157,13 @@ public class ServicoOfResourceIT {
         List<ServicoOf> servicoOfList = servicoOfRepository.findAll();
         assertThat(servicoOfList).hasSize(databaseSizeBeforeCreate + 1);
         ServicoOf testServicoOf = servicoOfList.get(servicoOfList.size() - 1);
-        assertThat(testServicoOf.getUserid()).isEqualTo(DEFAULT_USERID);
         assertThat(testServicoOf.getNumero()).isEqualTo(DEFAULT_NUMERO);
+        assertThat(testServicoOf.getEstado()).isEqualTo(DEFAULT_ESTADO);
+        assertThat(testServicoOf.getObservacaoDoGestor()).isEqualTo(DEFAULT_OBSERVACAO_DO_GESTOR);
+        assertThat(testServicoOf.getCreatedBy()).isEqualTo(DEFAULT_CREATED_BY);
         assertThat(testServicoOf.getCreatedDate()).isEqualTo(DEFAULT_CREATED_DATE);
+        assertThat(testServicoOf.getLastModifiedBy()).isEqualTo(DEFAULT_LAST_MODIFIED_BY);
+        assertThat(testServicoOf.getLastModifiedDate()).isEqualTo(DEFAULT_LAST_MODIFIED_DATE);
     }
 
     @Test
@@ -160,25 +186,6 @@ public class ServicoOfResourceIT {
         assertThat(servicoOfList).hasSize(databaseSizeBeforeCreate);
     }
 
-
-    @Test
-    @Transactional
-    public void checkUseridIsRequired() throws Exception {
-        int databaseSizeBeforeTest = servicoOfRepository.findAll().size();
-        // set the field null
-        servicoOf.setUserid(null);
-
-        // Create the ServicoOf, which fails.
-        ServicoOfDTO servicoOfDTO = servicoOfMapper.toDto(servicoOf);
-
-        restServicoOfMockMvc.perform(post("/api/servico-ofs")
-            .contentType(TestUtil.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(servicoOfDTO)))
-            .andExpect(status().isBadRequest());
-
-        List<ServicoOf> servicoOfList = servicoOfRepository.findAll();
-        assertThat(servicoOfList).hasSize(databaseSizeBeforeTest);
-    }
 
     @Test
     @Transactional
@@ -210,9 +217,13 @@ public class ServicoOfResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(servicoOf.getId().intValue())))
-            .andExpect(jsonPath("$.[*].userid").value(hasItem(DEFAULT_USERID.intValue())))
             .andExpect(jsonPath("$.[*].numero").value(hasItem(DEFAULT_NUMERO)))
-            .andExpect(jsonPath("$.[*].createdDate").value(hasItem(DEFAULT_CREATED_DATE.toString())));
+            .andExpect(jsonPath("$.[*].estado").value(hasItem(DEFAULT_ESTADO.toString())))
+            .andExpect(jsonPath("$.[*].observacaoDoGestor").value(hasItem(DEFAULT_OBSERVACAO_DO_GESTOR.toString())))
+            .andExpect(jsonPath("$.[*].createdBy").value(hasItem(DEFAULT_CREATED_BY)))
+            .andExpect(jsonPath("$.[*].createdDate").value(hasItem(DEFAULT_CREATED_DATE.toString())))
+            .andExpect(jsonPath("$.[*].lastModifiedBy").value(hasItem(DEFAULT_LAST_MODIFIED_BY)))
+            .andExpect(jsonPath("$.[*].lastModifiedDate").value(hasItem(DEFAULT_LAST_MODIFIED_DATE.toString())));
     }
     
     @Test
@@ -226,9 +237,13 @@ public class ServicoOfResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(servicoOf.getId().intValue()))
-            .andExpect(jsonPath("$.userid").value(DEFAULT_USERID.intValue()))
             .andExpect(jsonPath("$.numero").value(DEFAULT_NUMERO))
-            .andExpect(jsonPath("$.createdDate").value(DEFAULT_CREATED_DATE.toString()));
+            .andExpect(jsonPath("$.estado").value(DEFAULT_ESTADO.toString()))
+            .andExpect(jsonPath("$.observacaoDoGestor").value(DEFAULT_OBSERVACAO_DO_GESTOR.toString()))
+            .andExpect(jsonPath("$.createdBy").value(DEFAULT_CREATED_BY))
+            .andExpect(jsonPath("$.createdDate").value(DEFAULT_CREATED_DATE.toString()))
+            .andExpect(jsonPath("$.lastModifiedBy").value(DEFAULT_LAST_MODIFIED_BY))
+            .andExpect(jsonPath("$.lastModifiedDate").value(DEFAULT_LAST_MODIFIED_DATE.toString()));
     }
 
     @Test
@@ -252,9 +267,13 @@ public class ServicoOfResourceIT {
         // Disconnect from session so that the updates on updatedServicoOf are not directly saved in db
         em.detach(updatedServicoOf);
         updatedServicoOf
-            .userid(UPDATED_USERID)
             .numero(UPDATED_NUMERO)
-            .createdDate(UPDATED_CREATED_DATE);
+            .estado(UPDATED_ESTADO)
+            .observacaoDoGestor(UPDATED_OBSERVACAO_DO_GESTOR)
+            .createdBy(UPDATED_CREATED_BY)
+            .createdDate(UPDATED_CREATED_DATE)
+            .lastModifiedBy(UPDATED_LAST_MODIFIED_BY)
+            .lastModifiedDate(UPDATED_LAST_MODIFIED_DATE);
         ServicoOfDTO servicoOfDTO = servicoOfMapper.toDto(updatedServicoOf);
 
         restServicoOfMockMvc.perform(put("/api/servico-ofs")
@@ -266,9 +285,13 @@ public class ServicoOfResourceIT {
         List<ServicoOf> servicoOfList = servicoOfRepository.findAll();
         assertThat(servicoOfList).hasSize(databaseSizeBeforeUpdate);
         ServicoOf testServicoOf = servicoOfList.get(servicoOfList.size() - 1);
-        assertThat(testServicoOf.getUserid()).isEqualTo(UPDATED_USERID);
         assertThat(testServicoOf.getNumero()).isEqualTo(UPDATED_NUMERO);
+        assertThat(testServicoOf.getEstado()).isEqualTo(UPDATED_ESTADO);
+        assertThat(testServicoOf.getObservacaoDoGestor()).isEqualTo(UPDATED_OBSERVACAO_DO_GESTOR);
+        assertThat(testServicoOf.getCreatedBy()).isEqualTo(UPDATED_CREATED_BY);
         assertThat(testServicoOf.getCreatedDate()).isEqualTo(UPDATED_CREATED_DATE);
+        assertThat(testServicoOf.getLastModifiedBy()).isEqualTo(UPDATED_LAST_MODIFIED_BY);
+        assertThat(testServicoOf.getLastModifiedDate()).isEqualTo(UPDATED_LAST_MODIFIED_DATE);
     }
 
     @Test

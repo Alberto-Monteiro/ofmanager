@@ -1,0 +1,11 @@
+{
+  "ofmanagerApp": {
+    "EstadoOf": {
+      "null": "",
+      "NOVA": "NOVA",
+      "ANALISE": "ANALISE",
+      "ACEITA": "ACEITA",
+      "REJEITADA": "REJEITADA"
+    }
+  }
+}

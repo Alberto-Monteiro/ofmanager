@@ -1,9 +1,10 @@
-import { getTestBed, TestBed } from '@angular/core/testing';
+import { TestBed, getTestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import * as moment from 'moment';
 import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
 import { ServicoOfService } from 'app/entities/servico-of/servico-of.service';
 import { IServicoOf, ServicoOf } from 'app/shared/model/servico-of.model';
+import { EstadoOf } from 'app/shared/model/enumerations/estado-of.model';
 
 describe('Service Tests', () => {
   describe('ServicoOf Service', () => {
@@ -24,14 +25,15 @@ describe('Service Tests', () => {
       httpMock = injector.get(HttpTestingController);
       currentDate = moment();
 
-      elemDefault = new ServicoOf(0, 0, {}, {}, 0, currentDate, [{}], 0, 0);
+      elemDefault = new ServicoOf(0, 0, EstadoOf.NOVA, 'AAAAAAA', 'AAAAAAA', currentDate, 'AAAAAAA', currentDate);
     });
 
     describe('Service methods', () => {
       it('should find an element', () => {
         const returnedFromService = Object.assign(
           {
-            createdDate: currentDate.format(DATE_TIME_FORMAT)
+            createdDate: currentDate.format(DATE_TIME_FORMAT),
+            lastModifiedDate: currentDate.format(DATE_TIME_FORMAT)
           },
           elemDefault
         );
@@ -47,14 +49,16 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             id: 0,
-            createdDate: currentDate.format(DATE_TIME_FORMAT)
+            createdDate: currentDate.format(DATE_TIME_FORMAT),
+            lastModifiedDate: currentDate.format(DATE_TIME_FORMAT)
           },
           elemDefault
         );
 
         const expected = Object.assign(
           {
-            createdDate: currentDate
+            createdDate: currentDate,
+            lastModifiedDate: currentDate
           },
           returnedFromService
         );
@@ -69,16 +73,21 @@ describe('Service Tests', () => {
       it('should update a ServicoOf', () => {
         const returnedFromService = Object.assign(
           {
-            userid: 1,
             numero: 1,
-            createdDate: currentDate.format(DATE_TIME_FORMAT)
+            estado: 'BBBBBB',
+            observacaoDoGestor: 'BBBBBB',
+            createdBy: 'BBBBBB',
+            createdDate: currentDate.format(DATE_TIME_FORMAT),
+            lastModifiedBy: 'BBBBBB',
+            lastModifiedDate: currentDate.format(DATE_TIME_FORMAT)
           },
           elemDefault
         );
 
         const expected = Object.assign(
           {
-            createdDate: currentDate
+            createdDate: currentDate,
+            lastModifiedDate: currentDate
           },
           returnedFromService
         );
@@ -93,16 +102,21 @@ describe('Service Tests', () => {
       it('should return a list of ServicoOf', () => {
         const returnedFromService = Object.assign(
           {
-            userid: 1,
             numero: 1,
-            createdDate: currentDate.format(DATE_TIME_FORMAT)
+            estado: 'BBBBBB',
+            observacaoDoGestor: 'BBBBBB',
+            createdBy: 'BBBBBB',
+            createdDate: currentDate.format(DATE_TIME_FORMAT),
+            lastModifiedBy: 'BBBBBB',
+            lastModifiedDate: currentDate.format(DATE_TIME_FORMAT)
           },
           elemDefault
         );
 
         const expected = Object.assign(
           {
-            createdDate: currentDate
+            createdDate: currentDate,
+            lastModifiedDate: currentDate
           },
           returnedFromService
         );

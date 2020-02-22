@@ -5,6 +5,7 @@ import br.com.rocksti.ofmanager.domain.ArquivoDaOf;
 import br.com.rocksti.ofmanager.domain.ServicoOf;
 import br.com.rocksti.ofmanager.domain.User;
 import br.com.rocksti.ofmanager.domain.enumeration.EstadoArquivo;
+import br.com.rocksti.ofmanager.domain.enumeration.EstadoOf;
 import br.com.rocksti.ofmanager.planilha.DescricaoArtefato;
 import br.com.rocksti.ofmanager.planilha.EstruturaDoArquivo;
 import br.com.rocksti.ofmanager.repository.ArquivoDaOfRepository;
@@ -92,7 +93,7 @@ public class OrdemFornecimentoService {
                 .filter(user -> user.getAuthorities().stream().noneMatch(authority -> authority.getName().equals(AuthoritiesConstants.ADMIN)
                     || authority.getName().equals(AuthoritiesConstants.GESTOR_OF)))
                 .ifPresent(user -> servicoOfRepository.findById(idServicoOf).ifPresent(servicoOf -> {
-                    if (!servicoOf.getUserid().equals(user.getId())) {
+                    if (!servicoOf.getDonoDaOf().getId().equals(user.getId())) {
                         throw new BadRequestAlertException("Of pertencente a outro usuário", "servicoOf", "servicoOfNaoPertencente");
                     }
                 }));
@@ -106,7 +107,7 @@ public class OrdemFornecimentoService {
                 .stream()
                 .noneMatch(authority -> authority.getName().equals(AuthoritiesConstants.ADMIN)
                     || authority.getName().equals(AuthoritiesConstants.GESTOR_OF)))
-            .map(user -> servicoOfRepository.findAllByUseridEquals(pageable, user.getId()).map(servicoOfMapper::toDto))
+            .map(user -> servicoOfRepository.findAllByDonoDaOf_IdEquals(pageable, user.getId()).map(servicoOfMapper::toDto))
             .orElse(servicoOfRepository.findAll(pageable).map(servicoOfMapper::toDto));
     }
 
@@ -167,17 +168,14 @@ public class OrdemFornecimentoService {
                     servicoOf.set(servicoOf1);
                     servicoOf.get().setNumero(ordemFornecimentoDTO.getServicoOf().getNumero());
                     servicoOf.get().setGestorDaOf(ordemFornecimentoDTO.getServicoOf().getGestorDaOf());
-
-                    servicoOf.get().setUserid(0L);
                 });
         } else {
             userService.getUserWithAuthorities()
                 .ifPresent(user -> {
+                    servicoOf.get().setEstado(EstadoOf.NOVA);
                     servicoOf.get().setDonoDaOf(user);
                     servicoOf.get().setNumero(ordemFornecimentoDTO.getServicoOf().getNumero());
                     servicoOf.get().setGestorDaOf(ordemFornecimentoDTO.getServicoOf().getGestorDaOf());
-
-                    servicoOf.get().setUserid(0L);
                 });
         }
     }

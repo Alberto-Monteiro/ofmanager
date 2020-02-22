@@ -11,8 +11,8 @@ application {
 }
 
 relationship ManyToOne {
-	ServicoOf{gestorDaOf} to User
-    ServicoOf{donoDaOf} to User
+	ServicoOf{gestorDaOf(login)} to User
+    ServicoOf{donoDaOf(login)} to User
 }
 
 relationship OneToMany {
@@ -21,9 +21,13 @@ relationship OneToMany {
 }
 
 entity ServicoOf {
-	userid Long required
 	numero Integer required
+    estado EstadoOf
+    observacaoDoGestor TextBlob
+    createdBy String
     createdDate Instant
+    lastModifiedBy String
+    lastModifiedDate Instant
 }
 
 entity ArquivoDaOf {
@@ -35,6 +39,13 @@ entity Arquivo {
     extensao String required
     complexidade Complexidade
     arquivoDeTest Boolean
+}
+
+enum EstadoOf {
+	NOVA,
+    ANALISE,
+	ACEITA,
+    REJEITADA
 }
 
 enum EstadoArquivo {

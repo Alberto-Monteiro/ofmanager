@@ -2,12 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { GerenciadorDeOfsService } from './gerenciador-de-ofs.service';
-import { IOrdemFornecimento, OrdemFornecimento } from 'app/shared/model/ordem-fornecimento.model';
+import { IOrdemFornecimento } from 'app/shared/model/ordem-fornecimento.model';
 import { Arquivo, IArquivo } from 'app/shared/model/arquivo.model';
 import { ArquivoDaOf, IArquivoDaOf } from 'app/shared/model/arquivo-da-of.model';
 import * as fileSaver from 'file-saver';
 import { IUser } from 'app/core/user/user.model';
-import { ServicoOf } from 'app/shared/model/servico-of.model';
 
 @Component({
   selector: 'of-gerenciador-de-ofs-update',
@@ -49,15 +48,14 @@ export class GerenciadorDeOfsUpdateComponent implements OnInit {
   }
 
   private createFromForm(): IOrdemFornecimento {
-    const servicoOf = new ServicoOf(
-      this.ordemFornecimento!.servicoOf!.id,
-      undefined,
-      this.editForm.get(['usuarioGestor'])!.value,
-      undefined,
-      this.editForm.get(['numero'])!.value
-    );
-
-    return new OrdemFornecimento(this.editForm.get(['listaDeArquivo'])!.value, servicoOf);
+    return {
+      listaDosArquivos: this.editForm.get(['listaDeArquivo'])!.value,
+      servicoOf: {
+        id: this.ordemFornecimento!.servicoOf!.id,
+        gestorDaOf: this.editForm.get(['usuarioGestor'])!.value,
+        numero: this.editForm.get(['numero'])!.value
+      }
+    };
   }
 
   previousState(): void {

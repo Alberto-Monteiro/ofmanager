@@ -41,18 +41,34 @@ describe('ServicoOf e2e test', () => {
     await servicoOfComponentsPage.clickOnCreateButton();
 
     await promise.all([
-      servicoOfUpdatePage.setUseridInput('5'),
       servicoOfUpdatePage.setNumeroInput('5'),
+      servicoOfUpdatePage.estadoSelectLastOption(),
+      servicoOfUpdatePage.setObservacaoDoGestorInput('observacaoDoGestor'),
+      servicoOfUpdatePage.setCreatedByInput('createdBy'),
       servicoOfUpdatePage.setCreatedDateInput('01/01/2001' + protractor.Key.TAB + '02:30AM'),
+      servicoOfUpdatePage.setLastModifiedByInput('lastModifiedBy'),
+      servicoOfUpdatePage.setLastModifiedDateInput('01/01/2001' + protractor.Key.TAB + '02:30AM'),
       servicoOfUpdatePage.gestorDaOfSelectLastOption(),
       servicoOfUpdatePage.donoDaOfSelectLastOption()
     ]);
 
-    expect(await servicoOfUpdatePage.getUseridInput()).to.eq('5', 'Expected userid value to be equals to 5');
     expect(await servicoOfUpdatePage.getNumeroInput()).to.eq('5', 'Expected numero value to be equals to 5');
+    expect(await servicoOfUpdatePage.getObservacaoDoGestorInput()).to.eq(
+      'observacaoDoGestor',
+      'Expected ObservacaoDoGestor value to be equals to observacaoDoGestor'
+    );
+    expect(await servicoOfUpdatePage.getCreatedByInput()).to.eq('createdBy', 'Expected CreatedBy value to be equals to createdBy');
     expect(await servicoOfUpdatePage.getCreatedDateInput()).to.contain(
       '2001-01-01T02:30',
       'Expected createdDate value to be equals to 2000-12-31'
+    );
+    expect(await servicoOfUpdatePage.getLastModifiedByInput()).to.eq(
+      'lastModifiedBy',
+      'Expected LastModifiedBy value to be equals to lastModifiedBy'
+    );
+    expect(await servicoOfUpdatePage.getLastModifiedDateInput()).to.contain(
+      '2001-01-01T02:30',
+      'Expected lastModifiedDate value to be equals to 2000-12-31'
     );
 
     await servicoOfUpdatePage.save();
