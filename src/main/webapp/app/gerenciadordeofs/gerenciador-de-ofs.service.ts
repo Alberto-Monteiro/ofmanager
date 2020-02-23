@@ -54,4 +54,8 @@ export class GerenciadorDeOfsService {
   getUsuariosGestor(): Observable<HttpResponse<IUser[]>> {
     return this.http.get<IUser[]>(`${this.resourceUrl}/getUsuariosGestor`, { observe: 'response' });
   }
+
+  updateEstadoDaOf(servicoOf: IServicoOf): Observable<HttpResponse<IServicoOf>> {
+    return this.http.put<IServicoOf>(`${this.resourceUrl}/updateEstadoDaOf`, servicoOf, { observe: 'response' });
+  }
 }

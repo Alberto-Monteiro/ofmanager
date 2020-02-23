@@ -1,15 +1,15 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {HttpHeaders, HttpResponse} from '@angular/common/http';
-import {ActivatedRoute, Router} from '@angular/router';
-import {Subscription} from 'rxjs';
-import {JhiEventManager} from 'ng-jhipster';
-import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { HttpHeaders, HttpResponse } from '@angular/common/http';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { JhiEventManager } from 'ng-jhipster';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-import {IServicoOf} from 'app/shared/model/servico-of.model';
+import { IServicoOf } from 'app/shared/model/servico-of.model';
 
-import {ITEMS_PER_PAGE} from 'app/shared/constants/pagination.constants';
-import {GerenciadorDeOfsService} from './gerenciador-de-ofs.service';
-import {ServicoOfDeleteDialogComponent} from 'app/entities/servico-of/servico-of-delete-dialog.component';
+import { ITEMS_PER_PAGE } from 'app/shared/constants/pagination.constants';
+import { GerenciadorDeOfsService } from './gerenciador-de-ofs.service';
+import { ServicoOfDeleteDialogComponent } from 'app/entities/servico-of/servico-of-delete-dialog.component';
 
 @Component({
   selector: 'of-gerenciador-de-ofs',
@@ -31,8 +31,7 @@ export class GerenciadorDeOfsComponent implements OnInit, OnDestroy {
     protected router: Router,
     protected eventManager: JhiEventManager,
     protected modalService: NgbModal
-  ) {
-  }
+  ) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(data => {
@@ -82,7 +81,7 @@ export class GerenciadorDeOfsComponent implements OnInit, OnDestroy {
   }
 
   delete(servicoOf: IServicoOf): void {
-    const modalRef = this.modalService.open(ServicoOfDeleteDialogComponent, {size: 'lg', backdrop: 'static'});
+    const modalRef = this.modalService.open(ServicoOfDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
     modalRef.componentInstance.servicoOf = servicoOf;
   }
 
@@ -102,5 +101,18 @@ export class GerenciadorDeOfsComponent implements OnInit, OnDestroy {
     if (this.eventSubscriber) {
       this.eventManager.destroy(this.eventSubscriber);
     }
+  }
+
+  atualizaEstadoDaOf(servicoOf: IServicoOf, estado: any): void {
+    const estadoAnterior = servicoOf.estado;
+    servicoOf.estado = estado;
+    this.gerenciadorDeOfsService.updateEstadoDaOf(servicoOf).subscribe(
+      servicoOf1 => {
+        servicoOf.lastModifiedDate = servicoOf1.body!.lastModifiedDate;
+      },
+      () => {
+        servicoOf.estado = estadoAnterior;
+      }
+    );
   }
 }

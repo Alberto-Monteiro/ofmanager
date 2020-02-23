@@ -42,7 +42,7 @@ export const gerenciadorDeOfsRoute: Routes = [
     },
     data: {
       authorities: ['ROLE_USER', 'ROLE_GESTOR_OF'],
-      defaultSort: 'id,asc',
+      defaultSort: 'lastModifiedDate,desc',
       pageTitle: 'ofmanagerApp.servicoOf.home.title'
     },
     canActivate: [UserRouteAccessService]

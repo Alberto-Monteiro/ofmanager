@@ -135,6 +135,7 @@
     "idexists": "A new {{ entityName }} cannot already have an ID",
     "idnull": "Invalid ID",
     "servicoOfNaoPertencente": "Of pertencente a outro usuário",
+    "servicoOfEstadoEditadoGestor": "O estado da OF só pode ser editado pelo gestor",
     "arquivosDevemTerComplexidadeSelecionada": "Todos os arquivos devem ter a complexidade selecionada.",
     "file": {
       "could.not.extract": "Could not extract file",

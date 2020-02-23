@@ -19,7 +19,7 @@
         <table class="table table-striped" aria-describedby="page-heading">
             <thead>
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="loadPage.bind(this)">
-                <th scope="col" jhiSortBy="numero"><span jhiTranslate="ofmanagerApp.servicoOf.numero">Numero</span>
+                <th scope="col" jhiSortBy="numero"><span>Número OF</span>
                     <fa-icon [icon]="'sort'"></fa-icon>
                 </th>
                 <th *ofHasAnyAuthority="['ROLE_ADMIN', 'ROLE_GESTOR_OF']" scope="col" jhiSortBy="donoDaOfId">
@@ -33,6 +33,10 @@
                 <th scope="col" jhiSortBy="createdDate"><span>Criado em</span>
                     <fa-icon [icon]="'sort'"></fa-icon>
                 </th>
+                <th scope="col" jhiSortBy="lastModifiedDate"><span>Modificado em</span>
+                    <fa-icon [icon]="'sort'"></fa-icon>
+                </th>
+                <th scope="col"><span>Estado</span></th>
                 <th scope="col"></th>
             </tr>
             </thead>
@@ -42,6 +46,21 @@
                 <td *ofHasAnyAuthority="['ROLE_ADMIN', 'ROLE_GESTOR_OF']">{{servicoOf!.donoDaOfLogin}}</td>
                 <td>{{servicoOf!.gestorDaOfLogin}}</td>
                 <td>{{servicoOf.createdDate | date:'dd/MM/yy HH:mm'}}</td>
+                <td>{{servicoOf.lastModifiedDate | date:'dd/MM/yy HH:mm'}}</td>
+                <td>
+                    <mat-chip-list *ofHasAnyAuthority="['ROLE_USER']" aria-label="Fish selection">
+                        <mat-chip color="primary" selected><span jhiTranslate="{{ 'ofmanagerApp.EstadoOf.' + servicoOf.estado }}">{{ servicoOf.estado }}</span></mat-chip>
+                    </mat-chip-list>
+                    <mat-form-field *ofHasAnyAuthority="['ROLE_ADMIN', 'ROLE_GESTOR_OF']">
+                        <mat-label></mat-label>
+                        <mat-select [(value)]="servicoOf.estado">
+                            <mat-option (click)="atualizaEstadoDaOf(servicoOf, 'NOVA')" [value]="'NOVA'">Nova</mat-option>
+                            <mat-option (click)="atualizaEstadoDaOf(servicoOf, 'ANALISE')" [value]="'ANALISE'">Análise</mat-option>
+                            <mat-option (click)="atualizaEstadoDaOf(servicoOf, 'ACEITA')" [value]="'ACEITA'">Aceita</mat-option>
+                            <mat-option (click)="atualizaEstadoDaOf(servicoOf, 'REJEITADA')" [value]="'REJEITADA'">Rejeitada</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </td>
                 <td class="text-right">
                     <div class="btn-group">
                         <button type="submit"

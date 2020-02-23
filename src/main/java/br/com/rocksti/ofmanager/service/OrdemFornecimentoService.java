@@ -12,11 +12,7 @@ import br.com.rocksti.ofmanager.repository.ArquivoDaOfRepository;
 import br.com.rocksti.ofmanager.repository.ArquivoRepository;
 import br.com.rocksti.ofmanager.repository.ServicoOfRepository;
 import br.com.rocksti.ofmanager.security.AuthoritiesConstants;
-import br.com.rocksti.ofmanager.service.dto.ArquivoDTO;
-import br.com.rocksti.ofmanager.service.dto.ArquivoDaOfDTO;
-import br.com.rocksti.ofmanager.service.dto.OrdemFornecimentoDTO;
-import br.com.rocksti.ofmanager.service.dto.ServicoOfDTO;
-import br.com.rocksti.ofmanager.service.dto.UserDTO;
+import br.com.rocksti.ofmanager.service.dto.*;
 import br.com.rocksti.ofmanager.service.mapper.ArquivoDaOfMapper;
 import br.com.rocksti.ofmanager.service.mapper.ArquivoMapper;
 import br.com.rocksti.ofmanager.service.mapper.ServicoOfMapper;
@@ -33,13 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.Spliterator;
-import java.util.Spliterators;
-import java.util.StringJoiner;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -341,5 +331,23 @@ public class OrdemFornecimentoService {
                 return userDTO;
             })
             .collect(Collectors.toList());
+    }
+
+    public ServicoOfDTO updateEstadoDaOf(ServicoOfDTO servicoOfDTO) {
+        userService.getUserWithAuthorities()
+            .filter(user -> user.getAuthorities().stream().noneMatch(authority -> authority.getName().equals(AuthoritiesConstants.ADMIN)
+                || authority.getName().equals(AuthoritiesConstants.GESTOR_OF)))
+            .ifPresent(user -> {
+                throw new BadRequestAlertException("O estado da OF só pode ser editado pelo gestor", "servicoOf", "servicoOfEstadoEditadoGestor");
+            });
+
+        AtomicReference<ServicoOfDTO> servicoOfReference = new AtomicReference<>();
+
+        servicoOfRepository.findById(servicoOfDTO.getId()).ifPresent(servicoOf -> {
+            servicoOf.setEstado(servicoOfDTO.getEstado());
+            servicoOfReference.set(servicoOfMapper.toDto(servicoOfRepository.saveAndFlush(servicoOf)));
+        });
+
+        return servicoOfReference.get();
     }
 }

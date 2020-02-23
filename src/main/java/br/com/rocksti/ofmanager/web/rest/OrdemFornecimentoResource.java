@@ -1,11 +1,7 @@
 package br.com.rocksti.ofmanager.web.rest;
 
 import br.com.rocksti.ofmanager.service.OrdemFornecimentoService;
-import br.com.rocksti.ofmanager.service.dto.ArquivoDTO;
-import br.com.rocksti.ofmanager.service.dto.ArquivoDaOfDTO;
-import br.com.rocksti.ofmanager.service.dto.OrdemFornecimentoDTO;
-import br.com.rocksti.ofmanager.service.dto.ServicoOfDTO;
-import br.com.rocksti.ofmanager.service.dto.UserDTO;
+import br.com.rocksti.ofmanager.service.dto.*;
 import br.com.rocksti.ofmanager.web.rest.errors.BadRequestAlertException;
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
@@ -15,13 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletResponse;
@@ -137,5 +127,18 @@ public class OrdemFornecimentoResource {
     @GetMapping("/gerenciador_de_ofs/getUsuariosGestor")
     public ResponseEntity<List<UserDTO>> getUsuariosGestor() {
         return ResponseUtil.wrapOrNotFound(Optional.of(ordemFornecimentoService.getUsuariosGestor()));
+    }
+
+    @PutMapping("/gerenciador_de_ofs/updateEstadoDaOf")
+    public ResponseEntity<ServicoOfDTO> updateEstadoDaOf(@RequestBody ServicoOfDTO servicoOfDTO) {
+        if (servicoOfDTO.getId() == null) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+
+        ServicoOfDTO result = ordemFornecimentoService.updateEstadoDaOf(servicoOfDTO);
+
+        return ResponseEntity.ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, servicoOfDTO.getId().toString()))
+            .body(result);
     }
 }
