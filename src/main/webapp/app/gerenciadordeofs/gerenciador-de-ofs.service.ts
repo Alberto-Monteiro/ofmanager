@@ -20,7 +20,7 @@ export class GerenciadorDeOfsService {
 
   queryByUser(req?: any): Observable<HttpResponse<IServicoOf[]>> {
     const options = createRequestOption(req);
-    return this.http.get<IServicoOf[]>(`${this.resourceUrl}/queryByUser`, { params: options, observe: 'response' });
+    return this.http.post<IServicoOf[]>(`${this.resourceUrl}/queryByUser`, req, { params: options, observe: 'response' });
   }
 
   find(id: number): Observable<EntityResponseType> {

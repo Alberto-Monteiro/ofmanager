@@ -6,6 +6,7 @@ import br.com.rocksti.ofmanager.domain.ServicoOf;
 import br.com.rocksti.ofmanager.domain.User;
 import br.com.rocksti.ofmanager.domain.enumeration.EstadoArquivo;
 import br.com.rocksti.ofmanager.domain.enumeration.EstadoOf;
+import br.com.rocksti.ofmanager.filtropesquisa.FiltroPesquisaServicoOf;
 import br.com.rocksti.ofmanager.planilha.DescricaoArtefato;
 import br.com.rocksti.ofmanager.planilha.EstruturaDoArquivo;
 import br.com.rocksti.ofmanager.repository.ArquivoDaOfRepository;
@@ -91,7 +92,7 @@ public class OrdemFornecimentoService {
     }
 
     @Transactional(readOnly = true)
-    public Page<ServicoOfDTO> findAllByUser(Pageable pageable) {
+    public Page<ServicoOfDTO> findAllByUser(Pageable pageable, FiltroPesquisaServicoOf filtroPesquisa) {
         return userService.getUserWithAuthorities()
             .filter(user -> user.getAuthorities()
                 .stream()

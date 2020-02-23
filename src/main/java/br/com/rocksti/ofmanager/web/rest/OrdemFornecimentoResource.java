@@ -1,5 +1,6 @@
 package br.com.rocksti.ofmanager.web.rest;
 
+import br.com.rocksti.ofmanager.filtropesquisa.FiltroPesquisaServicoOf;
 import br.com.rocksti.ofmanager.service.OrdemFornecimentoService;
 import br.com.rocksti.ofmanager.service.dto.*;
 import br.com.rocksti.ofmanager.web.rest.errors.BadRequestAlertException;
@@ -37,9 +38,9 @@ public class OrdemFornecimentoResource {
         this.ordemFornecimentoService = ordemFornecimentoService;
     }
 
-    @GetMapping("/gerenciador_de_ofs/queryByUser")
-    public ResponseEntity<List<ServicoOfDTO>> getAllServicoOfsByUser(Pageable pageable) {
-        Page<ServicoOfDTO> page = ordemFornecimentoService.findAllByUser(pageable);
+    @PostMapping("/gerenciador_de_ofs/queryByUser")
+    public ResponseEntity<List<ServicoOfDTO>> getAllServicoOfsByUser(@RequestBody FiltroPesquisaServicoOf filtroPesquisa, Pageable pageable) {
+        Page<ServicoOfDTO> page = ordemFornecimentoService.findAllByUser(pageable, filtroPesquisa);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }

@@ -10,6 +10,7 @@ import { IServicoOf } from 'app/shared/model/servico-of.model';
 import { ITEMS_PER_PAGE } from 'app/shared/constants/pagination.constants';
 import { GerenciadorDeOfsService } from './gerenciador-de-ofs.service';
 import { ServicoOfDeleteDialogComponent } from 'app/entities/servico-of/servico-of-delete-dialog.component';
+import { IUser } from 'app/core/user/user.model';
 
 @Component({
   selector: 'of-gerenciador-de-ofs',
@@ -25,6 +26,9 @@ export class GerenciadorDeOfsComponent implements OnInit, OnDestroy {
   ascending!: boolean;
   ngbPaginationPage = 1;
 
+  filtroPesquisa = { numeroOF: null, usuarioGestor: null };
+  usuariosGestor?: IUser[] | null;
+
   constructor(
     protected gerenciadorDeOfsService: GerenciadorDeOfsService,
     protected activatedRoute: ActivatedRoute,
@@ -34,6 +38,10 @@ export class GerenciadorDeOfsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this.gerenciadorDeOfsService.getUsuariosGestor().subscribe(usuarios => {
+      this.usuariosGestor = usuarios.body;
+    });
+
     this.activatedRoute.data.subscribe(data => {
       this.page = data.pagingParams.page;
       this.ascending = data.pagingParams.ascending;
@@ -50,7 +58,9 @@ export class GerenciadorDeOfsComponent implements OnInit, OnDestroy {
       .queryByUser({
         page: pageToLoad - 1,
         size: this.itemsPerPage,
-        sort: this.sort()
+        sort: this.sort(),
+        numeroOF: this.filtroPesquisa.numeroOF,
+        usuarioGestor: this.filtroPesquisa.usuarioGestor
       })
       .subscribe(
         (res: HttpResponse<IServicoOf[]>) => this.onSuccess(res.body, res.headers, pageToLoad),
