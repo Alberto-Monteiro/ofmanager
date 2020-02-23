@@ -7,6 +7,7 @@ import { Arquivo, IArquivo } from 'app/shared/model/arquivo.model';
 import { ArquivoDaOf, IArquivoDaOf } from 'app/shared/model/arquivo-da-of.model';
 import * as fileSaver from 'file-saver';
 import { IUser } from 'app/core/user/user.model';
+import { IServicoOf } from 'app/shared/model/servico-of.model';
 
 @Component({
   selector: 'of-gerenciador-de-ofs-update',
@@ -117,5 +118,18 @@ export class GerenciadorDeOfsUpdateComponent implements OnInit {
 
   podeSerArquivoDeTest(extensao: string): boolean {
     return extensao === 'java' || extensao === 'js' || extensao === 'ts';
+  }
+
+  atualizaEstadoDaOf(servicoOf: IServicoOf, estado: any): void {
+    const estadoAnterior = servicoOf.estado;
+    servicoOf.estado = estado;
+    this.gerenciadorDeOfsService.updateEstadoDaOf(servicoOf).subscribe(
+      servicoOf1 => {
+        servicoOf.lastModifiedDate = servicoOf1.body!.lastModifiedDate;
+      },
+      () => {
+        servicoOf.estado = estadoAnterior;
+      }
+    );
   }
 }
