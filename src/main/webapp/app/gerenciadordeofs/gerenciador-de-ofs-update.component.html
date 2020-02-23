@@ -42,7 +42,14 @@
                                   id="field_lista_arquivo" name="listaDeAqruivos"
                                   formControlName="listaDeArquivo"></textarea>
                     </mat-form-field>
+                    <mat-chip-list *ngIf="ordemFornecimento.servicoOf.id" aria-label="Fish selection">
+                        <mat-chip color="primary" selected>
+                            <span>Total de arquivos: {{ordemFornecimento.servicoOf.arquivoDaOfs.length}}</span>
+                        </mat-chip>
+                    </mat-chip-list>
                 </div>
+
+                <br>
 
                 <button type="button" id="cancel-save" class="btn btn-secondary form-group" (click)="previousState()">
                     <fa-icon icon="chevron-left"></fa-icon>&nbsp;<span>Voltar</span>
