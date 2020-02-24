@@ -15,7 +15,7 @@
                     &nbsp;
                     <mat-form-field class="no-ng-invalid">
                         <mat-label>Gestor da OF</mat-label>
-                        <mat-select class="no-ng-invalid" formControlName="usuarioGestor">
+                        <mat-select class="no-ng-invalid" formControlName="usuarioGestor" (selectionChange)="processar()">
                             <mat-option *ngFor="let usuarioGestor of usuariosGestor" [value]="usuarioGestor">
                                 {{usuarioGestor.firstName}}
                             </mat-option>

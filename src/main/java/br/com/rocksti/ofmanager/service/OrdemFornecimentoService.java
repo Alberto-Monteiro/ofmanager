@@ -157,7 +157,6 @@ public class OrdemFornecimentoService {
             servicoOfRepository.findById(ordemFornecimentoDTO.getServicoOf().getId())
                 .ifPresent(servicoOf1 -> {
                     servicoOf.set(servicoOf1);
-                    servicoOf.get().setNumero(ordemFornecimentoDTO.getServicoOf().getNumero());
                     servicoOf.get().setGestorDaOf(ordemFornecimentoDTO.getServicoOf().getGestorDaOf());
                 });
         } else {
