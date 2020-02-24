@@ -132,4 +132,11 @@ export class GerenciadorDeOfsUpdateComponent implements OnInit {
       }
     );
   }
+
+  downloadTxt(): void {
+    this.gerenciadorDeOfsService.downloadTxt(this.ordemFornecimento!.servicoOf!.id).subscribe(response => {
+      const blob: any = new Blob([response], { type: 'text/txt' });
+      fileSaver.saveAs(blob, `OF-${this.ordemFornecimento!.servicoOf!.numero}.txt`);
+    });
+  }
 }

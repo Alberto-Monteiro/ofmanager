@@ -350,4 +350,9 @@ public class OrdemFornecimentoService {
 
         return servicoOfReference.get();
     }
+
+    public void produzirConteudoDoTxt(OrdemFornecimentoDTO ordemFornecimentoDTO) {
+        ordemFornecimentoDTO.toString();
+
+    }
 }

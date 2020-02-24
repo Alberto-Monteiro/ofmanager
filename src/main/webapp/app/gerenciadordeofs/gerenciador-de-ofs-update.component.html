@@ -15,7 +15,8 @@
                     &nbsp;
                     <mat-form-field class="no-ng-invalid">
                         <mat-label>Gestor da OF</mat-label>
-                        <mat-select class="no-ng-invalid" formControlName="usuarioGestor" (selectionChange)="processar()">
+                        <mat-select class="no-ng-invalid" formControlName="usuarioGestor"
+                                    (selectionChange)="ordemFornecimento!.servicoOf!.id!==null?processar():0;">
                             <mat-option *ngFor="let usuarioGestor of usuariosGestor" [value]="usuarioGestor">
                                 {{usuarioGestor.firstName}}
                             </mat-option>
@@ -61,6 +62,10 @@
                 <button type="button" id="download" class="btn btn-success form-group" (click)="download()"
                         [disabled]="!ordemFornecimento!.servicoOf!.id">
                     <fa-icon icon="download"></fa-icon>&nbsp;<span>Download</span>
+                </button>
+                <button type="button" id="downloadTxt" class="btn btn-success form-group" (click)="downloadTxt()"
+                        [disabled]="!ordemFornecimento!.servicoOf!.id">
+                    <fa-icon icon="download"></fa-icon>&nbsp;<span>Download TXT</span>
                 </button>
                 <div *ngFor="let mapArquivoDaOf of ordemFornecimento!.mapArquivoDaOf! | keyvalue"
                      class="card form-group">

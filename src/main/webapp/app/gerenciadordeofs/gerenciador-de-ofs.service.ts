@@ -58,4 +58,8 @@ export class GerenciadorDeOfsService {
   updateEstadoDaOf(servicoOf: IServicoOf): Observable<HttpResponse<IServicoOf>> {
     return this.http.put<IServicoOf>(`${this.resourceUrl}/updateEstadoDaOf`, servicoOf, { observe: 'response' });
   }
+
+  downloadTxt(idServicoOf?: number): Observable<any> {
+    return this.http.get(`${this.resourceUrl}/downloadTxt/${idServicoOf}`, { responseType: 'blob' });
+  }
 }
