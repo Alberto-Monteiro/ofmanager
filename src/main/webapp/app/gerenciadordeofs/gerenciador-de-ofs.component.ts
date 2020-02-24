@@ -11,6 +11,7 @@ import { ITEMS_PER_PAGE } from 'app/shared/constants/pagination.constants';
 import { GerenciadorDeOfsService } from './gerenciador-de-ofs.service';
 import { ServicoOfDeleteDialogComponent } from 'app/entities/servico-of/servico-of-delete-dialog.component';
 import { IUser } from 'app/core/user/user.model';
+import { AccountService } from 'app/core/auth/account.service';
 
 @Component({
   selector: 'of-gerenciador-de-ofs',
@@ -26,7 +27,7 @@ export class GerenciadorDeOfsComponent implements OnInit, OnDestroy {
   ascending!: boolean;
   ngbPaginationPage = 1;
 
-  filtroPesquisa = { numeroOF: null, usuarioGestor: null };
+  filtroPesquisa = { numeroOF: null, usuarioGestor: {} };
   usuariosGestor?: IUser[] | null;
 
   constructor(
@@ -34,21 +35,25 @@ export class GerenciadorDeOfsComponent implements OnInit, OnDestroy {
     protected activatedRoute: ActivatedRoute,
     protected router: Router,
     protected eventManager: JhiEventManager,
-    protected modalService: NgbModal
+    protected modalService: NgbModal,
+    protected accountService: AccountService
   ) {}
 
   ngOnInit(): void {
     this.gerenciadorDeOfsService.getUsuariosGestor().subscribe(usuarios => {
       this.usuariosGestor = usuarios.body;
+      this.accountService.identity(false).subscribe(user => {
+        this.filtroPesquisa.usuarioGestor = this.usuariosGestor!.filter(user1 => user1.login === user!.login)![0];
+        this.activatedRoute.data.subscribe(data => {
+          this.page = data.pagingParams.page;
+          this.ascending = data.pagingParams.ascending;
+          this.predicate = data.pagingParams.predicate;
+          this.ngbPaginationPage = data.pagingParams.page;
+          this.loadPage();
+        });
+      });
     });
 
-    this.activatedRoute.data.subscribe(data => {
-      this.page = data.pagingParams.page;
-      this.ascending = data.pagingParams.ascending;
-      this.predicate = data.pagingParams.predicate;
-      this.ngbPaginationPage = data.pagingParams.page;
-      this.loadPage();
-    });
     this.registerChangeInServicoOfs();
   }
 
@@ -119,6 +124,7 @@ export class GerenciadorDeOfsComponent implements OnInit, OnDestroy {
     this.gerenciadorDeOfsService.updateEstadoDaOf(servicoOf).subscribe(
       servicoOf1 => {
         servicoOf.lastModifiedDate = servicoOf1.body!.lastModifiedDate;
+        servicoOf.lastModifiedBy = servicoOf1.body!.lastModifiedBy;
       },
       () => {
         servicoOf.estado = estadoAnterior;

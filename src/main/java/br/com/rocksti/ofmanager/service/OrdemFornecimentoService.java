@@ -98,8 +98,8 @@ public class OrdemFornecimentoService {
                 .stream()
                 .noneMatch(authority -> authority.getName().equals(AuthoritiesConstants.ADMIN)
                     || authority.getName().equals(AuthoritiesConstants.GESTOR_OF)))
-            .map(user -> servicoOfRepository.findAllByDonoDaOf_IdEquals(pageable, user.getId()).map(servicoOfMapper::toDto))
-            .orElse(servicoOfRepository.findAll(pageable).map(servicoOfMapper::toDto));
+            .map(user -> servicoOfRepository.findAllByDonoDaOf_IdEqualsAndNumeroEquals(pageable, user.getId(), filtroPesquisa.getNumeroOF()).map(servicoOfMapper::toDto))
+            .orElse(servicoOfRepository.findAllByNumeroEqualsAndGestorDaOf_Id(pageable, filtroPesquisa.getNumeroOF(), Optional.ofNullable(filtroPesquisa.getUsuarioGestor()).map(UserDTO::getId).orElse(null)).map(servicoOfMapper::toDto));
     }
 
     @Transactional(readOnly = true)
