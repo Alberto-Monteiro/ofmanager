@@ -42,7 +42,9 @@ export class GerenciadorDeOfsUpdateComponent implements OnInit {
 
   updateForm(ordemFornecimento: IOrdemFornecimento): void {
     this.editForm.patchValue({
-      usuarioGestor: this.usuariosGestor!.filter(value => value.id === ordemFornecimento.servicoOf!.gestorDaOf!.id)![0],
+      usuarioGestor: this.usuariosGestor!.filter(
+        value => value.id === (ordemFornecimento.servicoOf!.gestorDaOf! ? ordemFornecimento.servicoOf!.gestorDaOf!.id : 0)
+      )[0],
       numero: ordemFornecimento.servicoOf!.numero,
       listaDeArquivo: ordemFornecimento.listaDosArquivos
     });
@@ -116,6 +118,13 @@ export class GerenciadorDeOfsUpdateComponent implements OnInit {
     });
   }
 
+  downloadTxt(): void {
+    this.gerenciadorDeOfsService.downloadTxt(this.ordemFornecimento!.servicoOf!.id).subscribe(response => {
+      const blob: any = new Blob([response], { type: 'text/txt' });
+      fileSaver.saveAs(blob, `OF-${this.ordemFornecimento!.servicoOf!.numero}.txt`);
+    });
+  }
+
   podeSerArquivoDeTest(extensao: string): boolean {
     return extensao === 'java' || extensao === 'js' || extensao === 'ts';
   }
@@ -131,12 +140,5 @@ export class GerenciadorDeOfsUpdateComponent implements OnInit {
         servicoOf.estado = estadoAnterior;
       }
     );
-  }
-
-  downloadTxt(): void {
-    this.gerenciadorDeOfsService.downloadTxt(this.ordemFornecimento!.servicoOf!.id).subscribe(response => {
-      const blob: any = new Blob([response], { type: 'text/txt' });
-      fileSaver.saveAs(blob, `OF-${this.ordemFornecimento!.servicoOf!.numero}.txt`);
-    });
   }
 }

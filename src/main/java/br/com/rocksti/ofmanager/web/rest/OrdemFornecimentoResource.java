@@ -125,6 +125,21 @@ public class OrdemFornecimentoResource {
         }
     }
 
+    @GetMapping("/gerenciador_de_ofs/downloadTxt/{idServicoOf}")
+    public void downloadTxt(HttpServletResponse response, @PathVariable Long idServicoOf) {
+        try {
+
+            ordemFornecimentoService
+                .produzirConteudoDoTxt(ordemFornecimentoService.findOneOrdemFornecimento(idServicoOf).get());
+            //response.getOutputStream();
+
+            //org.apache.commons.io.IOUtils.copy(planilha, response.getOutputStream());
+            response.flushBuffer();
+        } catch (IOException ex) {
+            throw new RuntimeException("IOError writing file to output stream");
+        }
+    }
+
     @GetMapping("/gerenciador_de_ofs/getUsuariosGestor")
     public ResponseEntity<List<UserDTO>> getUsuariosGestor() {
         return ResponseUtil.wrapOrNotFound(Optional.of(ordemFornecimentoService.getUsuariosGestor()));
@@ -141,20 +156,5 @@ public class OrdemFornecimentoResource {
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, servicoOfDTO.getId().toString()))
             .body(result);
-    }
-
-    @GetMapping("/gerenciador_de_ofs/downloadTxt/{idServicoOf}")
-    public void downloadTxt(HttpServletResponse response, @PathVariable Long idServicoOf) {
-        try {
-
-            ordemFornecimentoService
-                .produzirConteudoDoTxt(ordemFornecimentoService.findOneOrdemFornecimento(idServicoOf).get());
-            //response.getOutputStream();
-
-            //org.apache.commons.io.IOUtils.copy(planilha, response.getOutputStream());
-            response.flushBuffer();
-        } catch (IOException ex) {
-            throw new RuntimeException("IOError writing file to output stream");
-        }
     }
 }

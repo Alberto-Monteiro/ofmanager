@@ -15,15 +15,15 @@
     <div class="row">
         <div class="col">
             <mat-form-field>
-                <input matInput type="number" placeholder="Número da OF" [(ngModel)]="filtroPesquisa.numeroOF">
-                <button *ngIf="filtroPesquisa.numeroOF" mat-button matSuffix mat-icon-button aria-label="Limpar" (click)="filtroPesquisa.numeroOF=null">
+                <input matInput type="number" placeholder="Número da OF" [(ngModel)]="filtroPesquisa.numeroOF" (keyup.enter)="loadPage()">
+                <button *ngIf="filtroPesquisa.numeroOF" mat-button matSuffix mat-icon-button aria-label="Limpar" (click)="filtroPesquisa.numeroOF=null;loadPage()">
                     <fa-icon [icon]="'times'"></fa-icon>
                 </button>
             </mat-form-field>
 
             <mat-form-field *ofHasAnyAuthority="['ROLE_ADMIN', 'ROLE_GESTOR_OF']">
                 <mat-label>Gestor da OF</mat-label>
-                <mat-select [(ngModel)]="filtroPesquisa.usuarioGestor">
+                <mat-select [(ngModel)]="filtroPesquisa.usuarioGestor" (ngModelChange)="loadPage()">
                     <mat-option [value]="null">Todos</mat-option>
                     <mat-option *ngFor="let usuarioGestor of usuariosGestor" [value]="usuarioGestor">
                         {{usuarioGestor!.firstName}}
@@ -64,7 +64,9 @@
                 <th scope="col" jhiSortBy="valorUstibb"><span>USTIBB</span>
                     <fa-icon [icon]="'sort'"></fa-icon>
                 </th>
-                <th scope="col"><span>Estado</span></th>
+                <th scope="col" jhiSortBy="estado"><span>Estado</span>
+                    <fa-icon [icon]="'sort'"></fa-icon>
+                </th>
                 <th scope="col"></th>
             </tr>
             </thead>

@@ -47,6 +47,10 @@ export class GerenciadorDeOfsService {
     return this.http.get(`${this.resourceUrl}/downloadPlanilha/${idServicoOf}`, { responseType: 'blob' });
   }
 
+  downloadTxt(idServicoOf?: number): Observable<any> {
+    return this.http.get(`${this.resourceUrl}/downloadTxt/${idServicoOf}`, { responseType: 'blob' });
+  }
+
   deletarArquivoDaOf(arquivoDaOf: IArquivoDaOf): Observable<EntityResponseType> {
     return this.http.delete(`${this.resourceUrl}/deletarArquivoDaOf/${arquivoDaOf.id}`, { observe: 'response' });
   }
@@ -57,9 +61,5 @@ export class GerenciadorDeOfsService {
 
   updateEstadoDaOf(servicoOf: IServicoOf): Observable<HttpResponse<IServicoOf>> {
     return this.http.put<IServicoOf>(`${this.resourceUrl}/updateEstadoDaOf`, servicoOf, { observe: 'response' });
-  }
-
-  downloadTxt(idServicoOf?: number): Observable<any> {
-    return this.http.get(`${this.resourceUrl}/downloadTxt/${idServicoOf}`, { responseType: 'blob' });
   }
 }

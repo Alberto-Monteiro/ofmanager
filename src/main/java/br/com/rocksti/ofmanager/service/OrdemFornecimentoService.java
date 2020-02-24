@@ -293,6 +293,11 @@ public class OrdemFornecimentoService {
         return workbook;
     }
 
+    public void produzirConteudoDoTxt(OrdemFornecimentoDTO ordemFornecimentoDTO) {
+        ordemFornecimentoDTO.toString();
+
+    }
+
     public List<EstruturaDoArquivo> getEstruturaDoNegocioArquivoDaOf(OrdemFornecimentoDTO ordemFornecimento) {
         List<EstruturaDoArquivo> estruturaDoArquivoList = new ArrayList<>();
 
@@ -349,10 +354,5 @@ public class OrdemFornecimentoService {
         });
 
         return servicoOfReference.get();
-    }
-
-    public void produzirConteudoDoTxt(OrdemFornecimentoDTO ordemFornecimentoDTO) {
-        ordemFornecimentoDTO.toString();
-
     }
 }
