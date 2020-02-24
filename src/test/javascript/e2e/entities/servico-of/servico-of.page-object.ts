@@ -36,6 +36,7 @@ export class ServicoOfUpdatePage {
   createdDateInput = element(by.id('field_createdDate'));
   lastModifiedByInput = element(by.id('field_lastModifiedBy'));
   lastModifiedDateInput = element(by.id('field_lastModifiedDate'));
+  valorUstibbInput = element(by.id('field_valorUstibb'));
 
   gestorDaOfSelect = element(by.id('field_gestorDaOf'));
   donoDaOfSelect = element(by.id('field_donoDaOf'));
@@ -105,6 +106,14 @@ export class ServicoOfUpdatePage {
 
   async getLastModifiedDateInput(): Promise<string> {
     return await this.lastModifiedDateInput.getAttribute('value');
+  }
+
+  async setValorUstibbInput(valorUstibb: string): Promise<void> {
+    await this.valorUstibbInput.sendKeys(valorUstibb);
+  }
+
+  async getValorUstibbInput(): Promise<string> {
+    return await this.valorUstibbInput.getAttribute('value');
   }
 
   async gestorDaOfSelectLastOption(): Promise<void> {

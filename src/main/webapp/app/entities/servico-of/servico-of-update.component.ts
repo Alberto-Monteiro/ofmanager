@@ -31,6 +31,7 @@ export class ServicoOfUpdateComponent implements OnInit {
     createdDate: [],
     lastModifiedBy: [],
     lastModifiedDate: [],
+    valorUstibb: [],
     gestorDaOfId: [],
     donoDaOfId: []
   });
@@ -68,6 +69,7 @@ export class ServicoOfUpdateComponent implements OnInit {
       createdDate: servicoOf.createdDate ? servicoOf.createdDate.format(DATE_TIME_FORMAT) : null,
       lastModifiedBy: servicoOf.lastModifiedBy,
       lastModifiedDate: servicoOf.lastModifiedDate ? servicoOf.lastModifiedDate.format(DATE_TIME_FORMAT) : null,
+      valorUstibb: servicoOf.valorUstibb,
       gestorDaOfId: servicoOf.gestorDaOfId,
       donoDaOfId: servicoOf.donoDaOfId
     });
@@ -118,6 +120,7 @@ export class ServicoOfUpdateComponent implements OnInit {
       lastModifiedDate: this.editForm.get(['lastModifiedDate'])!.value
         ? moment(this.editForm.get(['lastModifiedDate'])!.value, DATE_TIME_FORMAT)
         : undefined,
+      valorUstibb: this.editForm.get(['valorUstibb'])!.value,
       gestorDaOfId: this.editForm.get(['gestorDaOfId'])!.value,
       donoDaOfId: this.editForm.get(['donoDaOfId'])!.value
     };

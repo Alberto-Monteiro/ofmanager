@@ -25,7 +25,7 @@ describe('Service Tests', () => {
       httpMock = injector.get(HttpTestingController);
       currentDate = moment();
 
-      elemDefault = new ServicoOf(0, 0, EstadoOf.NOVA, 'AAAAAAA', 'AAAAAAA', currentDate, 'AAAAAAA', currentDate);
+      elemDefault = new ServicoOf(0, 0, EstadoOf.NOVA, 'AAAAAAA', 'AAAAAAA', currentDate, 'AAAAAAA', currentDate, 0);
     });
 
     describe('Service methods', () => {
@@ -79,7 +79,8 @@ describe('Service Tests', () => {
             createdBy: 'BBBBBB',
             createdDate: currentDate.format(DATE_TIME_FORMAT),
             lastModifiedBy: 'BBBBBB',
-            lastModifiedDate: currentDate.format(DATE_TIME_FORMAT)
+            lastModifiedDate: currentDate.format(DATE_TIME_FORMAT),
+            valorUstibb: 1
           },
           elemDefault
         );
@@ -108,7 +109,8 @@ describe('Service Tests', () => {
             createdBy: 'BBBBBB',
             createdDate: currentDate.format(DATE_TIME_FORMAT),
             lastModifiedBy: 'BBBBBB',
-            lastModifiedDate: currentDate.format(DATE_TIME_FORMAT)
+            lastModifiedDate: currentDate.format(DATE_TIME_FORMAT),
+            valorUstibb: 1
           },
           elemDefault
         );

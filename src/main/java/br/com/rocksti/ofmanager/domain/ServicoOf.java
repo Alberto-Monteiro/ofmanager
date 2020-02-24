@@ -8,6 +8,7 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
@@ -61,6 +62,9 @@ public class ServicoOf implements Serializable {
     @LastModifiedDate
     @Column(name = "last_modified_date")
     private Instant lastModifiedDate = Instant.now();
+
+    @Column(name = "valor_ustibb", precision = 21, scale = 2)
+    private BigDecimal valorUstibb;
 
     @OneToMany(mappedBy = "servicoOf", cascade = {CascadeType.ALL}, orphanRemoval = true)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -174,6 +178,19 @@ public class ServicoOf implements Serializable {
         this.lastModifiedDate = lastModifiedDate;
     }
 
+    public BigDecimal getValorUstibb() {
+        return valorUstibb;
+    }
+
+    public ServicoOf valorUstibb(BigDecimal valorUstibb) {
+        this.valorUstibb = valorUstibb;
+        return this;
+    }
+
+    public void setValorUstibb(BigDecimal valorUstibb) {
+        this.valorUstibb = valorUstibb;
+    }
+
     public Set<ArquivoDaOf> getArquivoDaOfs() {
         return arquivoDaOfs;
     }
@@ -253,6 +270,7 @@ public class ServicoOf implements Serializable {
             ", createdDate='" + getCreatedDate() + "'" +
             ", lastModifiedBy='" + getLastModifiedBy() + "'" +
             ", lastModifiedDate='" + getLastModifiedDate() + "'" +
+            ", valorUstibb=" + getValorUstibb() +
             "}";
     }
 }

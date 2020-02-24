@@ -79,6 +79,7 @@ class ServicoOfGatlingTest extends Simulation {
                 , "createdDate":"2020-01-01T00:00:00.000Z"
                 , "lastModifiedBy":"SAMPLE_TEXT"
                 , "lastModifiedDate":"2020-01-01T00:00:00.000Z"
+                , "valorUstibb":"0"
                 }""")).asJson
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_servicoOf_url"))).exitHereIfFailed

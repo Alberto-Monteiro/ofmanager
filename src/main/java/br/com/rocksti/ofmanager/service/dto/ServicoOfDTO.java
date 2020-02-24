@@ -3,6 +3,7 @@ package br.com.rocksti.ofmanager.service.dto;
 import java.time.Instant;
 import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Objects;
 import javax.persistence.Lob;
 import br.com.rocksti.ofmanager.domain.enumeration.EstadoOf;
@@ -29,6 +30,8 @@ public class ServicoOfDTO implements Serializable {
     private String lastModifiedBy;
 
     private Instant lastModifiedDate;
+
+    private BigDecimal valorUstibb;
 
 
     private Long gestorDaOfId;
@@ -103,6 +106,14 @@ public class ServicoOfDTO implements Serializable {
         this.lastModifiedDate = lastModifiedDate;
     }
 
+    public BigDecimal getValorUstibb() {
+        return valorUstibb;
+    }
+
+    public void setValorUstibb(BigDecimal valorUstibb) {
+        this.valorUstibb = valorUstibb;
+    }
+
     public Long getGestorDaOfId() {
         return gestorDaOfId;
     }
@@ -167,6 +178,7 @@ public class ServicoOfDTO implements Serializable {
             ", createdDate='" + getCreatedDate() + "'" +
             ", lastModifiedBy='" + getLastModifiedBy() + "'" +
             ", lastModifiedDate='" + getLastModifiedDate() + "'" +
+            ", valorUstibb=" + getValorUstibb() +
             ", gestorDaOfId=" + getGestorDaOfId() +
             ", gestorDaOfLogin='" + getGestorDaOfLogin() + "'" +
             ", donoDaOfId=" + getDonoDaOfId() +

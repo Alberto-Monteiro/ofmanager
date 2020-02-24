@@ -8,6 +8,7 @@ import br.com.rocksti.ofmanager.service.mapper.ServicoOfMapper;
 import br.com.rocksti.ofmanager.web.rest.errors.BadRequestAlertException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -91,7 +92,7 @@ public class ServicoOfService {
                 .anyMatch(authority -> authority.getName().equals(AuthoritiesConstants.ADMIN)
                     || authority.getName().equals(AuthoritiesConstants.GESTOR_OF)))
             .map(user -> {
-                servicoOfRepository.deleteById(id);
+        servicoOfRepository.deleteById(id);
                 return Optional.of(user);
             })
             .orElseGet(() -> {

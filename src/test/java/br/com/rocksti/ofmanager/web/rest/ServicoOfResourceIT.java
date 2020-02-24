@@ -23,6 +23,7 @@ import org.springframework.util.Base64Utils;
 import org.springframework.validation.Validator;
 
 import javax.persistence.EntityManager;
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -60,6 +61,9 @@ public class ServicoOfResourceIT {
 
     private static final Instant DEFAULT_LAST_MODIFIED_DATE = Instant.ofEpochMilli(0L);
     private static final Instant UPDATED_LAST_MODIFIED_DATE = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+
+    private static final BigDecimal DEFAULT_VALOR_USTIBB = new BigDecimal(1);
+    private static final BigDecimal UPDATED_VALOR_USTIBB = new BigDecimal(2);
 
     @Autowired
     private ServicoOfRepository servicoOfRepository;
@@ -115,7 +119,8 @@ public class ServicoOfResourceIT {
             .createdBy(DEFAULT_CREATED_BY)
             .createdDate(DEFAULT_CREATED_DATE)
             .lastModifiedBy(DEFAULT_LAST_MODIFIED_BY)
-            .lastModifiedDate(DEFAULT_LAST_MODIFIED_DATE);
+            .lastModifiedDate(DEFAULT_LAST_MODIFIED_DATE)
+            .valorUstibb(DEFAULT_VALOR_USTIBB);
         return servicoOf;
     }
     /**
@@ -132,7 +137,8 @@ public class ServicoOfResourceIT {
             .createdBy(UPDATED_CREATED_BY)
             .createdDate(UPDATED_CREATED_DATE)
             .lastModifiedBy(UPDATED_LAST_MODIFIED_BY)
-            .lastModifiedDate(UPDATED_LAST_MODIFIED_DATE);
+            .lastModifiedDate(UPDATED_LAST_MODIFIED_DATE)
+            .valorUstibb(UPDATED_VALOR_USTIBB);
         return servicoOf;
     }
 
@@ -164,6 +170,7 @@ public class ServicoOfResourceIT {
         assertThat(testServicoOf.getCreatedDate()).isEqualTo(DEFAULT_CREATED_DATE);
         assertThat(testServicoOf.getLastModifiedBy()).isEqualTo(DEFAULT_LAST_MODIFIED_BY);
         assertThat(testServicoOf.getLastModifiedDate()).isEqualTo(DEFAULT_LAST_MODIFIED_DATE);
+        assertThat(testServicoOf.getValorUstibb()).isEqualTo(DEFAULT_VALOR_USTIBB);
     }
 
     @Test
@@ -223,7 +230,8 @@ public class ServicoOfResourceIT {
             .andExpect(jsonPath("$.[*].createdBy").value(hasItem(DEFAULT_CREATED_BY)))
             .andExpect(jsonPath("$.[*].createdDate").value(hasItem(DEFAULT_CREATED_DATE.toString())))
             .andExpect(jsonPath("$.[*].lastModifiedBy").value(hasItem(DEFAULT_LAST_MODIFIED_BY)))
-            .andExpect(jsonPath("$.[*].lastModifiedDate").value(hasItem(DEFAULT_LAST_MODIFIED_DATE.toString())));
+            .andExpect(jsonPath("$.[*].lastModifiedDate").value(hasItem(DEFAULT_LAST_MODIFIED_DATE.toString())))
+            .andExpect(jsonPath("$.[*].valorUstibb").value(hasItem(DEFAULT_VALOR_USTIBB.intValue())));
     }
     
     @Test
@@ -243,7 +251,8 @@ public class ServicoOfResourceIT {
             .andExpect(jsonPath("$.createdBy").value(DEFAULT_CREATED_BY))
             .andExpect(jsonPath("$.createdDate").value(DEFAULT_CREATED_DATE.toString()))
             .andExpect(jsonPath("$.lastModifiedBy").value(DEFAULT_LAST_MODIFIED_BY))
-            .andExpect(jsonPath("$.lastModifiedDate").value(DEFAULT_LAST_MODIFIED_DATE.toString()));
+            .andExpect(jsonPath("$.lastModifiedDate").value(DEFAULT_LAST_MODIFIED_DATE.toString()))
+            .andExpect(jsonPath("$.valorUstibb").value(DEFAULT_VALOR_USTIBB.intValue()));
     }
 
     @Test
@@ -273,7 +282,8 @@ public class ServicoOfResourceIT {
             .createdBy(UPDATED_CREATED_BY)
             .createdDate(UPDATED_CREATED_DATE)
             .lastModifiedBy(UPDATED_LAST_MODIFIED_BY)
-            .lastModifiedDate(UPDATED_LAST_MODIFIED_DATE);
+            .lastModifiedDate(UPDATED_LAST_MODIFIED_DATE)
+            .valorUstibb(UPDATED_VALOR_USTIBB);
         ServicoOfDTO servicoOfDTO = servicoOfMapper.toDto(updatedServicoOf);
 
         restServicoOfMockMvc.perform(put("/api/servico-ofs")
@@ -292,6 +302,7 @@ public class ServicoOfResourceIT {
         assertThat(testServicoOf.getCreatedDate()).isEqualTo(UPDATED_CREATED_DATE);
         assertThat(testServicoOf.getLastModifiedBy()).isEqualTo(UPDATED_LAST_MODIFIED_BY);
         assertThat(testServicoOf.getLastModifiedDate()).isEqualTo(UPDATED_LAST_MODIFIED_DATE);
+        assertThat(testServicoOf.getValorUstibb()).isEqualTo(UPDATED_VALOR_USTIBB);
     }
 
     @Test

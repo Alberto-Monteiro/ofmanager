@@ -1,12 +1,17 @@
 <?xml version="1.1" encoding="UTF-8" standalone="no"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
-                   xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-3.8.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
-    <changeSet author="C1298328 (generated)" id="1582232551874-5">
+    <changeSet author="Alberto Monteiro" id="1582232551874-5">
+        <sql dbms="h2, mysql"
+             endDelimiter="\nGO"
+             splitStatements="true"
+             stripComments="true">
+            INSERT INTO of_authority (name) VALUES ('ROLE_GESTOR_OF')
+        </sql>
+
         <dropColumn tableName="servico_of">
-            <column name="created_date"/>
             <column name="userid"/>
         </dropColumn>
 
@@ -20,9 +25,6 @@
             <column name="created_by" type="varchar(255)">
                 <constraints nullable="true"/>
             </column>
-            <column name="created_date" type="datetime">
-                <constraints nullable="true"/>
-            </column>
             <column name="last_modified_by" type="varchar(255)">
                 <constraints nullable="true"/>
             </column>
@@ -33,6 +35,9 @@
                 <constraints nullable="true"/>
             </column>
             <column name="dono_da_of_id" type="bigint">
+                <constraints nullable="true"/>
+            </column>
+            <column name="valor_ustibb" type="decimal(21,2)">
                 <constraints nullable="true"/>
             </column>
         </addColumn>

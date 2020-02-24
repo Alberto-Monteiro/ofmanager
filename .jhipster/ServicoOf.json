@@ -33,6 +33,10 @@
         {
             "fieldName": "lastModifiedDate",
             "fieldType": "Instant"
+        },
+        {
+            "fieldName": "valorUstibb",
+            "fieldType": "BigDecimal"
         }
     ],
     "relationships": [

@@ -12,6 +12,7 @@ export interface IServicoOf {
   createdDate?: Moment;
   lastModifiedBy?: string;
   lastModifiedDate?: Moment;
+  valorUstibb?: number;
   arquivoDaOfs?: IArquivoDaOf[];
   gestorDaOf?: IUser;
   gestorDaOfLogin?: string;
@@ -31,6 +32,7 @@ export class ServicoOf implements IServicoOf {
     public createdDate?: Moment,
     public lastModifiedBy?: string,
     public lastModifiedDate?: Moment,
+    public valorUstibb?: number,
     public arquivoDaOfs?: IArquivoDaOf[],
     public gestorDaOf?: IUser,
     public gestorDaOfLogin?: string,

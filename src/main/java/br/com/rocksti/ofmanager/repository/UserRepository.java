@@ -2,8 +2,10 @@ package br.com.rocksti.ofmanager.repository;
 
 import br.com.rocksti.ofmanager.domain.Authority;
 import br.com.rocksti.ofmanager.domain.User;
+
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;

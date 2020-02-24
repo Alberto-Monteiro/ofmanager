@@ -1,11 +1,11 @@
-id;numero;estado;observacao_do_gestor;created_by;created_date;last_modified_by;last_modified_date
-1;84075;NOVA;../fake-data/blob/hipster.txt;UAE Dirham Product Dynamic;2020-02-13T03:44:15;secondary Metal dynamic;2020-02-13T04:38:38
-2;56523;REJEITADA;../fake-data/blob/hipster.txt;Tactics;2020-02-13T04:40:08;green;2020-02-13T05:23:05
-3;13577;ACEITA;../fake-data/blob/hipster.txt;Licensed Connecticut;2020-02-13T05:59:49;Liaison Tasty Lane;2020-02-12T23:02:46
-4;16225;ANALISE;../fake-data/blob/hipster.txt;Florida Nepal Small Cotton Gloves;2020-02-13T11:42:49;Minnesota Iowa;2020-02-13T04:57:50
-5;24116;REJEITADA;../fake-data/blob/hipster.txt;methodology;2020-02-13T07:22:17;Surinam Dollar stable Principal;2020-02-13T13:29:14
-6;17112;REJEITADA;../fake-data/blob/hipster.txt;orchestrate;2020-02-13T02:09:39;neural;2020-02-13T01:57:32
-7;23120;NOVA;../fake-data/blob/hipster.txt;middleware Isle;2020-02-13T03:12:35;card;2020-02-13T02:48:57
-8;84810;ACEITA;../fake-data/blob/hipster.txt;mobile;2020-02-12T17:59:06;Jewelery Norwegian Krone;2020-02-13T08:47:59
-9;65357;ACEITA;../fake-data/blob/hipster.txt;Investment Account Checking Account;2020-02-13T02:03:16;Row Pennsylvania;2020-02-13T00:18:45
-10;4194;NOVA;../fake-data/blob/hipster.txt;Bedfordshire;2020-02-12T17:15:35;Tasty Plastic Tuna;2020-02-13T02:30:09
+id;numero;estado;observacao_do_gestor;created_by;created_date;last_modified_by;last_modified_date;valor_ustibb
+1;84075;NOVA;../fake-data/blob/hipster.txt;UAE Dirham Product Dynamic;2020-02-13T03:44:15;secondary Metal dynamic;2020-02-13T04:38:38;56523
+2;37380;ANALISE;../fake-data/blob/hipster.txt;Intelligent Steel Shoes Rubber;2020-02-13T14:25:05;Sleek Plastic Pants;2020-02-13T02:47:20;62021
+3;9536;NOVA;../fake-data/blob/hipster.txt;Lane hack ROI;2020-02-12T19:53:40;Berkshire quantify Hat;2020-02-13T02:08:08;5624
+4;4404;ANALISE;../fake-data/blob/hipster.txt;installation User-centric;2020-02-13T10:09:07;Movies Bedfordshire SQL;2020-02-13T09:11:18;61025
+5;40332;NOVA;../fake-data/blob/hipster.txt;Fantastic Metal Cheese;2020-02-13T10:38:13;Soap scalable;2020-02-12T22:11:40;62883
+6;23120;NOVA;../fake-data/blob/hipster.txt;middleware Isle;2020-02-13T03:12:35;card;2020-02-13T02:48:57;84810
+7;98389;ANALISE;../fake-data/blob/hipster.txt;Licensed Strategist;2020-02-13T07:21:49;wireless;2020-02-13T02:42:29;34380
+8;65357;ACEITA;../fake-data/blob/hipster.txt;Investment Account Checking Account;2020-02-13T02:03:16;Row Pennsylvania;2020-02-13T00:18:45;4194
+9;92736;ACEITA;../fake-data/blob/hipster.txt;Sleek Plastic Chips;2020-02-13T14:44:44;Paradigm;2020-02-13T01:46:51;60619
+10;39723;ACEITA;../fake-data/blob/hipster.txt;Industrial Response Strategist;2020-02-13T06:57:34;Fantastic Rubber Salad Granite Movies;2020-02-13T06:52:04;34960

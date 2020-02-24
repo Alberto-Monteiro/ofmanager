@@ -48,6 +48,7 @@ describe('ServicoOf e2e test', () => {
       servicoOfUpdatePage.setCreatedDateInput('01/01/2001' + protractor.Key.TAB + '02:30AM'),
       servicoOfUpdatePage.setLastModifiedByInput('lastModifiedBy'),
       servicoOfUpdatePage.setLastModifiedDateInput('01/01/2001' + protractor.Key.TAB + '02:30AM'),
+      servicoOfUpdatePage.setValorUstibbInput('5'),
       servicoOfUpdatePage.gestorDaOfSelectLastOption(),
       servicoOfUpdatePage.donoDaOfSelectLastOption()
     ]);
@@ -70,6 +71,7 @@ describe('ServicoOf e2e test', () => {
       '2001-01-01T02:30',
       'Expected lastModifiedDate value to be equals to 2000-12-31'
     );
+    expect(await servicoOfUpdatePage.getValorUstibbInput()).to.eq('5', 'Expected valorUstibb value to be equals to 5');
 
     await servicoOfUpdatePage.save();
     expect(await servicoOfUpdatePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;

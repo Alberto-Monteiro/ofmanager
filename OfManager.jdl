@@ -28,6 +28,7 @@ entity ServicoOf {
     createdDate Instant
     lastModifiedBy String
     lastModifiedDate Instant
+    valorUstibb BigDecimal
 }
 
 entity ArquivoDaOf {
