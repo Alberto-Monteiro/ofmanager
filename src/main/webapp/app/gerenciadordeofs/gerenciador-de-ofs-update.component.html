@@ -17,20 +17,20 @@
                         <mat-label>Gestor da OF</mat-label>
                         <mat-select class="no-ng-invalid" formControlName="usuarioGestor">
                             <mat-option *ngFor="let usuarioGestor of usuariosGestor" [value]="usuarioGestor">
-                                {{usuarioGestor!.firstName}}
+                                {{usuarioGestor.firstName}}
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
                     &nbsp;
                     &nbsp;
-                    <span *ngIf="ordemFornecimento.servicoOf.id">
+                    <span *ngIf="ordemFornecimento!.servicoOf!.id">
                         <mat-form-field *ofHasAnyAuthority="['ROLE_ADMIN', 'ROLE_GESTOR_OF']">
                             <mat-label>Estado da OF</mat-label>
-                            <mat-select [(value)]="ordemFornecimento.servicoOf.estado">
-                                <mat-option (click)="atualizaEstadoDaOf(ordemFornecimento.servicoOf, 'NOVA')" [value]="'NOVA'">Nova</mat-option>
-                                <mat-option (click)="atualizaEstadoDaOf(ordemFornecimento.servicoOf, 'ANALISE')" [value]="'ANALISE'">Análise</mat-option>
-                                <mat-option (click)="atualizaEstadoDaOf(ordemFornecimento.servicoOf, 'ACEITA')" [value]="'ACEITA'">Aceita</mat-option>
-                                <mat-option (click)="atualizaEstadoDaOf(ordemFornecimento.servicoOf, 'REJEITADA')" [value]="'REJEITADA'">Rejeitada</mat-option>
+                            <mat-select [(value)]="ordemFornecimento!.servicoOf!.estado">
+                                <mat-option (click)="atualizaEstadoDaOf(ordemFornecimento!.servicoOf!, 'NOVA')" [value]="'NOVA'">Nova</mat-option>
+                                <mat-option (click)="atualizaEstadoDaOf(ordemFornecimento!.servicoOf!, 'ANALISE')" [value]="'ANALISE'">Análise</mat-option>
+                                <mat-option (click)="atualizaEstadoDaOf(ordemFornecimento!.servicoOf!, 'ACEITA')" [value]="'ACEITA'">Aceita</mat-option>
+                                <mat-option (click)="atualizaEstadoDaOf(ordemFornecimento!.servicoOf!, 'REJEITADA')" [value]="'REJEITADA'">Rejeitada</mat-option>
                             </mat-select>
                         </mat-form-field>
                     </span>
@@ -42,9 +42,9 @@
                                   id="field_lista_arquivo" name="listaDeAqruivos"
                                   formControlName="listaDeArquivo"></textarea>
                     </mat-form-field>
-                    <mat-chip-list *ngIf="ordemFornecimento.servicoOf.id" aria-label="Fish selection">
+                    <mat-chip-list *ngIf="ordemFornecimento!.servicoOf!.id" aria-label="Fish selection">
                         <mat-chip color="primary" selected>
-                            <span>Total de arquivos: {{ordemFornecimento.servicoOf.arquivoDaOfs.length}}</span>
+                            <span>Total de arquivos: {{ordemFornecimento!.servicoOf!.arquivoDaOfs!.length}}</span>
                         </mat-chip>
                     </mat-chip-list>
                 </div>
@@ -55,7 +55,7 @@
                     <fa-icon icon="chevron-left"></fa-icon>&nbsp;<span>Voltar</span>
                 </button>
                 <button type="button" id="processar" class="btn btn-primary form-group" (click)="processar()"
-                        [disabled]="editForm!.invalid">
+                        [disabled]="editForm.invalid">
                     <fa-icon icon="sync"></fa-icon>&nbsp;<span>Processar</span>
                 </button>
                 <button type="button" id="download" class="btn btn-success form-group" (click)="download()"
@@ -68,7 +68,7 @@
                         {{mapArquivoDaOf.key}}
                     </div>
                     <ul class="list-group list-group-flush">
-                        <li *ngFor="let arquivoDaOf of mapArquivoDaOf!.value" class="list-group-item">
+                        <li *ngFor="let arquivoDaOf of mapArquivoDaOf.value" class="list-group-item">
 
                             <mat-grid-list cols="12" rowHeight="100px">
                                 <mat-grid-tile
@@ -78,7 +78,7 @@
                                     {{arquivoDaOf.arquivo.caminhoDoArquivo}}
                                 </mat-grid-tile>
                                 <mat-grid-tile>
-                                    <mat-checkbox *ngIf="podeSerArquivoDeTest(mapArquivoDaOf!.key)" (change)="isArquivoTest(arquivoDaOf!.arquivo)" [checked]="arquivoDaOf!.arquivo.arquivoDeTest">Test</mat-checkbox>
+                                    <mat-checkbox *ngIf="podeSerArquivoDeTest(mapArquivoDaOf.key)" (change)="isArquivoTest(arquivoDaOf.arquivo)" [checked]="arquivoDaOf.arquivo.arquivoDeTest">Test</mat-checkbox>
                                 </mat-grid-tile>
                                 <mat-grid-tile [colspan]="2">
                                     <mat-form-field>
