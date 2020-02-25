@@ -317,8 +317,10 @@ public class OrdemFornecimentoService {
         estruturaDoNegocioArquivoTests.forEach(estruturaDoArquivo -> mapTestsArquivos.put(estruturaDoArquivo.getComplexidade(), estruturaDoArquivo));
 
         preparaConteudoArquivoTxt(stringJoiner, mapComplexidadesArquivos);
-        stringJoiner.add("<<<<<<<< - ARQUIVOS DE TEST - >>>>>>>>");
-        preparaConteudoArquivoTxt(stringJoiner, mapTestsArquivos);
+        if (!mapTestsArquivos.isEmpty()) {
+            stringJoiner.add("<<<<<<<< - ARQUIVOS DE TEST - >>>>>>>>");
+            preparaConteudoArquivoTxt(stringJoiner, mapTestsArquivos);
+        }
 
         return stringJoiner.toString();
     }
