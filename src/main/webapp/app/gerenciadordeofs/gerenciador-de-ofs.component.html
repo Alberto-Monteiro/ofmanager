@@ -76,7 +76,7 @@
                 <td *ofHasAnyAuthority="['ROLE_ADMIN', 'ROLE_GESTOR_OF']">{{servicoOf!.donoDaOfLogin}}</td>
                 <td>{{servicoOf!.gestorDaOfLogin}}</td>
                 <td>{{servicoOf.createdDate | date:'dd/MM/yy HH:mm'}}</td>
-                <td>{{servicoOf.lastModifiedDate | date:'dd/MM/yy HH:mm'}}{{' por '+servicoOf.lastModifiedBy}}</td>
+                <td>{{servicoOf.lastModifiedDate | date:'dd/MM/yy HH:mm'}} por <strong>{{servicoOf.lastModifiedBy}}</strong></td>
                 <td>{{servicoOf.valorUstibb}}</td>
                 <td>
                     <mat-chip-list *ofHasAnyAuthority="['ROLE_USER']" aria-label="Fish selection">

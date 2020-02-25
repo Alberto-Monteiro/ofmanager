@@ -32,7 +32,11 @@ public enum DescricaoArtefato {
         return descricao;
     }
 
-    public static String get(String extensao, EstadoArquivo estadoArquivo) {
+    public static String get(Boolean arquivoDeTest, String extensao, EstadoArquivo estadoArquivo) {
+        if (arquivoDeTest != null && arquivoDeTest) {
+            return CRIAR_TEST.getDescricao();
+        }
+
         if (extensao == null || estadoArquivo == null) {
             return null;
         }

@@ -4,8 +4,6 @@
             <h2 id="of-servico-of-heading" jhiTranslate="ofmanagerApp.servicoOf.home.createOrEditLabel">Create or edit a
                 Servico Of</h2>
             <div>
-                <of-alert-error></of-alert-error>
-
                 <div class="form-group">
                     <mat-form-field class="no-ng-invalid">
                         <input class="no-ng-invalid" matInput placeholder="Número da OF" id="field_numero" type="number"
@@ -52,6 +50,8 @@
 
                 <br>
 
+                <of-alert-error></of-alert-error>
+
                 <button type="button" id="cancel-save" class="btn btn-secondary form-group" (click)="previousState()">
                     <fa-icon icon="chevron-left"></fa-icon>&nbsp;<span>Voltar</span>
                 </button>
@@ -61,16 +61,26 @@
                 </button>
                 <button type="button" id="download" class="btn btn-success form-group" (click)="download()"
                         [disabled]="!ordemFornecimento!.servicoOf!.id">
-                    <fa-icon icon="download"></fa-icon>&nbsp;<span>Download</span>
+                    <fa-icon icon="download"></fa-icon>&nbsp;<span>Download XLSX</span>
                 </button>
                 <button type="button" id="downloadTxt" class="btn btn-success form-group" (click)="downloadTxt()"
                         [disabled]="!ordemFornecimento!.servicoOf!.id">
                     <fa-icon icon="download"></fa-icon>&nbsp;<span>Download TXT</span>
                 </button>
+
+                <div class="form-group">
+                    <ngb-alert [dismissible]="false">
+                        <strong>
+                            A complexidade do arquivo quando selecionada fica gravada no mesmo para ser compartilhada em outras OFs.<br>
+                            Quando marcado o checkbox "Test" será informado para outras OFs que o arquivo é de teste.
+                        </strong>
+                    </ngb-alert>
+                </div>
+
                 <div *ngFor="let mapArquivoDaOf of ordemFornecimento!.mapArquivoDaOf! | keyvalue"
                      class="card form-group">
                     <div class="card-header">
-                        {{mapArquivoDaOf.key}}
+                        <strong>{{mapArquivoDaOf.key}}</strong>
                     </div>
                     <ul class="list-group list-group-flush">
                         <li *ngFor="let arquivoDaOf of mapArquivoDaOf.value" class="list-group-item">
@@ -89,6 +99,7 @@
                                     <mat-form-field>
                                         <mat-label>Complexidade</mat-label>
                                         <mat-select [(value)]="arquivoDaOf.arquivo.complexidade">
+                                            <mat-option (click)="atualizaComplexidade(arquivoDaOf.arquivo, null)" [value]="">N/A</mat-option>
                                             <mat-option (click)="atualizaComplexidade(arquivoDaOf.arquivo, 'MUITO_BAIXA')" [value]="'MUITO_BAIXA'">Muito Baixa</mat-option>
                                             <mat-option (click)="atualizaComplexidade(arquivoDaOf.arquivo, 'BAIXA')" [value]="'BAIXA'">Baixa</mat-option>
                                             <mat-option (click)="atualizaComplexidade(arquivoDaOf.arquivo, 'MEDIA')" [value]="'MEDIA'">Media</mat-option>

@@ -4,6 +4,7 @@ import br.com.rocksti.ofmanager.domain.Arquivo;
 import br.com.rocksti.ofmanager.domain.ArquivoDaOf;
 import br.com.rocksti.ofmanager.domain.ServicoOf;
 import br.com.rocksti.ofmanager.domain.User;
+import br.com.rocksti.ofmanager.domain.enumeration.Complexidade;
 import br.com.rocksti.ofmanager.domain.enumeration.EstadoArquivo;
 import br.com.rocksti.ofmanager.domain.enumeration.EstadoOf;
 import br.com.rocksti.ofmanager.filtropesquisa.FiltroPesquisaServicoOf;
@@ -18,6 +19,8 @@ import br.com.rocksti.ofmanager.service.mapper.ArquivoDaOfMapper;
 import br.com.rocksti.ofmanager.service.mapper.ArquivoMapper;
 import br.com.rocksti.ofmanager.service.mapper.ServicoOfMapper;
 import br.com.rocksti.ofmanager.web.rest.errors.BadRequestAlertException;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
 import liquibase.util.file.FilenameUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -183,6 +186,7 @@ public class OrdemFornecimentoService {
             .filter(caminhoDoArquivo -> !listaArquivosQueExistem.stream().map(Arquivo::getCaminhoDoArquivo).collect(Collectors.toList()).contains(caminhoDoArquivo))
             .map(caminhoDoArquivo -> {
                 Arquivo arquivo = new Arquivo();
+                arquivo.setArquivoDeTest(false);
                 arquivo.setCaminhoDoArquivo(caminhoDoArquivo);
                 arquivo.setExtensao(FilenameUtils.getExtension(caminhoDoArquivo).toLowerCase());
                 return arquivo;
@@ -278,7 +282,10 @@ public class OrdemFornecimentoService {
             .map(cells -> StreamSupport.stream(Spliterators.spliteratorUnknownSize(cells.cellIterator(), Spliterator.ORDERED), false).collect(Collectors.toList()))
             .collect(Collectors.toList());
 
-        List<EstruturaDoArquivo> estruturaDoNegocioArquivoDaOf = getEstruturaDoNegocioArquivoDaOf(ordemFornecimento);
+        List<EstruturaDoArquivo> estruturaDoNegocioArquivoDaOf = getEstruturaDoNegocioArquivoDaOf(ordemFornecimento)
+            .stream()
+            .filter(estruturaDoArquivo -> estruturaDoArquivo.getDescricaoArtefato() != null)
+            .collect(Collectors.toList());
         estruturaDoNegocioArquivoDaOf.forEach(estruturaDoArquivo -> {
             List<Cell> cells = listsCell.get(estruturaDoNegocioArquivoDaOf.indexOf(estruturaDoArquivo));
             cells.get(2).setCellValue(estruturaDoArquivo.getDisciplina());
@@ -293,9 +300,50 @@ public class OrdemFornecimentoService {
         return workbook;
     }
 
-    public void produzirConteudoDoTxt(OrdemFornecimentoDTO ordemFornecimentoDTO) {
-        ordemFornecimentoDTO.toString();
+    public String produzirConteudoDoTxt(OrdemFornecimentoDTO ordemFornecimentoDTO) {
+        StringJoiner stringJoiner = new StringJoiner("\n");
 
+        List<EstruturaDoArquivo> estruturaDoNegocioArquivoDaOf = getEstruturaDoNegocioArquivoDaOf(ordemFornecimentoDTO);
+        List<EstruturaDoArquivo> estruturaDoNegocioArquivoTests = estruturaDoNegocioArquivoDaOf
+            .stream()
+            .filter(estruturaDoArquivo -> estruturaDoArquivo.getDescricaoArtefato() != null &&
+                estruturaDoArquivo.getDescricaoArtefato().equals(DescricaoArtefato.CRIAR_TEST.getDescricao()))
+            .collect(Collectors.toList());
+        estruturaDoNegocioArquivoDaOf.removeAll(estruturaDoNegocioArquivoTests);
+
+        Multimap<String, EstruturaDoArquivo> mapComplexidadesArquivos = ArrayListMultimap.create();
+        Multimap<String, EstruturaDoArquivo> mapTestsArquivos = ArrayListMultimap.create();
+        estruturaDoNegocioArquivoDaOf.forEach(estruturaDoArquivo -> mapComplexidadesArquivos.put(estruturaDoArquivo.getComplexidade(), estruturaDoArquivo));
+        estruturaDoNegocioArquivoTests.forEach(estruturaDoArquivo -> mapTestsArquivos.put(estruturaDoArquivo.getComplexidade(), estruturaDoArquivo));
+
+        preparaConteudoArquivoTxt(stringJoiner, mapComplexidadesArquivos);
+        stringJoiner.add("<<<<<<<< - ARQUIVOS DE TEST - >>>>>>>>");
+        preparaConteudoArquivoTxt(stringJoiner, mapTestsArquivos);
+
+        return stringJoiner.toString();
+    }
+
+    private void preparaConteudoArquivoTxt(StringJoiner stringJoiner, Multimap<String, EstruturaDoArquivo> multimap) {
+        multimap.asMap().forEach((s, estruturaDoArquivos) -> {
+            stringJoiner.add("##### - Arquivos de complexidade: " + s + " - #####");
+            Multimap<String, String> arquivos = ArrayListMultimap.create();
+            estruturaDoArquivos
+                .stream()
+                .map(EstruturaDoArquivo::getNomeDoArtefato)
+                .reduce(new ArrayList<>(), (strings, strings2) -> {
+                    strings.addAll(strings2);
+                    return strings;
+                })
+                .forEach(s1 -> arquivos.put(FilenameUtils.getExtension(s1).toLowerCase(), s1));
+            arquivos.asMap().forEach((s1, strings) -> {
+                stringJoiner.add("## - Arquivos de extensão: " + s1.toUpperCase() + " - ##");
+                strings.forEach(stringJoiner::add);
+                stringJoiner.add("");
+            });
+            stringJoiner.add("");
+        });
+        stringJoiner.add("");
+        stringJoiner.add("");
     }
 
     public List<EstruturaDoArquivo> getEstruturaDoNegocioArquivoDaOf(OrdemFornecimentoDTO ordemFornecimento) {
@@ -303,8 +351,8 @@ public class OrdemFornecimentoService {
 
         ordemFornecimento.getServicoOf().getArquivoDaOfs().forEach(arquivoDaOf -> {
             EstruturaDoArquivo estruturaDoArquivo = new EstruturaDoArquivo();
-            estruturaDoArquivo.setDescricaoArtefato(DescricaoArtefato.get(arquivoDaOf.getArquivo().getExtensao(), arquivoDaOf.getEstadoArquivo()));
-            estruturaDoArquivo.setComplexidade(arquivoDaOf.getArquivo().getComplexidade().getDescricao());
+            estruturaDoArquivo.setDescricaoArtefato(DescricaoArtefato.get(arquivoDaOf.getArquivo().isArquivoDeTest(), arquivoDaOf.getArquivo().getExtensao(), arquivoDaOf.getEstadoArquivo()));
+            estruturaDoArquivo.setComplexidade(Optional.ofNullable(arquivoDaOf.getArquivo().getComplexidade()).map(Complexidade::getDescricao).orElse("N/A"));
             estruturaDoArquivo.addNomeDoArtefato(arquivoDaOf.getArquivo().getCaminhoDoArquivo());
 
             estruturaDoArquivoList.stream()
@@ -315,9 +363,7 @@ public class OrdemFornecimentoService {
                     return estruturaDoArquivo1;
                 })
                 .orElseGet(() -> {
-                    if (estruturaDoArquivo.getDescricaoArtefato() != null) {
-                        estruturaDoArquivoList.add(estruturaDoArquivo);
-                    }
+                    estruturaDoArquivoList.add(estruturaDoArquivo);
                     return estruturaDoArquivo;
                 });
         });

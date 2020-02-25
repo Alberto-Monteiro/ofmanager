@@ -1,6 +1,9 @@
 package br.com.rocksti.ofmanager.planilha;
 
 import br.com.rocksti.ofmanager.domain.enumeration.Complexidade;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
+import liquibase.util.file.FilenameUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,6 +78,14 @@ public class EstruturaDoArquivo {
 
     public void addNomeDoArtefato(String nomeDoArtefato) {
         this.nomeDoArtefato.add(nomeDoArtefato);
+    }
+
+    public Multimap<String, String> getMapArquivoDaOf() {
+        Multimap<String, String> map = ArrayListMultimap.create();
+
+        nomeDoArtefato.forEach(s -> map.put(FilenameUtils.getExtension(s).toLowerCase(), s));
+
+        return map;
     }
 
     @Override

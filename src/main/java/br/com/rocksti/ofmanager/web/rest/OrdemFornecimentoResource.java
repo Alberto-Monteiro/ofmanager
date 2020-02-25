@@ -129,11 +129,11 @@ public class OrdemFornecimentoResource {
     public void downloadTxt(HttpServletResponse response, @PathVariable Long idServicoOf) {
         try {
 
-            ordemFornecimentoService
+            String conteudoDoTxt = ordemFornecimentoService
                 .produzirConteudoDoTxt(ordemFornecimentoService.findOneOrdemFornecimento(idServicoOf).get());
-            //response.getOutputStream();
 
-            //org.apache.commons.io.IOUtils.copy(planilha, response.getOutputStream());
+            response.getOutputStream().write(conteudoDoTxt.getBytes());
+
             response.flushBuffer();
         } catch (IOException ex) {
             throw new RuntimeException("IOError writing file to output stream");
