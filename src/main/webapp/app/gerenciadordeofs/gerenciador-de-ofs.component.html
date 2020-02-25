@@ -1,13 +1,11 @@
 <ngx-loading-bar></ngx-loading-bar>
 <div>
     <h2 id="page-heading">
-        <span jhiTranslate="ofmanagerApp.servicoOf.home.title">Servico Ofs</span>
+        <span>Lista de OF</span>
         <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-servico-of"
                 [routerLink]="['/gerenciador_de_ofs/new']">
             <fa-icon [icon]="'plus'"></fa-icon>
-            <span jhiTranslate="ofmanagerApp.servicoOf.home.createLabel">
-            Create a new Servico Of
-            </span>
+            <span>Criar uma nova OF</span>
         </button>
     </h2>
     <of-alert-error></of-alert-error>

@@ -11,6 +11,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { MaterialModule } from 'app/shared/material-module';
 import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client';
 import { LoadingBarModule } from '@ngx-loading-bar/core';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
 
@@ -34,7 +35,8 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
     HasAnyAuthorityDirective,
     MaterialModule,
     LoadingBarHttpClientModule,
-    LoadingBarModule
+    LoadingBarModule,
+    FlexLayoutModule
   ]
 })
 export class OfmanagerSharedModule {}
