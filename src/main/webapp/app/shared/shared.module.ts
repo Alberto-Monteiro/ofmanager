@@ -9,6 +9,8 @@ import { ServicoOfDeleteDialogComponent } from 'app/entities/servico-of/servico-
 import { IConfig, NgxMaskModule } from 'ngx-mask';
 import { ToastrModule } from 'ngx-toastr';
 import { MaterialModule } from 'app/shared/material-module';
+import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client';
+import { LoadingBarModule } from '@ngx-loading-bar/core';
 
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
 
@@ -30,7 +32,9 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
     AlertErrorComponent,
     LoginModalComponent,
     HasAnyAuthorityDirective,
-    MaterialModule
+    MaterialModule,
+    LoadingBarHttpClientModule,
+    LoadingBarModule
   ]
 })
 export class OfmanagerSharedModule {}
