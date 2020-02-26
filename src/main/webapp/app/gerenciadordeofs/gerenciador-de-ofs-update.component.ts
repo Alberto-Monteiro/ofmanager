@@ -33,8 +33,8 @@ export class GerenciadorDeOfsUpdateComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ ordemFornecimento }) => {
       this.ordemFornecimento = ordemFornecimento;
-      this.gerenciadorDeOfsService.getUsuariosGestor().subscribe(usuarios => {
-        this.usuariosGestor = usuarios.body;
+      this.gerenciadorDeOfsService.getUsuariosGestor().subscribe(response => {
+        this.usuariosGestor = response.body;
         this.updateForm(ordemFornecimento);
       });
     });
@@ -65,11 +65,37 @@ export class GerenciadorDeOfsUpdateComponent implements OnInit {
     window.history.back();
   }
 
-  processar(): void {
-    this.gerenciadorDeOfsService.processar(this.createFromForm()).subscribe(ordemFornecimento => {
-      this.ordemFornecimento = ordemFornecimento.body!;
+  atualizaGestorDaOf(): void {
+    this.createFromForm();
+    this.gerenciadorDeOfsService.updateGestorDaOf(this.createFromForm()).subscribe(response => {
+      this.ordemFornecimento = response.body!;
       this.updateForm(this.ordemFornecimento);
     });
+  }
+
+  atualizaEstadoDaOf(servicoOf: IServicoOf, estado: any): void {
+    const estadoAnterior = servicoOf.estado;
+    servicoOf.estado = estado;
+    this.gerenciadorDeOfsService.updateEstadoDaOf(servicoOf).subscribe(
+      response => {
+        servicoOf.lastModifiedDate = response.body!.lastModifiedDate;
+        servicoOf.lastModifiedBy = response.body!.lastModifiedBy;
+      },
+      () => {
+        servicoOf.estado = estadoAnterior;
+      }
+    );
+  }
+
+  processar(): void {
+    this.gerenciadorDeOfsService.processar(this.createFromForm()).subscribe(response => {
+      this.ordemFornecimento = response.body!;
+      this.updateForm(this.ordemFornecimento);
+    });
+  }
+
+  podeSerArquivoDeTest(extensao: string): boolean {
+    return extensao === 'java' || extensao === 'js' || extensao === 'ts';
   }
 
   isArquivoTest(arquivo: IArquivo): void {
@@ -85,7 +111,7 @@ export class GerenciadorDeOfsUpdateComponent implements OnInit {
   atualizaComplexidade(arquivo: Arquivo, complexidade: any): void {
     const complexidadeAnterior = arquivo.complexidade;
     arquivo.complexidade = complexidade;
-    this.gerenciadorDeOfsService.updateComplexidade(arquivo).subscribe(
+    this.gerenciadorDeOfsService.updateComplexidade(this.ordemFornecimento!.servicoOf!, arquivo).subscribe(
       () => {},
       () => {
         arquivo.complexidade = complexidadeAnterior;
@@ -105,40 +131,23 @@ export class GerenciadorDeOfsUpdateComponent implements OnInit {
   }
 
   deletarArquivoDaOf(arquivoDaOf: IArquivoDaOf): void {
-    this.gerenciadorDeOfsService.deletarArquivoDaOf(arquivoDaOf).subscribe(ordemFornecimento => {
-      this.ordemFornecimento = ordemFornecimento.body!;
+    this.gerenciadorDeOfsService.deletarArquivoDaOf(arquivoDaOf).subscribe(response => {
+      this.ordemFornecimento = response.body!;
       this.updateForm(this.ordemFornecimento);
     });
   }
 
   download(): void {
     this.gerenciadorDeOfsService.downloadPlanilha(this.ordemFornecimento!.servicoOf!.id).subscribe(response => {
-      const blob: any = new Blob([response], { type: 'text/xlsx' });
+      const blob: Blob = new Blob([response], { type: 'text/xlsx' });
       fileSaver.saveAs(blob, `OF-${this.ordemFornecimento!.servicoOf!.numero}.xlsx`);
     });
   }
 
   downloadTxt(): void {
     this.gerenciadorDeOfsService.downloadTxt(this.ordemFornecimento!.servicoOf!.id).subscribe(response => {
-      const blob: any = new Blob([response], { type: 'text/txt' });
+      const blob: Blob = new Blob([response], { type: 'text/txt' });
       fileSaver.saveAs(blob, `OF-${this.ordemFornecimento!.servicoOf!.numero}.txt`);
     });
-  }
-
-  podeSerArquivoDeTest(extensao: string): boolean {
-    return extensao === 'java' || extensao === 'js' || extensao === 'ts';
-  }
-
-  atualizaEstadoDaOf(servicoOf: IServicoOf, estado: any): void {
-    const estadoAnterior = servicoOf.estado;
-    servicoOf.estado = estado;
-    this.gerenciadorDeOfsService.updateEstadoDaOf(servicoOf).subscribe(
-      servicoOf1 => {
-        servicoOf.lastModifiedDate = servicoOf1.body!.lastModifiedDate;
-      },
-      () => {
-        servicoOf.estado = estadoAnterior;
-      }
-    );
   }
 }

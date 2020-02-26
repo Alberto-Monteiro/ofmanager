@@ -50,6 +50,31 @@ public class OrdemFornecimentoResource {
         return ResponseUtil.wrapOrNotFound(ordemFornecimentoService.findOneOrdemFornecimento(id));
     }
 
+    @GetMapping("/gerenciador_de_ofs/getUsuariosGestor")
+    public ResponseEntity<List<UserDTO>> getUsuariosGestor() {
+        return ResponseUtil.wrapOrNotFound(Optional.of(ordemFornecimentoService.getUsuariosGestor()));
+    }
+
+    @PutMapping("/gerenciador_de_ofs/updateGestorDaOf")
+    public ResponseEntity<OrdemFornecimentoDTO> updateGestorDaOf(@Valid @RequestBody OrdemFornecimentoDTO ordemFornecimentoDTO) {
+        return ResponseEntity.ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, ordemFornecimentoDTO.toString()))
+            .body(ordemFornecimentoService.updateGestorDaOf(ordemFornecimentoDTO));
+    }
+
+    @PutMapping("/gerenciador_de_ofs/updateEstadoDaOf")
+    public ResponseEntity<ServicoOfDTO> updateEstadoDaOf(@RequestBody ServicoOfDTO servicoOfDTO) {
+        if (servicoOfDTO.getId() == null) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+
+        ServicoOfDTO result = ordemFornecimentoService.updateEstadoDaOf(servicoOfDTO);
+
+        return ResponseEntity.ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, servicoOfDTO.getId().toString()))
+            .body(result);
+    }
+
     @PutMapping("/gerenciador_de_ofs/processar")
     public ResponseEntity<OrdemFornecimentoDTO> processar(@Valid @RequestBody OrdemFornecimentoDTO ordemFornecimentoDTO) {
         return ResponseEntity.ok()
@@ -71,16 +96,14 @@ public class OrdemFornecimentoResource {
     }
 
     @PutMapping("/gerenciador_de_ofs/updateComplexidade")
-    public ResponseEntity<ArquivoDTO> updateComplexidade(@Valid @RequestBody ArquivoDTO arquivoDTO) {
+    public ResponseEntity<OrdemFornecimentoDTO> updateComplexidade(@Valid @RequestBody ArquivoDTO arquivoDTO, Long servicoOfId) {
         if (arquivoDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
 
-        ArquivoDTO result = ordemFornecimentoService.updateComplexidade(arquivoDTO);
-
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, arquivoDTO.getId().toString()))
-            .body(result);
+            .body(ordemFornecimentoService.updateComplexidade(arquivoDTO, servicoOfId));
     }
 
     @PutMapping("/gerenciador_de_ofs/updateEstadoArquivo")
@@ -114,11 +137,14 @@ public class OrdemFornecimentoResource {
 
             InputStream planilha = new FileInputStream(localDoArquivo);
 
+            response.setContentType("text/xlsx; charset=UTF-8");
+            response.setCharacterEncoding("UTF-8");
+
+            //org.apache.commons.io.IOUtils.copy(planilha, response.getOutputStream());
             ordemFornecimentoService
                 .produzirConteudoDaPlanilha(planilha, ordemFornecimentoService.findOneOrdemFornecimento(idServicoOf).get())
                 .write(response.getOutputStream());
 
-            //org.apache.commons.io.IOUtils.copy(planilha, response.getOutputStream());
             response.flushBuffer();
         } catch (IOException ex) {
             throw new RuntimeException("IOError writing file to output stream");
@@ -132,29 +158,14 @@ public class OrdemFornecimentoResource {
             String conteudoDoTxt = ordemFornecimentoService
                 .produzirConteudoDoTxt(ordemFornecimentoService.findOneOrdemFornecimento(idServicoOf).get());
 
+            response.setContentType("text/html; charset=UTF-8");
+            response.setCharacterEncoding("UTF-8");
+
             response.getOutputStream().write(conteudoDoTxt.getBytes());
 
             response.flushBuffer();
         } catch (IOException ex) {
             throw new RuntimeException("IOError writing file to output stream");
         }
-    }
-
-    @GetMapping("/gerenciador_de_ofs/getUsuariosGestor")
-    public ResponseEntity<List<UserDTO>> getUsuariosGestor() {
-        return ResponseUtil.wrapOrNotFound(Optional.of(ordemFornecimentoService.getUsuariosGestor()));
-    }
-
-    @PutMapping("/gerenciador_de_ofs/updateEstadoDaOf")
-    public ResponseEntity<ServicoOfDTO> updateEstadoDaOf(@RequestBody ServicoOfDTO servicoOfDTO) {
-        if (servicoOfDTO.getId() == null) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
-        }
-
-        ServicoOfDTO result = ordemFornecimentoService.updateEstadoDaOf(servicoOfDTO);
-
-        return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, servicoOfDTO.getId().toString()))
-            .body(result);
     }
 }

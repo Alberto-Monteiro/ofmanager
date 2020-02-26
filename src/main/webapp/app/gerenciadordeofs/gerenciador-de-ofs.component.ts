@@ -122,9 +122,9 @@ export class GerenciadorDeOfsComponent implements OnInit, OnDestroy {
     const estadoAnterior = servicoOf.estado;
     servicoOf.estado = estado;
     this.gerenciadorDeOfsService.updateEstadoDaOf(servicoOf).subscribe(
-      servicoOf1 => {
-        servicoOf.lastModifiedDate = servicoOf1.body!.lastModifiedDate;
-        servicoOf.lastModifiedBy = servicoOf1.body!.lastModifiedBy;
+      response => {
+        servicoOf.lastModifiedDate = response.body!.lastModifiedDate;
+        servicoOf.lastModifiedBy = response.body!.lastModifiedBy;
       },
       () => {
         servicoOf.estado = estadoAnterior;

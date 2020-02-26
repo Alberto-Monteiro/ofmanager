@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { SERVER_API_URL } from 'app/app.constants';
@@ -27,6 +27,18 @@ export class GerenciadorDeOfsService {
     return this.http.get<IOrdemFornecimento>(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 
+  getUsuariosGestor(): Observable<HttpResponse<IUser[]>> {
+    return this.http.get<IUser[]>(`${this.resourceUrl}/getUsuariosGestor`, { observe: 'response' });
+  }
+
+  updateGestorDaOf(ordemFornecimento: IOrdemFornecimento): Observable<EntityResponseType> {
+    return this.http.put<IOrdemFornecimento>(`${this.resourceUrl}/updateGestorDaOf`, ordemFornecimento, { observe: 'response' });
+  }
+
+  updateEstadoDaOf(servicoOf: IServicoOf): Observable<HttpResponse<IServicoOf>> {
+    return this.http.put<IServicoOf>(`${this.resourceUrl}/updateEstadoDaOf`, servicoOf, { observe: 'response' });
+  }
+
   processar(ordemFornecimento: IOrdemFornecimento): Observable<EntityResponseType> {
     return this.http.put<IOrdemFornecimento>(`${this.resourceUrl}/processar`, ordemFornecimento, { observe: 'response' });
   }
@@ -35,12 +47,19 @@ export class GerenciadorDeOfsService {
     return this.http.put<IArquivo>(`${this.resourceUrl}/updateIsTestArquivo`, arquivo, { observe: 'response' });
   }
 
-  updateComplexidade(arquivo: IArquivo): Observable<HttpResponse<IArquivo>> {
-    return this.http.put<IArquivo>(`${this.resourceUrl}/updateComplexidade`, arquivo, { observe: 'response' });
+  updateComplexidade(servicoOf: IServicoOf, arquivo: IArquivo): Observable<EntityResponseType> {
+    return this.http.put<IOrdemFornecimento>(`${this.resourceUrl}/updateComplexidade`, arquivo, {
+      params: new HttpParams().append('servicoOfId', String(servicoOf.id)),
+      observe: 'response'
+    });
   }
 
   updateEstadoArquivo(arquivoDaOf: IArquivoDaOf): Observable<HttpResponse<IArquivoDaOf>> {
     return this.http.put<IArquivoDaOf>(`${this.resourceUrl}/updateEstadoArquivo`, arquivoDaOf, { observe: 'response' });
+  }
+
+  deletarArquivoDaOf(arquivoDaOf: IArquivoDaOf): Observable<EntityResponseType> {
+    return this.http.delete(`${this.resourceUrl}/deletarArquivoDaOf/${arquivoDaOf.id}`, { observe: 'response' });
   }
 
   downloadPlanilha(idServicoOf?: number): Observable<any> {
@@ -49,17 +68,5 @@ export class GerenciadorDeOfsService {
 
   downloadTxt(idServicoOf?: number): Observable<any> {
     return this.http.get(`${this.resourceUrl}/downloadTxt/${idServicoOf}`, { responseType: 'blob' });
-  }
-
-  deletarArquivoDaOf(arquivoDaOf: IArquivoDaOf): Observable<EntityResponseType> {
-    return this.http.delete(`${this.resourceUrl}/deletarArquivoDaOf/${arquivoDaOf.id}`, { observe: 'response' });
-  }
-
-  getUsuariosGestor(): Observable<HttpResponse<IUser[]>> {
-    return this.http.get<IUser[]>(`${this.resourceUrl}/getUsuariosGestor`, { observe: 'response' });
-  }
-
-  updateEstadoDaOf(servicoOf: IServicoOf): Observable<HttpResponse<IServicoOf>> {
-    return this.http.put<IServicoOf>(`${this.resourceUrl}/updateEstadoDaOf`, servicoOf, { observe: 'response' });
   }
 }

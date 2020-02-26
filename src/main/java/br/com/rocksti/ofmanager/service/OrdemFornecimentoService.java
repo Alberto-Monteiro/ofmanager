@@ -31,6 +31,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.Valid;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
@@ -135,6 +136,52 @@ public class OrdemFornecimentoService {
         }).get();
     }
 
+    public List<UserDTO> getUsuariosGestor() {
+        return userService.getUsersByAuthorities(AuthoritiesConstants.GESTOR_OF)
+            .stream()
+            .map(user -> {
+                UserDTO userDTO = new UserDTO();
+                userDTO.setId(user.getId());
+                userDTO.setFirstName(user.getFirstName());
+                userDTO.setLogin(user.getLogin());
+                return userDTO;
+            })
+            .collect(Collectors.toList());
+    }
+
+    public OrdemFornecimentoDTO updateGestorDaOf(@Valid OrdemFornecimentoDTO ordemFornecimentoDTO) {
+        validarOfPertencenteDeUsuario(ordemFornecimentoDTO.getServicoOf().getId());
+
+        AtomicReference<ServicoOfDTO> servicoOfReference = new AtomicReference<>();
+
+        userService.getUserWithAuthorities(ordemFornecimentoDTO.getServicoOf().getGestorDaOf().getId()).ifPresent(user -> {
+            servicoOfRepository.findById(ordemFornecimentoDTO.getServicoOf().getId()).ifPresent(servicoOf -> {
+                servicoOf.setGestorDaOf(user);
+                servicoOfReference.set(servicoOfMapper.toDto(servicoOfRepository.saveAndFlush(servicoOf)));
+            });
+        });
+
+        return findOneOrdemFornecimento(ordemFornecimentoDTO.getServicoOf().getId()).orElseGet(OrdemFornecimentoDTO::new);
+    }
+
+    public ServicoOfDTO updateEstadoDaOf(ServicoOfDTO servicoOfDTO) {
+        userService.getUserWithAuthorities()
+            .filter(user -> user.getAuthorities().stream().noneMatch(authority -> authority.getName().equals(AuthoritiesConstants.ADMIN)
+                || authority.getName().equals(AuthoritiesConstants.GESTOR_OF)))
+            .ifPresent(user -> {
+                throw new BadRequestAlertException("O estado da OF só pode ser editado pelo gestor", "servicoOf", "servicoOfEstadoEditadoGestor");
+            });
+
+        AtomicReference<ServicoOfDTO> servicoOfReference = new AtomicReference<>();
+
+        servicoOfRepository.findById(servicoOfDTO.getId()).ifPresent(servicoOf -> {
+            servicoOf.setEstado(servicoOfDTO.getEstado());
+            servicoOfReference.set(servicoOfMapper.toDto(servicoOfRepository.saveAndFlush(servicoOf)));
+        });
+
+        return servicoOfReference.get();
+    }
+
     public OrdemFornecimentoDTO processar(OrdemFornecimentoDTO ordemFornecimentoDTO) {
         validarOfPertencenteDeUsuario(ordemFornecimentoDTO.getServicoOf().getId());
 
@@ -233,7 +280,9 @@ public class OrdemFornecimentoService {
         return arquivoMapper.toDto(arquivoReference.get());
     }
 
-    public ArquivoDTO updateComplexidade(ArquivoDTO arquivoDTO) {
+    public OrdemFornecimentoDTO updateComplexidade(ArquivoDTO arquivoDTO, Long servicoOfId) {
+        validarOfPertencenteDeUsuario(servicoOfId);
+
         AtomicReference<Arquivo> arquivoReference = new AtomicReference<>();
 
         arquivoRepository.findById(arquivoDTO.getId()).ifPresent(arquivo -> {
@@ -242,7 +291,8 @@ public class OrdemFornecimentoService {
             arquivoReference.set(arquivo);
         });
 
-        return arquivoMapper.toDto(arquivoReference.get());
+        //return findOneOrdemFornecimento(servicoOfId).orElseGet(OrdemFornecimentoDTO::new);
+        return null;
     }
 
     public ArquivoDaOfDTO updateEstadoArquivo(ArquivoDaOfDTO arquivoDaOfDTO) {
@@ -260,6 +310,8 @@ public class OrdemFornecimentoService {
     public OrdemFornecimentoDTO deletarArquivoDaOf(Long id) {
         Optional<ArquivoDaOf> arquivoDaOf = arquivoDaOfRepository.findById(id);
         Optional<ServicoOf> servicoOf = arquivoDaOf.map(ArquivoDaOf::getServicoOf);
+
+        servicoOf.ifPresent(servicoOf1 -> validarOfPertencenteDeUsuario(servicoOf1.getId()));
 
         return servicoOf.flatMap(servicoOf1 -> {
             servicoOf1.removeArquivoDaOf(arquivoDaOf.get());
@@ -371,36 +423,5 @@ public class OrdemFornecimentoService {
         });
 
         return estruturaDoArquivoList;
-    }
-
-    public List<UserDTO> getUsuariosGestor() {
-        return userService.getUsersByAuthorities(AuthoritiesConstants.GESTOR_OF)
-            .stream()
-            .map(user -> {
-                UserDTO userDTO = new UserDTO();
-                userDTO.setId(user.getId());
-                userDTO.setFirstName(user.getFirstName());
-                userDTO.setLogin(user.getLogin());
-                return userDTO;
-            })
-            .collect(Collectors.toList());
-    }
-
-    public ServicoOfDTO updateEstadoDaOf(ServicoOfDTO servicoOfDTO) {
-        userService.getUserWithAuthorities()
-            .filter(user -> user.getAuthorities().stream().noneMatch(authority -> authority.getName().equals(AuthoritiesConstants.ADMIN)
-                || authority.getName().equals(AuthoritiesConstants.GESTOR_OF)))
-            .ifPresent(user -> {
-                throw new BadRequestAlertException("O estado da OF só pode ser editado pelo gestor", "servicoOf", "servicoOfEstadoEditadoGestor");
-            });
-
-        AtomicReference<ServicoOfDTO> servicoOfReference = new AtomicReference<>();
-
-        servicoOfRepository.findById(servicoOfDTO.getId()).ifPresent(servicoOf -> {
-            servicoOf.setEstado(servicoOfDTO.getEstado());
-            servicoOfReference.set(servicoOfMapper.toDto(servicoOfRepository.saveAndFlush(servicoOf)));
-        });
-
-        return servicoOfReference.get();
     }
 }
