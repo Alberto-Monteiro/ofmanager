@@ -1,24 +1,22 @@
 package br.com.rocksti.ofmanager.domain;
 
+import br.com.rocksti.ofmanager.domain.enumeration.EstadoOf;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import javax.persistence.*;
-import javax.validation.constraints.*;
-
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.time.Instant;
-import java.util.HashSet;
-import java.util.Set;
-
-import br.com.rocksti.ofmanager.domain.enumeration.EstadoOf;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A ServicoOf.
@@ -68,7 +66,7 @@ public class ServicoOf implements Serializable {
 
     @OneToMany(mappedBy = "servicoOf", cascade = {CascadeType.ALL}, orphanRemoval = true)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<ArquivoDaOf> arquivoDaOfs = new HashSet<>();
+    private List<ArquivoDaOf> arquivoDaOfs = new ArrayList<>();
 
     @ManyToOne
     @JsonIgnoreProperties("servicoOfs")
@@ -191,11 +189,11 @@ public class ServicoOf implements Serializable {
         this.valorUstibb = valorUstibb;
     }
 
-    public Set<ArquivoDaOf> getArquivoDaOfs() {
+    public List<ArquivoDaOf> getArquivoDaOfs() {
         return arquivoDaOfs;
     }
 
-    public ServicoOf arquivoDaOfs(Set<ArquivoDaOf> arquivoDaOfs) {
+    public ServicoOf arquivoDaOfs(List<ArquivoDaOf> arquivoDaOfs) {
         this.arquivoDaOfs = arquivoDaOfs;
         return this;
     }
@@ -212,7 +210,7 @@ public class ServicoOf implements Serializable {
         return this;
     }
 
-    public void setArquivoDaOfs(Set<ArquivoDaOf> arquivoDaOfs) {
+    public void setArquivoDaOfs(List<ArquivoDaOf> arquivoDaOfs) {
         this.arquivoDaOfs = arquivoDaOfs;
     }
 

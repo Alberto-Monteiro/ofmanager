@@ -185,9 +185,9 @@ public class OrdemFornecimentoService {
     public OrdemFornecimentoDTO processar(OrdemFornecimentoDTO ordemFornecimentoDTO) {
         validarOfPertencenteDeUsuario(ordemFornecimentoDTO.getServicoOf().getId());
 
-        final AtomicReference<ServicoOf> servicoOf = new AtomicReference<>(new ServicoOf());
+        final AtomicReference<ServicoOf> servicoOf = new AtomicReference<>(servicoOfRepository.findById(Optional.ofNullable(ordemFornecimentoDTO.getServicoOf().getId()).orElse(0L)).orElseGet(ServicoOf::new));
 
-        montarServicoOf(ordemFornecimentoDTO, servicoOf);
+        preparaServicoOf(ordemFornecimentoDTO, servicoOf);
 
         List<String> listaCaminhoDosArquivos = getListaCaminhoDosArquivos(ordemFornecimentoDTO);
 
@@ -202,22 +202,13 @@ public class OrdemFornecimentoService {
         return findOneOrdemFornecimento(servicoOf.get().getId()).orElseGet(OrdemFornecimentoDTO::new);
     }
 
-    private void montarServicoOf(OrdemFornecimentoDTO ordemFornecimentoDTO, AtomicReference<ServicoOf> servicoOf) {
-        if (ordemFornecimentoDTO.getServicoOf().getId() != null) {
-            servicoOfRepository.findById(ordemFornecimentoDTO.getServicoOf().getId())
-                .ifPresent(servicoOf1 -> {
-                    servicoOf.set(servicoOf1);
-                    servicoOf.get().setGestorDaOf(ordemFornecimentoDTO.getServicoOf().getGestorDaOf());
-                });
-        } else {
-            userService.getUserWithAuthorities()
-                .ifPresent(user -> {
-                    servicoOf.get().setEstado(EstadoOf.NOVA);
-                    servicoOf.get().setDonoDaOf(user);
-                    servicoOf.get().setNumero(ordemFornecimentoDTO.getServicoOf().getNumero());
-                    servicoOf.get().setGestorDaOf(ordemFornecimentoDTO.getServicoOf().getGestorDaOf());
-                });
+    private void preparaServicoOf(OrdemFornecimentoDTO ordemFornecimentoDTO, AtomicReference<ServicoOf> servicoOf) {
+        if (servicoOf.get().getId() == null) {
+            servicoOf.get().setEstado(EstadoOf.NOVA);
+            servicoOf.get().setDonoDaOf(userService.getUserWithAuthorities().orElse(null));
+            servicoOf.get().setNumero(ordemFornecimentoDTO.getServicoOf().getNumero());
         }
+        servicoOf.get().setGestorDaOf(ordemFornecimentoDTO.getServicoOf().getGestorDaOf());
     }
 
     private List<String> getListaCaminhoDosArquivos(OrdemFornecimentoDTO ordemFornecimentoDTO) {
