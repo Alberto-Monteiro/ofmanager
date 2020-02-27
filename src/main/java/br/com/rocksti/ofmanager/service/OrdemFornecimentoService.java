@@ -344,6 +344,10 @@ public class OrdemFornecimentoService {
     }
 
     public String produzirConteudoDoTxt(OrdemFornecimentoDTO ordemFornecimentoDTO) {
+        return ordemFornecimentoDTO.getListaDosArquivos().replace("\n", ";;");
+    }
+
+    public String produzirConteudoDoTxt2(OrdemFornecimentoDTO ordemFornecimentoDTO) {
         StringJoiner stringJoiner = new StringJoiner("\n");
 
         List<EstruturaDoArquivo> estruturaDoNegocioArquivoDaOf = getEstruturaDoNegocioArquivoDaOf(ordemFornecimentoDTO);
