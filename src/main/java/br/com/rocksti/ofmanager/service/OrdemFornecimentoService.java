@@ -32,6 +32,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.Valid;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
@@ -311,8 +312,16 @@ public class OrdemFornecimentoService {
         }).get();
     }
 
-    public XSSFWorkbook produzirConteudoDaPlanilha(InputStream planilha, OrdemFornecimentoDTO ordemFornecimento) throws IOException {
+    public XSSFWorkbook produzirConteudoDaPlanilha(OrdemFornecimentoDTO ordemFornecimento) throws IOException {
         validarAntesDeProduzirConteudoDaPlanilha(ordemFornecimento);
+
+        String localDoArquivo =
+            Optional.of(System.getProperty("os.name"))
+                .filter(s -> s.toLowerCase().contains("windows"))
+                .map(s -> "src/main/resources/templates/OF-nova.xlsx")
+                .orElse("/app/resources/templates/OF-nova.xlsx");
+
+        InputStream planilha = new FileInputStream(localDoArquivo);
 
         XSSFWorkbook workbook = new XSSFWorkbook(planilha);
 

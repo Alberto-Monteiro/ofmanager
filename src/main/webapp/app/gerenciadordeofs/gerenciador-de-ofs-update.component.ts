@@ -1,13 +1,13 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-import { GerenciadorDeOfsService } from './gerenciador-de-ofs.service';
-import { IOrdemFornecimento } from 'app/shared/model/ordem-fornecimento.model';
-import { Arquivo, IArquivo } from 'app/shared/model/arquivo.model';
-import { ArquivoDaOf, IArquivoDaOf } from 'app/shared/model/arquivo-da-of.model';
+import {Component, OnInit} from '@angular/core';
+import {FormBuilder, Validators} from '@angular/forms';
+import {ActivatedRoute} from '@angular/router';
+import {GerenciadorDeOfsService} from './gerenciador-de-ofs.service';
+import {IOrdemFornecimento} from 'app/shared/model/ordem-fornecimento.model';
+import {Arquivo, IArquivo} from 'app/shared/model/arquivo.model';
+import {ArquivoDaOf, IArquivoDaOf} from 'app/shared/model/arquivo-da-of.model';
 import * as fileSaver from 'file-saver';
-import { IUser } from 'app/core/user/user.model';
-import { IServicoOf } from 'app/shared/model/servico-of.model';
+import {IUser} from 'app/core/user/user.model';
+import {IServicoOf} from 'app/shared/model/servico-of.model';
 
 @Component({
   selector: 'of-gerenciador-de-ofs-update',
@@ -28,10 +28,11 @@ export class GerenciadorDeOfsUpdateComponent implements OnInit {
     protected gerenciadorDeOfsService: GerenciadorDeOfsService,
     protected activatedRoute: ActivatedRoute,
     private fb: FormBuilder
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
-    this.activatedRoute.data.subscribe(({ ordemFornecimento }) => {
+    this.activatedRoute.data.subscribe(({ordemFornecimento}) => {
       this.ordemFornecimento = ordemFornecimento;
       this.gerenciadorDeOfsService.getUsuariosGestor().subscribe(response => {
         this.usuariosGestor = response.body;
@@ -101,7 +102,8 @@ export class GerenciadorDeOfsUpdateComponent implements OnInit {
   isArquivoTest(arquivo: IArquivo): void {
     arquivo.arquivoDeTest = !arquivo.arquivoDeTest;
     this.gerenciadorDeOfsService.updateIsTestArquivo(arquivo).subscribe(
-      () => {},
+      () => {
+      },
       () => {
         arquivo.arquivoDeTest = !arquivo.arquivoDeTest;
       }
@@ -112,7 +114,8 @@ export class GerenciadorDeOfsUpdateComponent implements OnInit {
     const complexidadeAnterior = arquivo.complexidade;
     arquivo.complexidade = complexidade;
     this.gerenciadorDeOfsService.updateComplexidade(this.ordemFornecimento!.servicoOf!, arquivo).subscribe(
-      () => {},
+      () => {
+      },
       () => {
         arquivo.complexidade = complexidadeAnterior;
       }
@@ -123,7 +126,8 @@ export class GerenciadorDeOfsUpdateComponent implements OnInit {
     const estadoArquivoAnterior = arquivoDaOf.estadoArquivo;
     arquivoDaOf.estadoArquivo = estadoArquivo;
     this.gerenciadorDeOfsService.updateEstadoArquivo(arquivoDaOf).subscribe(
-      () => {},
+      () => {
+      },
       () => {
         arquivoDaOf.estadoArquivo = estadoArquivoAnterior;
       }
@@ -139,15 +143,20 @@ export class GerenciadorDeOfsUpdateComponent implements OnInit {
 
   download(): void {
     this.gerenciadorDeOfsService.downloadPlanilha(this.ordemFornecimento!.servicoOf!.id).subscribe(response => {
-      const blob: Blob = new Blob([response], { type: 'text/xlsx' });
+      const blob: Blob = new Blob([response], {type: 'text/xlsx'});
       fileSaver.saveAs(blob, `OF-${this.ordemFornecimento!.servicoOf!.numero}.xlsx`);
     });
   }
 
   downloadTxt(): void {
     this.gerenciadorDeOfsService.downloadTxt(this.ordemFornecimento!.servicoOf!.id).subscribe(response => {
-      const blob: Blob = new Blob([response], { type: 'text/txt' });
+      const blob: Blob = new Blob([response], {type: 'text/txt'});
       fileSaver.saveAs(blob, `OF-${this.ordemFornecimento!.servicoOf!.numero}.txt`);
     });
+  }
+
+  getNomeDoArquivo(caminhoDoArquivo: string): string {
+    const nomeDoArquivo: string[] = caminhoDoArquivo.split('/');
+    return nomeDoArquivo[nomeDoArquivo.length - 1];
   }
 }

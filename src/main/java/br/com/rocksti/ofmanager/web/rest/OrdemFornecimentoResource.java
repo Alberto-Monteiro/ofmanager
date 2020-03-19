@@ -129,20 +129,12 @@ public class OrdemFornecimentoResource {
     @GetMapping("/gerenciador_de_ofs/downloadPlanilha/{idServicoOf}")
     public void downloadPlanilha(HttpServletResponse response, @PathVariable Long idServicoOf) {
         try {
-            String localDoArquivo =
-                Optional.of(System.getProperty("os.name"))
-                    .filter(s -> s.toLowerCase().contains("windows"))
-                    .map(s -> "src/main/resources/templates/OF-nova.xlsx")
-                    .orElse("/app/resources/templates/OF-nova.xlsx");
-
-            InputStream planilha = new FileInputStream(localDoArquivo);
-
             response.setContentType("text/xlsx; charset=UTF-8");
             response.setCharacterEncoding("UTF-8");
 
             //org.apache.commons.io.IOUtils.copy(planilha, response.getOutputStream());
             ordemFornecimentoService
-                .produzirConteudoDaPlanilha(planilha, ordemFornecimentoService.findOneOrdemFornecimento(idServicoOf).get())
+                .produzirConteudoDaPlanilha(ordemFornecimentoService.findOneOrdemFornecimento(idServicoOf).get())
                 .write(response.getOutputStream());
 
             response.flushBuffer();

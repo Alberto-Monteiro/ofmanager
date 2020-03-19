@@ -87,10 +87,12 @@
 
                             <mat-grid-list cols="12" rowHeight="100px">
                                 <mat-grid-tile
-                                    [colspan]="6"
+                                    [colspan]="4"
                                     style="word-break: break-all; word-wrap: break-word;"
                                     [ngStyle]="{'background-color':arquivoDaOf.estadoArquivo === 'CRIANDO'?'#b3ff99':'#b9e2ff'}">
-                                    {{arquivoDaOf.arquivo.caminhoDoArquivo}}
+                                    <span class="badge badge-primary" style="font-size: 16px" autoClose="false" container="body" placement="top" ngbTooltip="{{arquivoDaOf.arquivo.caminhoDoArquivo}}">
+                                        {{getNomeDoArquivo(arquivoDaOf.arquivo.caminhoDoArquivo)}}
+                                    </span>
                                 </mat-grid-tile>
                                 <mat-grid-tile>
                                     <mat-checkbox *ngIf="podeSerArquivoDeTest(mapArquivoDaOf.key)" (change)="isArquivoTest(arquivoDaOf.arquivo)" [checked]="arquivoDaOf.arquivo.arquivoDeTest">Test</mat-checkbox>
