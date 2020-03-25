@@ -36,7 +36,8 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
     MaterialModule,
     LoadingBarHttpClientModule,
     LoadingBarModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    NgxMaskModule
   ]
 })
 export class OfmanagerSharedModule {}
