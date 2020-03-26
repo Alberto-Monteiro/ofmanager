@@ -136,7 +136,6 @@
     "idnull": "Identificador inválido",
     "servicoOfNaoPertencente": "Of pertencente a outro usuário",
     "servicoOfEstadoEditadoGestor": "O estado da OF só pode ser editado pelo gestor",
-    "arquivosDevemTerComplexidadeSelecionada": "Todos os arquivos devem ter a complexidade selecionada.",
     "file": {
       "could.not.extract": "Could not extract file",
       "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""

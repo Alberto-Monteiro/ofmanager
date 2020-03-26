@@ -3,11 +3,11 @@ package br.com.rocksti.ofmanager.planilha;
 import br.com.rocksti.ofmanager.domain.enumeration.EstadoArquivo;
 
 public enum DescricaoArtefato {
-    CRIAR_JAVA("Criação de objetos de Integração e Negócio Java  "),
+    CRIAR_JAVA("Criação de objetos de Integração e Negócio Java"),
     ALTERAR_JAVA("Alteração de Objetos de Integração e Negócio Java "),
     ALTERAR_JAVA2("Alteração de pacote de Objetos de Integração e Negócio Java "),
-    CRIAR_HTML("Criação de tela HTML ou XHTML ou JSP ou XML ou VTL ou XSL ou Swing ou \nAWT ou XUI "),
-    ALTERAR_HTML("Alteração de tela HTML ou XHTML ou JSP ou XML ou VTL ou XSL ou Swing ou \nAWT ou XUI "),
+    CRIAR_HTML("Criação de tela HTML ou XHTML ou JSP ou XML ou VTL ou XSL ou Swing ou AWT ou XUI ou PHP"),
+    ALTERAR_HTML("Alteração de tela HTML ou XHTML ou JSP ou XML ou VTL ou XSL ou Swing ou AWT ou XUI ou PHP"),
     CRIAR_CSS("Criação CSS ou SCSS "),
     ALTERAR_CSS("Alteração CSS ou SCSS "),
     CRIAR_JS("Criação JavaScript "),
@@ -15,12 +15,12 @@ public enum DescricaoArtefato {
     CRIAR_XML("Criação de arquivo chave/valor ou tipo xml "),
     ALTERAR_XML("Alteração de arquivo chave/valor ou tipo xml "),
     CRIAR_C("Criação de objetos de Integração e Negócio C, C# e C++"),
-    ALTERAR_C("Criação de objetos de Integração e Negócio C, C# e C++"),
+    ALTERAR_C("Alteração de Objetos de Integração e Negócio C, C# e C++"),
     ALTERAR_C2("Alteração de pacote de Objetos de Integração e Negócio C, C# e C++"),
     CRIAR_NET("Criação de objetos de Integração e Negócio .Net "),
     ALTERAR_NET("Alteração de Objetos de Integração e Negócio .Net "),
     ALTERAR_NET2("Alteração de pacote de Objetos de Integração e Negócio .Net "),
-    CRIAR_TEST("Criação de objeto de teste automatizado (não considerar o teste unitário previsto no PDSTI) ");
+    CRIAR_TEST("Criação de objeto de teste automatizado");
 
     private String descricao;
 

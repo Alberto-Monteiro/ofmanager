@@ -75,14 +75,6 @@ public class OrdemFornecimentoService {
         this.arquivoDaOfMapper = arquivoDaOfMapper;
     }
 
-    private void validarAntesDeProduzirConteudoDaPlanilha(OrdemFornecimentoDTO ordemFornecimentoDTO) {
-        if (ordemFornecimentoDTO.getServicoOf().getArquivoDaOfs()
-            .stream()
-            .anyMatch(arquivoDaOf -> arquivoDaOf.getArquivo().getComplexidade() == null)) {
-            throw new BadRequestAlertException("Todos os arquivos devem ter a complexidade selecionada.", "servicoOf", "arquivosDevemTerComplexidadeSelecionada");
-        }
-    }
-
     private void validarOfPertencenteDeUsuario(Long idServicoOf) {
         if (idServicoOf != null) {
             userService.getUserWithAuthorities()
@@ -313,8 +305,6 @@ public class OrdemFornecimentoService {
     }
 
     public XSSFWorkbook produzirConteudoDaPlanilha(OrdemFornecimentoDTO ordemFornecimento) throws IOException {
-        validarAntesDeProduzirConteudoDaPlanilha(ordemFornecimento);
-
         String localDoArquivo =
             Optional.of(System.getProperty("os.name"))
                 .filter(s -> s.toLowerCase().contains("windows"))
