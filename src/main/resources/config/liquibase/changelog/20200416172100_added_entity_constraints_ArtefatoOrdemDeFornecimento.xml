@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <!--
+        Added the constraints for entity ArtefatoOrdemDeFornecimento.
+    -->
+    <changeSet id="20200416172100-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="artefato_id"
+                                 baseTableName="artefato_ordem_de_fornecimento"
+                                 constraintName="fk_artefato_ordem_de_fornecimento_artefato_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="artefato"/>
+
+        <addForeignKeyConstraint baseColumnNames="ordem_de_fornecimento_id"
+                                 baseTableName="artefato_ordem_de_fornecimento"
+                                 constraintName="fk_artefato_ordem_de_fornecimento_ordem_de_fornecimento_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="ordem_de_fornecimento"/>
+
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,43 @@
+{
+    "name": "ArtefatoOrdemDeFornecimento",
+    "fields": [
+        {
+            "fieldName": "estado",
+            "fieldType": "EstadoArtefato",
+            "fieldValues": "CRIANDO,ALTERANDO"
+        },
+        {
+            "fieldName": "createdDate",
+            "fieldType": "Instant"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "artefato",
+            "otherEntityRelationshipName": "artefatoOrdemDeFornecimento",
+            "relationshipName": "artefato",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "ordemDeFornecimento",
+            "otherEntityRelationshipName": "artefatoOrdemDeFornecimento",
+            "relationshipName": "ordemDeFornecimento",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200416172100",
+    "entityTableName": "artefato_ordem_de_fornecimento",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": [
+        "ofmanager"
+    ]
+}

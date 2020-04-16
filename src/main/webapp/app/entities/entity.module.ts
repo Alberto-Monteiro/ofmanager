@@ -5,16 +5,19 @@ import { RouterModule } from '@angular/router';
   imports: [
     RouterModule.forChild([
       {
-        path: 'servico-of',
-        loadChildren: () => import('./servico-of/servico-of.module').then(m => m.OfmanagerServicoOfModule)
+        path: 'ordem-de-fornecimento',
+        loadChildren: () => import('./ordem-de-fornecimento/ordem-de-fornecimento.module').then(m => m.OfmanagerOrdemDeFornecimentoModule)
       },
       {
-        path: 'arquivo-da-of',
-        loadChildren: () => import('./arquivo-da-of/arquivo-da-of.module').then(m => m.OfmanagerArquivoDaOfModule)
+        path: 'artefato-ordem-de-fornecimento',
+        loadChildren: () =>
+          import('./artefato-ordem-de-fornecimento/artefato-ordem-de-fornecimento.module').then(
+            m => m.OfmanagerArtefatoOrdemDeFornecimentoModule
+          )
       },
       {
-        path: 'arquivo',
-        loadChildren: () => import('./arquivo/arquivo.module').then(m => m.OfmanagerArquivoModule)
+        path: 'artefato',
+        loadChildren: () => import('./artefato/artefato.module').then(m => m.OfmanagerArtefatoModule)
       }
       /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
     ])

@@ -2,11 +2,13 @@ package br.com.rocksti.ofmanager.service;
 
 import br.com.rocksti.ofmanager.config.Constants;
 
+import br.com.rocksti.ofmanager.RedisTestContainerExtension;
 import br.com.rocksti.ofmanager.OfmanagerApp;
 import br.com.rocksti.ofmanager.domain.User;
 import io.github.jhipster.config.JHipsterProperties;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.MockitoAnnotations;
@@ -41,9 +43,10 @@ import static org.mockito.Mockito.*;
  * Integration tests for {@link MailService}.
  */
 @SpringBootTest(classes = OfmanagerApp.class)
+@ExtendWith(RedisTestContainerExtension.class)
 public class MailServiceIT {
 
-    private static String languages[] = {
+    private static final String[] languages = {
         "pt-br",
         "en"
         // jhipster-needle-i18n-language-constant - JHipster will add/remove languages in this array

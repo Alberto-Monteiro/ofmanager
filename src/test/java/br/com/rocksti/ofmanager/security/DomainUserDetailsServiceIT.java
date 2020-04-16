@@ -1,5 +1,6 @@
 package br.com.rocksti.ofmanager.security;
 
+import br.com.rocksti.ofmanager.RedisTestContainerExtension;
 import br.com.rocksti.ofmanager.OfmanagerApp;
 import br.com.rocksti.ofmanager.domain.User;
 import br.com.rocksti.ofmanager.repository.UserRepository;
@@ -7,6 +8,7 @@ import br.com.rocksti.ofmanager.repository.UserRepository;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,6 +24,7 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
  * Integrations tests for {@link DomainUserDetailsService}.
  */
 @SpringBootTest(classes = OfmanagerApp.class)
+@ExtendWith(RedisTestContainerExtension.class)
 @Transactional
 public class DomainUserDetailsServiceIT {
 

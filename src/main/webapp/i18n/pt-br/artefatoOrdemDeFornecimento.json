@@ -1,0 +1,25 @@
+{
+  "ofmanagerApp": {
+    "artefatoOrdemDeFornecimento": {
+      "home": {
+        "title": "Artefato Ordem De Fornecimentos",
+        "createLabel": "Criar novo Artefato Ordem De Fornecimento",
+        "createOrEditLabel": "Criar ou editar Artefato Ordem De Fornecimento",
+        "notFound": "Nenhum Artefato Ordem De Fornecimento encontrado"
+      },
+      "created": "Um novo Artefato Ordem De Fornecimento foi criado com o identificador {{ param }}",
+      "updated": "Um Artefato Ordem De Fornecimento foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Artefato Ordem De Fornecimento foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Artefato Ordem De Fornecimento {{ id }}?"
+      },
+      "detail": {
+        "title": "Artefato Ordem De Fornecimento"
+      },
+      "estado": "Estado",
+      "createdDate": "Created Date",
+      "artefato": "Artefato",
+      "ordemDeFornecimento": "Ordem De Fornecimento"
+    }
+  }
+}

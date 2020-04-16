@@ -1,0 +1,77 @@
+{
+    "name": "OrdemDeFornecimento",
+    "fields": [
+        {
+            "fieldName": "numero",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "estado",
+            "fieldType": "EstadoOrdemDeFornecimento",
+            "fieldValues": "NOVA,ANALISE,ACEITA,REJEITADA"
+        },
+        {
+            "fieldName": "observacaoDoGestor",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
+        },
+        {
+            "fieldName": "createdBy",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "createdDate",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "lastModifiedBy",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "lastModifiedDate",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "valorUstibb",
+            "fieldType": "BigDecimal"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "artefatoOrdemDeFornecimento",
+            "otherEntityRelationshipName": "ordemDeFornecimento",
+            "relationshipName": "artefatoOrdemDeFornecimento"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "user",
+            "otherEntityRelationshipName": "ordemDeFornecimento",
+            "relationshipName": "gestorDaOf",
+            "otherEntityField": "login"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "user",
+            "otherEntityRelationshipName": "ordemDeFornecimento",
+            "relationshipName": "donoDaOf",
+            "otherEntityField": "login"
+        }
+    ],
+    "changelogDate": "20200416172000",
+    "entityTableName": "ordem_de_fornecimento",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": [
+        "ofmanager"
+    ]
+}

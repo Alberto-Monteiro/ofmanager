@@ -1,0 +1,46 @@
+{
+    "name": "Artefato",
+    "fields": [
+        {
+            "fieldName": "localDoArtefato",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "extensao",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "complexidade",
+            "fieldType": "ComplexidadeArtefato",
+            "fieldValues": "MUITO_BAIXA,BAIXA,MEDIA,ALTA,MUITO_ALTA"
+        },
+        {
+            "fieldName": "artefatoDeTest",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "createdDate",
+            "fieldType": "Instant"
+        }
+    ],
+    "relationships": [],
+    "changelogDate": "20200416172200",
+    "entityTableName": "artefato",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": [
+        "ofmanager"
+    ]
+}

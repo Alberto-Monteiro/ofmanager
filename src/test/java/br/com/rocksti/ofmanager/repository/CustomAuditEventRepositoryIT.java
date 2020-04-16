@@ -1,11 +1,14 @@
 package br.com.rocksti.ofmanager.repository;
 
 import br.com.rocksti.ofmanager.OfmanagerApp;
+
+import br.com.rocksti.ofmanager.RedisTestContainerExtension;
 import br.com.rocksti.ofmanager.config.Constants;
 import br.com.rocksti.ofmanager.config.audit.AuditEventConverter;
 import br.com.rocksti.ofmanager.domain.PersistentAuditEvent;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.audit.AuditEvent;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -28,6 +31,7 @@ import static br.com.rocksti.ofmanager.repository.CustomAuditEventRepository.EVE
  * Integration tests for {@link CustomAuditEventRepository}.
  */
 @SpringBootTest(classes = OfmanagerApp.class)
+@ExtendWith(RedisTestContainerExtension.class)
 @Transactional
 public class CustomAuditEventRepositoryIT {
 

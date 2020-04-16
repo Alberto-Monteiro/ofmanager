@@ -1,21 +1,26 @@
 package br.com.rocksti.ofmanager.web.rest;
 
 import br.com.rocksti.ofmanager.OfmanagerApp;
+import br.com.rocksti.ofmanager.RedisTestContainerExtension;
 import io.github.jhipster.config.JHipsterProperties;
 import br.com.rocksti.ofmanager.config.audit.AuditEventConverter;
 import br.com.rocksti.ofmanager.domain.PersistentAuditEvent;
 import br.com.rocksti.ofmanager.repository.PersistenceAuditEventRepository;
+import br.com.rocksti.ofmanager.security.AuthoritiesConstants;
 
 import br.com.rocksti.ofmanager.service.AuditEventService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.format.support.FormattingConversionService;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -31,7 +36,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Integration tests for the {@link AuditResource} REST controller.
  */
+@AutoConfigureMockMvc
+@WithMockUser(authorities = AuthoritiesConstants.ADMIN)
 @SpringBootTest(classes = OfmanagerApp.class)
+@ExtendWith(RedisTestContainerExtension.class)
 @Transactional
 public class AuditResourceIT {
 
@@ -43,38 +51,10 @@ public class AuditResourceIT {
     @Autowired
     private PersistenceAuditEventRepository auditEventRepository;
 
-    @Autowired
-    private AuditEventConverter auditEventConverter;
-
-    @Autowired
-    private JHipsterProperties jhipsterProperties;
-
-    @Autowired
-    private MappingJackson2HttpMessageConverter jacksonMessageConverter;
-
-    @Autowired
-    private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
-
-    @Autowired
-    @Qualifier("mvcConversionService")
-    private FormattingConversionService formattingConversionService;
-
     private PersistentAuditEvent auditEvent;
 
+    @Autowired
     private MockMvc restAuditMockMvc;
-
-    @BeforeEach
-    public void setup() {
-        MockitoAnnotations.initMocks(this);
-        AuditEventService auditEventService =
-            new AuditEventService(auditEventRepository, auditEventConverter, jhipsterProperties);
-        AuditResource auditResource = new AuditResource(auditEventService);
-        this.restAuditMockMvc = MockMvcBuilders.standaloneSetup(auditResource)
-            .setCustomArgumentResolvers(pageableArgumentResolver)
-            .setConversionService(formattingConversionService)
-            .setMessageConverters(jacksonMessageConverter)
-            .build();
-    }
 
     @BeforeEach
     public void initTest() {

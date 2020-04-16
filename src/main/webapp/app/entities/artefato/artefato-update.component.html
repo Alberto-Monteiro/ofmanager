@@ -1,0 +1,74 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+            <h2 id="of-artefato-heading" jhiTranslate="ofmanagerApp.artefato.home.createOrEditLabel">Create or edit a Artefato</h2>
+
+            <div>
+                <of-alert-error></of-alert-error>
+
+                <div class="form-group" [hidden]="!editForm.get('id')!.value">
+                    <label for="id" jhiTranslate="global.field.id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id" formControlName="id" readonly />
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="ofmanagerApp.artefato.localDoArtefato" for="field_localDoArtefato">Local Do Artefato</label>
+                    <input type="text" class="form-control" name="localDoArtefato" id="field_localDoArtefato"
+                           formControlName="localDoArtefato"/>
+                    <div *ngIf="editForm.get('localDoArtefato')!.invalid && (editForm.get('localDoArtefato')!.dirty || editForm.get('localDoArtefato')!.touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('localDoArtefato')?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="ofmanagerApp.artefato.extensao" for="field_extensao">Extensao</label>
+                    <input type="text" class="form-control" name="extensao" id="field_extensao"
+                           formControlName="extensao"/>
+                    <div *ngIf="editForm.get('extensao')!.invalid && (editForm.get('extensao')!.dirty || editForm.get('extensao')!.touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('extensao')?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="ofmanagerApp.artefato.complexidade" for="field_complexidade">Complexidade</label>
+                    <select class="form-control" name="complexidade" formControlName="complexidade" id="field_complexidade">
+                        <option value="MUITO_BAIXA">{{ 'ofmanagerApp.ComplexidadeArtefato.MUITO_BAIXA' | translate }}</option>
+                        <option value="BAIXA">{{ 'ofmanagerApp.ComplexidadeArtefato.BAIXA' | translate }}</option>
+                        <option value="MEDIA">{{ 'ofmanagerApp.ComplexidadeArtefato.MEDIA' | translate }}</option>
+                        <option value="ALTA">{{ 'ofmanagerApp.ComplexidadeArtefato.ALTA' | translate }}</option>
+                        <option value="MUITO_ALTA">{{ 'ofmanagerApp.ComplexidadeArtefato.MUITO_ALTA' | translate }}</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="ofmanagerApp.artefato.artefatoDeTest" for="field_artefatoDeTest">Artefato De Test</label>
+                    <input type="checkbox" class="form-control" name="artefatoDeTest" id="field_artefatoDeTest"
+                           formControlName="artefatoDeTest"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="ofmanagerApp.artefato.createdDate" for="field_createdDate">Created Date</label>
+                    <div class="d-flex">
+                        <input id="field_createdDate" type="datetime-local" class="form-control" name="createdDate" formControlName="createdDate" placeholder="YYYY-MM-DD HH:mm"/>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary" (click)="previousState()">
+                    <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                </button>
+
+                <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

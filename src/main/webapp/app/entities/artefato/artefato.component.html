@@ -1,0 +1,79 @@
+<div>
+    <h2 id="page-heading">
+        <span jhiTranslate="ofmanagerApp.artefato.home.title">Artefatoes</span>
+
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-artefato" [routerLink]="['/artefato/new']">
+            <fa-icon icon="plus"></fa-icon>
+            <span  jhiTranslate="ofmanagerApp.artefato.home.createLabel">
+            Create a new Artefato
+            </span>
+        </button>
+    </h2>
+
+    <of-alert-error></of-alert-error>
+
+    <of-alert></of-alert>
+
+    <div class="alert alert-warning" id="no-result" *ngIf="artefatoes?.length === 0">
+        <span jhiTranslate="ofmanagerApp.artefato.home.notFound">No artefatoes found</span>
+    </div>
+
+    <div class="table-responsive" id="entities" *ngIf="artefatoes?.length > 0">
+        <table class="table table-striped" aria-describedby="page-heading">
+            <thead>
+                <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="loadPage.bind(this)">
+                    <th scope="col"  jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="localDoArtefato"><span jhiTranslate="ofmanagerApp.artefato.localDoArtefato">Local Do Artefato</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="extensao"><span jhiTranslate="ofmanagerApp.artefato.extensao">Extensao</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="complexidade"><span jhiTranslate="ofmanagerApp.artefato.complexidade">Complexidade</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="artefatoDeTest"><span jhiTranslate="ofmanagerApp.artefato.artefatoDeTest">Artefato De Test</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="createdDate"><span jhiTranslate="ofmanagerApp.artefato.createdDate">Created Date</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let artefato of artefatoes ;trackBy: trackId">
+                    <td><a [routerLink]="['/artefato', artefato.id, 'view']">{{ artefato.id }}</a></td>
+                    <td>{{ artefato.localDoArtefato }}</td>
+                    <td>{{ artefato.extensao }}</td>
+                    <td jhiTranslate="{{ 'ofmanagerApp.ComplexidadeArtefato.' + artefato.complexidade }}">{{ artefato.complexidade }}</td>
+                    <td>{{ artefato.artefatoDeTest }}</td>
+                    <td>{{ artefato.createdDate | date:'medium' }}</td>
+                    <td class="text-right">
+                        <div class="btn-group">
+                            <button type="submit"
+                                    [routerLink]="['/artefato', artefato.id, 'view']"
+                                    class="btn btn-info btn-sm">
+                                <fa-icon icon="eye"></fa-icon>
+                                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                            </button>
+
+                            <button type="submit"
+                                    [routerLink]="['/artefato', artefato.id, 'edit']"
+                                    class="btn btn-primary btn-sm">
+                                <fa-icon icon="pencil-alt"></fa-icon>
+                                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                            </button>
+
+                            <button type="submit" (click)="delete(artefato)"
+                                    class="btn btn-danger btn-sm">
+                                <fa-icon icon="times"></fa-icon>
+                                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div *ngIf="artefatoes?.length > 0">
+        <div class="row justify-content-center">
+            <jhi-item-count [page]="page" [total]="totalItems" [itemsPerPage]="itemsPerPage"></jhi-item-count>
+        </div>
+
+        <div class="row justify-content-center">
+            <ngb-pagination [collectionSize]="totalItems" [(page)]="ngbPaginationPage" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="loadPage($event)"></ngb-pagination>
+        </div>
+    </div>
+</div>

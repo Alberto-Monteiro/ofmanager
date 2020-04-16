@@ -1,62 +1,68 @@
 package br.com.rocksti.ofmanager.config;
 
-import java.time.Duration;
-
-import org.ehcache.config.builders.*;
-import org.ehcache.jsr107.Eh107Configuration;
-
-import org.hibernate.cache.jcache.ConfigSettings;
-import io.github.jhipster.config.JHipsterProperties;
-
-import org.springframework.boot.autoconfigure.cache.JCacheManagerCustomizer;
-import org.springframework.boot.autoconfigure.orm.jpa.HibernatePropertiesCustomizer;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.*;
+import org.redisson.Redisson;
+import org.redisson.config.Config;
+import org.redisson.jcache.configuration.RedissonConfiguration;
+import org.springframework.boot.autoconfigure.cache.JCacheManagerCustomizer;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.autoconfigure.orm.jpa.HibernatePropertiesCustomizer;
+import org.hibernate.cache.jcache.ConfigSettings;
+
+import java.util.concurrent.TimeUnit;
+
+import javax.cache.configuration.MutableConfiguration;
+import javax.cache.expiry.CreatedExpiryPolicy;
+import javax.cache.expiry.Duration;
+
+import io.github.jhipster.config.JHipsterProperties;
 
 @Configuration
 @EnableCaching
 public class CacheConfiguration {
 
-    private final javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration;
-
-    public CacheConfiguration(JHipsterProperties jHipsterProperties) {
-        JHipsterProperties.Cache.Ehcache ehcache = jHipsterProperties.getCache().getEhcache();
-
-        jcacheConfiguration = Eh107Configuration.fromEhcacheCacheConfiguration(
-            CacheConfigurationBuilder.newCacheConfigurationBuilder(Object.class, Object.class,
-                ResourcePoolsBuilder.heap(ehcache.getMaxEntries()))
-                .withExpiry(ExpiryPolicyBuilder.timeToLiveExpiration(Duration.ofSeconds(ehcache.getTimeToLiveSeconds())))
-                .build());
+    @Bean
+    public javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration(JHipsterProperties jHipsterProperties) {
+        MutableConfiguration<Object, Object> jcacheConfig = new MutableConfiguration<>();
+        Config config = new Config();
+        if (jHipsterProperties.getCache().getRedis().isCluster()) {
+            config.useClusterServers().addNodeAddress(jHipsterProperties.getCache().getRedis().getServer());
+        } else {
+            config.useSingleServer().setAddress(jHipsterProperties.getCache().getRedis().getServer()[0]);
+        }
+        jcacheConfig.setStatisticsEnabled(true);
+        jcacheConfig.setExpiryPolicyFactory(CreatedExpiryPolicy.factoryOf(new Duration(TimeUnit.SECONDS, jHipsterProperties.getCache().getRedis().getExpiration())));
+        return RedissonConfiguration.fromInstance(Redisson.create(config), jcacheConfig);
     }
 
     @Bean
-    public HibernatePropertiesCustomizer hibernatePropertiesCustomizer(javax.cache.CacheManager cacheManager) {
-        return hibernateProperties -> hibernateProperties.put(ConfigSettings.CACHE_MANAGER, cacheManager);
+    public HibernatePropertiesCustomizer hibernatePropertiesCustomizer(javax.cache.CacheManager cm) {
+        return hibernateProperties -> hibernateProperties.put(ConfigSettings.CACHE_MANAGER, cm);
     }
 
     @Bean
-    public JCacheManagerCustomizer cacheManagerCustomizer() {
+    public JCacheManagerCustomizer cacheManagerCustomizer(javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration) {
         return cm -> {
-            createCache(cm, br.com.rocksti.ofmanager.repository.UserRepository.USERS_BY_LOGIN_CACHE);
-            createCache(cm, br.com.rocksti.ofmanager.repository.UserRepository.USERS_BY_EMAIL_CACHE);
-            createCache(cm, br.com.rocksti.ofmanager.domain.User.class.getName());
-            createCache(cm, br.com.rocksti.ofmanager.domain.Authority.class.getName());
-            createCache(cm, br.com.rocksti.ofmanager.domain.User.class.getName() + ".authorities");
-            createCache(cm, br.com.rocksti.ofmanager.domain.ServicoOf.class.getName());
-            createCache(cm, br.com.rocksti.ofmanager.domain.ServicoOf.class.getName() + ".arquivoDaOfs");
-            createCache(cm, br.com.rocksti.ofmanager.domain.ArquivoDaOf.class.getName());
-            createCache(cm, br.com.rocksti.ofmanager.domain.Arquivo.class.getName());
-            createCache(cm, br.com.rocksti.ofmanager.domain.Arquivo.class.getName() + ".arquivoDaOfs");
-            // jhipster-needle-ehcache-add-entry
+            createCache(cm, br.com.rocksti.ofmanager.repository.UserRepository.USERS_BY_LOGIN_CACHE, jcacheConfiguration);
+            createCache(cm, br.com.rocksti.ofmanager.repository.UserRepository.USERS_BY_EMAIL_CACHE, jcacheConfiguration);
+            createCache(cm, br.com.rocksti.ofmanager.domain.User.class.getName(), jcacheConfiguration);
+            createCache(cm, br.com.rocksti.ofmanager.domain.Authority.class.getName(), jcacheConfiguration);
+            createCache(cm, br.com.rocksti.ofmanager.domain.User.class.getName() + ".authorities", jcacheConfiguration);
+            createCache(cm, br.com.rocksti.ofmanager.domain.OrdemDeFornecimento.class.getName(), jcacheConfiguration);
+            createCache(cm, br.com.rocksti.ofmanager.domain.OrdemDeFornecimento.class.getName() + ".artefatoOrdemDeFornecimentos", jcacheConfiguration);
+            createCache(cm, br.com.rocksti.ofmanager.domain.ArtefatoOrdemDeFornecimento.class.getName(), jcacheConfiguration);
+            createCache(cm, br.com.rocksti.ofmanager.domain.Artefato.class.getName(), jcacheConfiguration);
+            // jhipster-needle-redis-add-entry
         };
     }
 
-    private void createCache(javax.cache.CacheManager cm, String cacheName) {
+    private void createCache(javax.cache.CacheManager cm, String cacheName, javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration) {
         javax.cache.Cache<Object, Object> cache = cm.getCache(cacheName);
-        if (cache != null) {
-            cm.destroyCache(cacheName);
+        if (cache == null) {
+            cm.createCache(cacheName, jcacheConfiguration);
         }
-        cm.createCache(cacheName, jcacheConfiguration);
     }
 
 }

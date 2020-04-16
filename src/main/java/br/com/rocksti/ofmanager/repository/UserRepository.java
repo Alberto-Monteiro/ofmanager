@@ -1,6 +1,5 @@
 package br.com.rocksti.ofmanager.repository;
 
-import br.com.rocksti.ofmanager.domain.Authority;
 import br.com.rocksti.ofmanager.domain.User;
 
 import org.springframework.cache.annotation.Cacheable;
@@ -11,9 +10,9 @@ import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
+import java.time.Instant;
 
 /**
  * Spring Data JPA repository for the {@link User} entity.
@@ -35,6 +34,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findOneByLogin(String login);
 
+
+
     @EntityGraph(attributePaths = "authorities")
     Optional<User> findOneWithAuthoritiesById(Long id);
 
@@ -47,6 +48,4 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findOneWithAuthoritiesByEmailIgnoreCase(String email);
 
     Page<User> findAllByLoginNot(Pageable pageable, String login);
-
-    List<User> findAllByAuthoritiesIn(List<Authority> authorityList);
 }

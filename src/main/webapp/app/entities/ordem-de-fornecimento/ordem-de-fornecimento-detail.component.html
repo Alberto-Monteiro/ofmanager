@@ -1,0 +1,66 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="ordemDeFornecimento">
+            <h2><span jhiTranslate="ofmanagerApp.ordemDeFornecimento.detail.title">Ordem De Fornecimento</span> {{ ordemDeFornecimento.id }}</h2>
+
+            <hr>
+
+            <of-alert-error></of-alert-error>
+
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="ofmanagerApp.ordemDeFornecimento.numero">Numero</span></dt>
+                <dd>
+                    <span>{{ ordemDeFornecimento.numero }}</span>
+                </dd>
+                <dt><span jhiTranslate="ofmanagerApp.ordemDeFornecimento.estado">Estado</span></dt>
+                <dd>
+                    <span jhiTranslate="{{ 'ofmanagerApp.EstadoOrdemDeFornecimento.' + ordemDeFornecimento.estado }}">{{ ordemDeFornecimento.estado }}</span>
+                </dd>
+                <dt><span jhiTranslate="ofmanagerApp.ordemDeFornecimento.observacaoDoGestor">Observacao Do Gestor</span></dt>
+                <dd>
+                    <span>{{ ordemDeFornecimento.observacaoDoGestor }}</span>
+                </dd>
+                <dt><span jhiTranslate="ofmanagerApp.ordemDeFornecimento.createdBy">Created By</span></dt>
+                <dd>
+                    <span>{{ ordemDeFornecimento.createdBy }}</span>
+                </dd>
+                <dt><span jhiTranslate="ofmanagerApp.ordemDeFornecimento.createdDate">Created Date</span></dt>
+                <dd>
+                    <span>{{ ordemDeFornecimento.createdDate }}</span>
+                </dd>
+                <dt><span jhiTranslate="ofmanagerApp.ordemDeFornecimento.lastModifiedBy">Last Modified By</span></dt>
+                <dd>
+                    <span>{{ ordemDeFornecimento.lastModifiedBy }}</span>
+                </dd>
+                <dt><span jhiTranslate="ofmanagerApp.ordemDeFornecimento.lastModifiedDate">Last Modified Date</span></dt>
+                <dd>
+                    <span>{{ ordemDeFornecimento.lastModifiedDate }}</span>
+                </dd>
+                <dt><span jhiTranslate="ofmanagerApp.ordemDeFornecimento.valorUstibb">Valor Ustibb</span></dt>
+                <dd>
+                    <span>{{ ordemDeFornecimento.valorUstibb }}</span>
+                </dd>
+                <dt><span jhiTranslate="ofmanagerApp.ordemDeFornecimento.gestorDaOf">Gestor Da Of</span></dt>
+                <dd>
+                    {{ ordemDeFornecimento.gestorDaOfLogin }}
+                </dd>
+                <dt><span jhiTranslate="ofmanagerApp.ordemDeFornecimento.donoDaOf">Dono Da Of</span></dt>
+                <dd>
+                    {{ ordemDeFornecimento.donoDaOfLogin }}
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/ordem-de-fornecimento', ordemDeFornecimento.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,26 @@
+{
+  "ofmanagerApp": {
+    "artefato": {
+      "home": {
+        "title": "Artefatoes",
+        "createLabel": "Create a new Artefato",
+        "createOrEditLabel": "Create or edit a Artefato",
+        "notFound": "No Artefatoes found"
+      },
+      "created": "A new Artefato is created with identifier {{ param }}",
+      "updated": "A Artefato is updated with identifier {{ param }}",
+      "deleted": "A Artefato is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Artefato {{ id }}?"
+      },
+      "detail": {
+        "title": "Artefato"
+      },
+      "localDoArtefato": "Local Do Artefato",
+      "extensao": "Extensao",
+      "complexidade": "Complexidade",
+      "artefatoDeTest": "Artefato De Test",
+      "createdDate": "Created Date"
+    }
+  }
+}

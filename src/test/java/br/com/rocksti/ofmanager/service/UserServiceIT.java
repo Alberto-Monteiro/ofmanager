@@ -1,5 +1,6 @@
 package br.com.rocksti.ofmanager.service;
 
+import br.com.rocksti.ofmanager.RedisTestContainerExtension;
 import br.com.rocksti.ofmanager.OfmanagerApp;
 import br.com.rocksti.ofmanager.config.Constants;
 import br.com.rocksti.ofmanager.domain.User;
@@ -11,6 +12,7 @@ import io.github.jhipster.security.RandomUtil;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,7 +21,6 @@ import org.springframework.data.auditing.DateTimeProvider;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.time.LocalDateTime;
@@ -33,6 +34,7 @@ import static org.mockito.Mockito.when;
  * Integration tests for {@link UserService}.
  */
 @SpringBootTest(classes = OfmanagerApp.class)
+@ExtendWith(RedisTestContainerExtension.class)
 @Transactional
 public class UserServiceIT {
 

@@ -1,0 +1,46 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="artefatoOrdemDeFornecimento">
+            <h2><span jhiTranslate="ofmanagerApp.artefatoOrdemDeFornecimento.detail.title">Artefato Ordem De Fornecimento</span> {{ artefatoOrdemDeFornecimento.id }}</h2>
+
+            <hr>
+
+            <of-alert-error></of-alert-error>
+
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="ofmanagerApp.artefatoOrdemDeFornecimento.estado">Estado</span></dt>
+                <dd>
+                    <span jhiTranslate="{{ 'ofmanagerApp.EstadoArtefato.' + artefatoOrdemDeFornecimento.estado }}">{{ artefatoOrdemDeFornecimento.estado }}</span>
+                </dd>
+                <dt><span jhiTranslate="ofmanagerApp.artefatoOrdemDeFornecimento.createdDate">Created Date</span></dt>
+                <dd>
+                    <span>{{ artefatoOrdemDeFornecimento.createdDate }}</span>
+                </dd>
+                <dt><span jhiTranslate="ofmanagerApp.artefatoOrdemDeFornecimento.artefato">Artefato</span></dt>
+                <dd>
+                    <div *ngIf="artefatoOrdemDeFornecimento.artefatoId">
+                        <a [routerLink]="['/artefato', artefatoOrdemDeFornecimento.artefatoId, 'view']">{{ artefatoOrdemDeFornecimento.artefatoId }}</a>
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="ofmanagerApp.artefatoOrdemDeFornecimento.ordemDeFornecimento">Ordem De Fornecimento</span></dt>
+                <dd>
+                    <div *ngIf="artefatoOrdemDeFornecimento.ordemDeFornecimentoId">
+                        <a [routerLink]="['/ordem-de-fornecimento', artefatoOrdemDeFornecimento.ordemDeFornecimentoId, 'view']">{{ artefatoOrdemDeFornecimento.ordemDeFornecimentoId }}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/artefato-ordem-de-fornecimento', artefatoOrdemDeFornecimento.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

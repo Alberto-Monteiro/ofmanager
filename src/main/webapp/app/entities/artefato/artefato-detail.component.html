@@ -1,0 +1,46 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="artefato">
+            <h2><span jhiTranslate="ofmanagerApp.artefato.detail.title">Artefato</span> {{ artefato.id }}</h2>
+
+            <hr>
+
+            <of-alert-error></of-alert-error>
+
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="ofmanagerApp.artefato.localDoArtefato">Local Do Artefato</span></dt>
+                <dd>
+                    <span>{{ artefato.localDoArtefato }}</span>
+                </dd>
+                <dt><span jhiTranslate="ofmanagerApp.artefato.extensao">Extensao</span></dt>
+                <dd>
+                    <span>{{ artefato.extensao }}</span>
+                </dd>
+                <dt><span jhiTranslate="ofmanagerApp.artefato.complexidade">Complexidade</span></dt>
+                <dd>
+                    <span jhiTranslate="{{ 'ofmanagerApp.ComplexidadeArtefato.' + artefato.complexidade }}">{{ artefato.complexidade }}</span>
+                </dd>
+                <dt><span jhiTranslate="ofmanagerApp.artefato.artefatoDeTest">Artefato De Test</span></dt>
+                <dd>
+                    <span>{{ artefato.artefatoDeTest }}</span>
+                </dd>
+                <dt><span jhiTranslate="ofmanagerApp.artefato.createdDate">Created Date</span></dt>
+                <dd>
+                    <span>{{ artefato.createdDate }}</span>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/artefato', artefato.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

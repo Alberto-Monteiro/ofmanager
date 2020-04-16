@@ -5,39 +5,18 @@ import { AlertComponent } from './alert/alert.component';
 import { AlertErrorComponent } from './alert/alert-error.component';
 import { LoginModalComponent } from './login/login.component';
 import { HasAnyAuthorityDirective } from './auth/has-any-authority.directive';
-import { ServicoOfDeleteDialogComponent } from 'app/entities/servico-of/servico-of-delete-dialog.component';
-import { IConfig, NgxMaskModule } from 'ngx-mask';
-import { ToastrModule } from 'ngx-toastr';
-import { MaterialModule } from 'app/shared/material-module';
-import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client';
-import { LoadingBarModule } from '@ngx-loading-bar/core';
-import { FlexLayoutModule } from '@angular/flex-layout';
-
-export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
 
 @NgModule({
-  imports: [OfmanagerSharedLibsModule, NgxMaskModule.forRoot(options), ToastrModule.forRoot()],
-  declarations: [
-    FindLanguageFromKeyPipe,
-    AlertComponent,
-    AlertErrorComponent,
-    LoginModalComponent,
-    HasAnyAuthorityDirective,
-    ServicoOfDeleteDialogComponent
-  ],
-  entryComponents: [LoginModalComponent, ServicoOfDeleteDialogComponent],
+  imports: [OfmanagerSharedLibsModule],
+  declarations: [FindLanguageFromKeyPipe, AlertComponent, AlertErrorComponent, LoginModalComponent, HasAnyAuthorityDirective],
+  entryComponents: [LoginModalComponent],
   exports: [
     OfmanagerSharedLibsModule,
     FindLanguageFromKeyPipe,
     AlertComponent,
     AlertErrorComponent,
     LoginModalComponent,
-    HasAnyAuthorityDirective,
-    MaterialModule,
-    LoadingBarHttpClientModule,
-    LoadingBarModule,
-    FlexLayoutModule,
-    NgxMaskModule
+    HasAnyAuthorityDirective
   ]
 })
 export class OfmanagerSharedModule {}

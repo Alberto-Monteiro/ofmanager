@@ -1,10 +1,12 @@
 package br.com.rocksti.ofmanager.config.timezone;
 
 import br.com.rocksti.ofmanager.OfmanagerApp;
+import br.com.rocksti.ofmanager.RedisTestContainerExtension;
 import br.com.rocksti.ofmanager.repository.timezone.DateTimeWrapper;
 import br.com.rocksti.ofmanager.repository.timezone.DateTimeWrapperRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -21,6 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Integration tests for the UTC Hibernate configuration.
  */
 @SpringBootTest(classes = OfmanagerApp.class)
+@ExtendWith(RedisTestContainerExtension.class)
 public class HibernateTimeZoneIT {
 
     @Autowired

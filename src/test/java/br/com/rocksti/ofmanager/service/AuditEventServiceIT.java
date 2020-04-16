@@ -1,11 +1,13 @@
 package br.com.rocksti.ofmanager.service;
 
+import br.com.rocksti.ofmanager.RedisTestContainerExtension;
 import br.com.rocksti.ofmanager.domain.PersistentAuditEvent;
 import br.com.rocksti.ofmanager.repository.PersistenceAuditEventRepository;
 import br.com.rocksti.ofmanager.OfmanagerApp;
 import io.github.jhipster.config.JHipsterProperties;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,8 +20,9 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Integration tests for {@link AuditEventService}.
  */
 @SpringBootTest(classes = OfmanagerApp.class)
+@ExtendWith(RedisTestContainerExtension.class)
 @Transactional
-public class AuditEventServiceIT {
+public class AuditEventServiceIT  {
     @Autowired
     private AuditEventService auditEventService;
 

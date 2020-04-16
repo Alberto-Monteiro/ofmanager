@@ -7,6 +7,10 @@ services:
       - SPRING_PROFILES_ACTIVE=prod,swagger
       - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
       - SPRING_DATASOURCE_URL=jdbc:mysql://ofmanager-mysql:3306/ofmanager?useUnicode=true&characterEncoding=utf8&useSSL=false&createDatabaseIfNotExist=true
+      - JHIPSTER_CACHE_REDIS_SERVER=redis://ofmanager-redis:6379
+      - JHIPSTER_CACHE_REDIS_CLUSTER=false
+      # - JHIPSTER_CACHE_REDIS_SERVER=redis://ofmanager-redis:6379
+      # - JHIPSTER_CACHE_REDIS_CLUSTER=true
       - JHIPSTER_SLEEP=30 # gives time for other services to boot before the application
     ports:
       - 8080:8080
@@ -14,3 +18,7 @@ services:
     extends:
       file: mysql.yml
       service: ofmanager-mysql
+  ofmanager-redis:
+    extends:
+      file: redis.yml
+      service: ofmanager-redis

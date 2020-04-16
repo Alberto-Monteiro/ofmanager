@@ -1,6 +1,7 @@
 application {
   config {
     baseName ofmanager,
+    cacheProvider redis,
     packageName br.com.rocksti.ofmanager,
     jhiPrefix of,
     nativeLanguage pt-br,
@@ -10,19 +11,26 @@ application {
   entities all
 }
 
+dto all with mapstruct
+service all with serviceClass
+paginate all with pagination
+
 relationship ManyToOne {
-	ServicoOf{gestorDaOf(login)} to User
-    ServicoOf{donoDaOf(login)} to User
+	OrdemDeFornecimento{gestorDaOf(login)} to User
+    OrdemDeFornecimento{donoDaOf(login)} to User
 }
 
 relationship OneToMany {
-	ServicoOf to ArquivoDaOf
-    Arquivo to ArquivoDaOf
+	OrdemDeFornecimento to ArtefatoOrdemDeFornecimento
 }
 
-entity ServicoOf {
+relationship ManyToOne {
+    ArtefatoOrdemDeFornecimento{artefato} to Artefato
+}
+
+entity OrdemDeFornecimento {
 	numero Integer required
-    estado EstadoOf
+    estado EstadoOrdemDeFornecimento
     observacaoDoGestor TextBlob
     createdBy String
     createdDate Instant
@@ -31,39 +39,35 @@ entity ServicoOf {
     valorUstibb BigDecimal
 }
 
-entity ArquivoDaOf {
-	estadoArquivo EstadoArquivo
+entity ArtefatoOrdemDeFornecimento {
+	estado EstadoArtefato
+    createdDate Instant
 }
 
-entity Arquivo {
-	caminhoDoArquivo String required
+entity Artefato {
+	localDoArtefato String required
     extensao String required
-    complexidade Complexidade
-    arquivoDeTest Boolean
+    complexidade ComplexidadeArtefato
+    artefatoDeTest Boolean
+    createdDate Instant
 }
 
-enum EstadoOf {
+enum EstadoOrdemDeFornecimento {
 	NOVA,
     ANALISE,
 	ACEITA,
     REJEITADA
 }
 
-enum EstadoArquivo {
+enum EstadoArtefato {
 	CRIANDO,
     ALTERANDO
 }
 
-enum Complexidade {
+enum ComplexidadeArtefato {
 	MUITO_BAIXA,
 	BAIXA,
 	MEDIA,
 	ALTA,
 	MUITO_ALTA
 }
-
-dto all with mapstruct
-service all with serviceClass
-paginate all with pagination
-
-

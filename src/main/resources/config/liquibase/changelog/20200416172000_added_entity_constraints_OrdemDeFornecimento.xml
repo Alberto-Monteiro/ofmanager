@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <!--
+        Added the constraints for entity OrdemDeFornecimento.
+    -->
+    <changeSet id="20200416172000-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="gestor_da_of_id"
+                                 baseTableName="ordem_de_fornecimento"
+                                 constraintName="fk_ordem_de_fornecimento_gestor_da_of_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="of_user"/>
+
+        <addForeignKeyConstraint baseColumnNames="dono_da_of_id"
+                                 baseTableName="ordem_de_fornecimento"
+                                 constraintName="fk_ordem_de_fornecimento_dono_da_of_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="of_user"/>
+
+    </changeSet>
+</databaseChangeLog>

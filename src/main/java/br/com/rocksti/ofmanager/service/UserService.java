@@ -290,7 +290,6 @@ public class UserService {
 
     /**
      * Gets a list of all the authorities.
-     *
      * @return a list of all the authorities.
      */
     public List<String> getAuthorities() {
@@ -303,13 +302,5 @@ public class UserService {
         if (user.getEmail() != null) {
             Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE)).evict(user.getEmail());
         }
-    }
-
-    public List<User> getUsersByAuthorities(String... authorities) {
-        return userRepository.findAllByAuthoritiesIn(Arrays.stream(authorities).map(name -> {
-            Authority authority = new Authority();
-            authority.setName(name);
-            return authority;
-        }).collect(Collectors.toList()));
     }
 }
