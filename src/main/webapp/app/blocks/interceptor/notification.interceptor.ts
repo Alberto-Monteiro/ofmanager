@@ -1,12 +1,13 @@
-import { JhiAlertService } from 'ng-jhipster';
-import { HttpInterceptor, HttpRequest, HttpResponse, HttpHandler, HttpEvent } from '@angular/common/http';
+import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { ToastrService } from 'ngx-toastr';
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable()
 export class NotificationInterceptor implements HttpInterceptor {
-  constructor(private alertService: JhiAlertService) {}
+  constructor(private toastrService: ToastrService, private translateService: TranslateService) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(request).pipe(
@@ -24,7 +25,12 @@ export class NotificationInterceptor implements HttpInterceptor {
           });
 
           if (alert) {
-            this.alertService.success(alert, { param: alertParams });
+            this.translateService.get(alert, { param: alertParams }).subscribe(value => {
+              this.toastrService.toastrConfig.positionClass = 'toast-top-center';
+              this.toastrService.toastrConfig.maxOpened = 1;
+              this.toastrService.toastrConfig.autoDismiss = true;
+              this.toastrService.success(value);
+            });
           }
         }
       })

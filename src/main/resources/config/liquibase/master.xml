@@ -21,4 +21,5 @@
     <include file="config/liquibase/changelog/20200416172000_added_entity_constraints_OrdemDeFornecimento.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200416172100_added_entity_constraints_ArtefatoOrdemDeFornecimento.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
+    <include file="config/liquibase/changelog/20200417102200_insert_role_gestor.xml" relativeToChangelogFile="false"/>
 </databaseChangeLog>

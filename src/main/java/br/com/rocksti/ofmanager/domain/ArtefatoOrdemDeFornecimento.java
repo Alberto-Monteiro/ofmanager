@@ -11,6 +11,7 @@ import java.util.Objects;
 import java.time.Instant;
 
 import br.com.rocksti.ofmanager.domain.enumeration.EstadoArtefato;
+import org.springframework.data.annotation.CreatedDate;
 
 /**
  * A ArtefatoOrdemDeFornecimento.
@@ -30,10 +31,11 @@ public class ArtefatoOrdemDeFornecimento implements Serializable {
     @Column(name = "estado")
     private EstadoArtefato estado;
 
-    @Column(name = "created_date")
-    private Instant createdDate;
+    @CreatedDate
+    @Column(name = "created_date", updatable = false)
+    private Instant createdDate = Instant.now();
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE})
     @JsonIgnoreProperties("artefatoOrdemDeFornecimentos")
     private Artefato artefato;
 

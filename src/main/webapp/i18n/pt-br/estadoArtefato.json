@@ -2,8 +2,8 @@
   "ofmanagerApp": {
     "EstadoArtefato": {
       "null": "",
-      "CRIANDO": "CRIANDO",
-      "ALTERANDO": "ALTERANDO"
+      "CRIANDO": "Criando",
+      "ALTERANDO": "Alterando"
     }
   }
 }

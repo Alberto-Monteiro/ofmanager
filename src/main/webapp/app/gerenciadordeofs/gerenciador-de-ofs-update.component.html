@@ -1,0 +1,145 @@
+<ngx-loading-bar></ngx-loading-bar>
+<div class="row justify-content-center">
+    <div class="col-9">
+        <form name="editForm" role="form" novalidate [formGroup]="editForm">
+            <h2 id="of-servico-of-heading">Criar ou editar OF</h2>
+            <div>
+                <div class="form-group">
+                    <mat-form-field class="no-ng-invalid" appearance="outline">
+                        <mat-label>Número da OF</mat-label>
+                        <input class="no-ng-invalid" matInput placeholder="Número da OF" id="field_numero" type="number" name="numero" formControlName="numero">
+                    </mat-form-field>
+                    &nbsp;
+                    &nbsp;
+                    <mat-form-field class="no-ng-invalid" appearance="outline">
+                        <mat-label>Gestor da OF</mat-label>
+                        <mat-select class="no-ng-invalid" formControlName="usuarioGestor" (selectionChange)="!!ordemFornecimento!.ordemDeFornecimento!.id?atualizaGestorDaOf():0;">
+                            <mat-option *ngFor="let usuarioGestor of usuariosGestor" [value]="usuarioGestor">
+                                {{usuarioGestor.firstName}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    &nbsp;
+                    &nbsp;
+                    <span *ngIf="ordemFornecimento!.ordemDeFornecimento!.id">
+                        <mat-form-field *ofHasAnyAuthority="['ROLE_ADMIN', 'ROLE_GESTOR_OF']" appearance="outline">
+                            <mat-label>Estado da OF</mat-label>
+                            <mat-select [(value)]="ordemFornecimento!.ordemDeFornecimento!.estado">
+                                <mat-option (click)="atualizaEstadoDaOf(ordemFornecimento!.ordemDeFornecimento!, 'NOVA')" [value]="'NOVA'">Nova</mat-option>
+                                <mat-option (click)="atualizaEstadoDaOf(ordemFornecimento!.ordemDeFornecimento!, 'ANALISE')" [value]="'ANALISE'">Análise</mat-option>
+                                <mat-option (click)="atualizaEstadoDaOf(ordemFornecimento!.ordemDeFornecimento!, 'ACEITA')" [value]="'ACEITA'">Aceita</mat-option>
+                                <mat-option (click)="atualizaEstadoDaOf(ordemFornecimento!.ordemDeFornecimento!, 'REJEITADA')" [value]="'REJEITADA'">Rejeitada</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    <mat-form-field class="w-100 no-ng-invalid" appearance="outline">
+                        <mat-label>Listas dos arquivos</mat-label>
+                        <textarea class="no-ng-invalid" matInput placeholder="Listas dos arquivos" rows="10" id="field_lista_arquivo" name="listaDeAqruivos" formControlName="listaDeArquivo"></textarea>
+                    </mat-form-field>
+                    <mat-chip-list *ngIf="ordemFornecimento!.ordemDeFornecimento!.id" aria-label="Fish selection">
+                        <mat-chip color="primary" selected>
+                            <span>Total de arquivos: {{ordemFornecimento!.ordemDeFornecimento!.artefatoOrdemDeFornecimentos!.length}}</span>
+                        </mat-chip>
+                    </mat-chip-list>
+                    <p>
+                    <p>
+                    <p>
+                    <div *ngIf="!editForm.invalid">
+                        <mat-form-field class="no-ng-invalid w-25" appearance="outline">
+                            <mat-label>Substituir</mat-label>
+                            <input #substituir1 class="no-ng-invalid" matInput placeholder="Substituir" type="text">
+                        </mat-form-field>
+                        <mat-form-field class="no-ng-invalid w-25" appearance="outline">
+                            <mat-label>Substituir</mat-label>
+                            <input #substituir2 class="no-ng-invalid" matInput placeholder="Substituir" type="text">
+                        </mat-form-field>
+                        <button type="button" class="btn btn-primary form-group" (click)="substituir(substituir1.value, substituir2.value)" [disabled]="editForm.invalid">
+                            <fa-icon icon="sync"></fa-icon>&nbsp;<span>Substituir</span>
+                        </button>
+                    </div>
+                </div>
+
+                <br>
+
+                <of-alert-error></of-alert-error>
+
+                <button type="button" id="cancel-save" class="btn btn-secondary form-group" (click)="previousState()">
+                    <fa-icon icon="chevron-left"></fa-icon>&nbsp;<span>Voltar</span>
+                </button>
+                <button type="button" id="processar" class="btn btn-primary form-group" (click)="processar()" [disabled]="editForm.invalid">
+                    <fa-icon icon="sync"></fa-icon>&nbsp;<span>Processar</span>
+                </button>
+                <button type="button" id="download" class="btn btn-success form-group" (click)="download()" [disabled]="!ordemFornecimento!.ordemDeFornecimento!.id">
+                    <fa-icon icon="download"></fa-icon>&nbsp;<span>Download XLSX</span>
+                </button>
+                <button type="button" id="downloadTxt" class="btn btn-success form-group" (click)="downloadTxt()" [disabled]="!ordemFornecimento!.ordemDeFornecimento!.id">
+                    <fa-icon icon="download"></fa-icon>&nbsp;<span>Download TXT</span>
+                </button>
+
+                <div class="form-group">
+                    <ngb-alert [dismissible]="false">
+                        <strong>
+                            A complexidade do arquivo quando selecionada fica gravada no mesmo para ser compartilhada em outras OFs.<br>
+                            Quando marcado o checkbox "Test" será informado para outras OFs que o arquivo é de teste.
+                        </strong>
+                    </ngb-alert>
+                </div>
+
+                <div *ngFor="let mapArtefatoOrdemDeFornecimento of ordemFornecimento!.mapArtefatoOrdemDeFornecimento! | keyvalue" class="card form-group">
+                    <div class="card-header">
+                        <h3>{{mapArtefatoOrdemDeFornecimento.key}}</h3>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li *ngFor="let artefatoOrdemDeFornecimento of mapArtefatoOrdemDeFornecimento.value" class="list-group-item">
+                            <div>
+                                <div class="row">
+                                    <div class="col text-center">
+                                        <h4 class="mb-4 pb-1 pt-1" autoClose="false" container="body" placement="top" ngbTooltip="{{artefatoOrdemDeFornecimento.artefato.localDoArtefato}}"
+                                            [ngStyle]="{'background-color':artefatoOrdemDeFornecimento.estado === 'CRIANDO'?'#b3ff99':'#b9e2ff'}">
+                                            {{getNomeDoArquivo(artefatoOrdemDeFornecimento.artefato.localDoArtefato)}}
+                                        </h4>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col text-center align-self-center mat-form-field-wrapper">
+                                        <mat-checkbox *ngIf="podeSerArquivoDeTest(mapArtefatoOrdemDeFornecimento.key)" (change)="isArquivoTest(artefatoOrdemDeFornecimento.artefato)" [checked]="artefatoOrdemDeFornecimento.artefato.artefatoDeTest">Test</mat-checkbox>
+                                    </div>
+                                    <div class="col text-center align-self-center">
+                                        <mat-form-field appearance="outline">
+                                            <mat-label>Complexidade</mat-label>
+                                            <mat-select [(value)]="artefatoOrdemDeFornecimento.artefato.complexidade">
+                                                <mat-option (click)="atualizaComplexidade(artefatoOrdemDeFornecimento.artefato, null)" [value]="">N/A</mat-option>
+                                                <mat-option (click)="atualizaComplexidade(artefatoOrdemDeFornecimento.artefato, 'MUITO_BAIXA')" [value]="'MUITO_BAIXA'">Muito Baixa</mat-option>
+                                                <mat-option (click)="atualizaComplexidade(artefatoOrdemDeFornecimento.artefato, 'BAIXA')" [value]="'BAIXA'">Baixa</mat-option>
+                                                <mat-option (click)="atualizaComplexidade(artefatoOrdemDeFornecimento.artefato, 'MEDIA')" [value]="'MEDIA'">Media</mat-option>
+                                                <mat-option (click)="atualizaComplexidade(artefatoOrdemDeFornecimento.artefato, 'ALTA')" [value]="'ALTA'">Alta</mat-option>
+                                                <mat-option (click)="atualizaComplexidade(artefatoOrdemDeFornecimento.artefato, 'MUITO_ALTA')" [value]="'MUITO_ALTA'">Muito Alta</mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col text-center align-self-center">
+                                        <mat-form-field appearance="outline">
+                                            <mat-label>Finalidade</mat-label>
+                                            <mat-select [(value)]="artefatoOrdemDeFornecimento.estado">
+                                                <mat-option (click)="atualizaEstadoArquivo(artefatoOrdemDeFornecimento, 'CRIANDO')" [value]="'CRIANDO'">Criando</mat-option>
+                                                <mat-option (click)="atualizaEstadoArquivo(artefatoOrdemDeFornecimento, 'ALTERANDO')" [value]="'ALTERANDO'">Editando</mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col text-center align-self-center mat-form-field-wrapper">
+                                        <button type="button" class="btn btn-danger" title="Apagar linha" (click)="deletarArquivoDaOf(artefatoOrdemDeFornecimento)">
+                                            <fa-icon [icon]="'times'"></fa-icon>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

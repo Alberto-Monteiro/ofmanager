@@ -1,5 +1,6 @@
 import { Moment } from 'moment';
 import { EstadoArtefato } from 'app/shared/model/enumerations/estado-artefato.model';
+import { Artefato, IArtefato } from 'app/shared/model/artefato.model';
 
 export interface IArtefatoOrdemDeFornecimento {
   id?: number;
@@ -7,6 +8,7 @@ export interface IArtefatoOrdemDeFornecimento {
   createdDate?: Moment;
   artefatoId?: number;
   ordemDeFornecimentoId?: number;
+  artefato?: IArtefato;
 }
 
 export class ArtefatoOrdemDeFornecimento implements IArtefatoOrdemDeFornecimento {
@@ -15,6 +17,7 @@ export class ArtefatoOrdemDeFornecimento implements IArtefatoOrdemDeFornecimento
     public estado?: EstadoArtefato,
     public createdDate?: Moment,
     public artefatoId?: number,
-    public ordemDeFornecimentoId?: number
+    public ordemDeFornecimentoId?: number,
+    public artefato?: Artefato
   ) {}
 }

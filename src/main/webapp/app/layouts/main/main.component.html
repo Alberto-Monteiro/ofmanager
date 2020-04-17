@@ -4,10 +4,18 @@
     <router-outlet name="navbar"></router-outlet>
 </div>
 
-<div class="container-fluid">
+<div class="container-fluid" *ngIf="router.url !== '/'">
     <div class="card jh-card">
-        <router-outlet></router-outlet>
+        <ng-container *ngTemplateOutlet="template"></ng-container>
     </div>
 
     <of-footer></of-footer>
 </div>
+
+<div *ngIf="router.url === '/'">
+    <ng-container *ngTemplateOutlet="template"></ng-container>
+</div>
+
+<ng-template #template>
+    <router-outlet></router-outlet>
+</ng-template>
