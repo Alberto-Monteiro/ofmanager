@@ -1,7 +1,16 @@
 /* ==========================================================================
 Main page styles
 ========================================================================== */
-.img-home {
-  background: url('../../content/images/stefanini/empresas-do-grupo.jpg') fixed center;
-  height: 880px;
+.ofmanager-home {
+  position: fixed;
+  padding: 0;
+  margin: 0;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('../../content/images/stefanini/empresas-do-grupo.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  z-index: -1;
 }
