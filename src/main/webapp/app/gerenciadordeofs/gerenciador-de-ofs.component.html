@@ -74,7 +74,11 @@
             </thead>
             <tbody>
             <tr *ngFor="let servicoOf of ordemDeFornecimentos ;trackBy: trackId">
-                <td>{{servicoOf.numero}}</td>
+                <td>
+                    <a target="_blank" href="https://genti.intranet.bb.com.br/ccm/web/projects/Fabricas%20de%20Software#action=com.ibm.team.workitem.viewWorkItem&id={{servicoOf.numero}}" >
+                        {{servicoOf.numero}}
+                    </a>
+                </td>
                 <td *ofHasAnyAuthority="['ROLE_ADMIN', 'ROLE_GESTOR_OF']">{{servicoOf!.donoDaOfFirstName!}}</td>
                 <td>{{servicoOf!.gestorDaOfFirstName!}}</td>
                 <td>{{servicoOf.createdDate | date:'dd/MM/yy HH:mm'}}</td>
