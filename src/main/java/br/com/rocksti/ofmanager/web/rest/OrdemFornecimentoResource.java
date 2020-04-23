@@ -1,6 +1,5 @@
 package br.com.rocksti.ofmanager.web.rest;
 
-import br.com.rocksti.ofmanager.domain.ArtefatoOrdemDeFornecimento;
 import br.com.rocksti.ofmanager.filtropesquisa.FiltroPesquisaServicoOf;
 import br.com.rocksti.ofmanager.service.OrdemFornecimentoService;
 import br.com.rocksti.ofmanager.service.dto.*;
@@ -18,9 +17,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 import java.util.Optional;
 
@@ -84,16 +81,14 @@ public class OrdemFornecimentoResource {
     }
 
     @PutMapping("/gerenciador_de_ofs/updateIsTestArquivo")
-    public ResponseEntity<ArtefatoDTO> updateIsTestArquivo(@Valid @RequestBody ArtefatoDTO artefatoDTO) {
+    public ResponseEntity<ArtefatoDTO> updateIsTestArquivo(@Valid @RequestBody ArtefatoDTO artefatoDTO, Long ordemDeFornecimentoId) {
         if (artefatoDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
 
-        ArtefatoDTO result = ordemFornecimentoService.updateIsTestArquivo(artefatoDTO);
-
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, artefatoDTO.getId().toString()))
-            .body(result);
+            .body(ordemFornecimentoService.updateIsTestArquivo(artefatoDTO, ordemDeFornecimentoId));
     }
 
     @PutMapping("/gerenciador_de_ofs/updateComplexidade")

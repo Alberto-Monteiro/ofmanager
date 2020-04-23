@@ -34,6 +34,7 @@ import javax.validation.Valid;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
@@ -189,6 +190,7 @@ public class OrdemFornecimentoService {
 
         prepararArquivosDaOf(ordemDeFornecimento, listaCaminhoDosArquivos, listaArquivosQueExistem, listaArquivosNovos);
 
+        ordemDeFornecimento.get().setLastModifiedDate(Instant.now());
         ordemDeFornecimentoRepository.save(ordemDeFornecimento.get());
 
         return findOneOrdemFornecimento(ordemDeFornecimento.get().getId()).orElseGet(OrdemFornecimentoDTO::new);
@@ -249,7 +251,9 @@ public class OrdemFornecimentoService {
             });
     }
 
-    public ArtefatoDTO updateIsTestArquivo(ArtefatoDTO artefatoDTO) {
+    public ArtefatoDTO updateIsTestArquivo(ArtefatoDTO artefatoDTO, Long ordemDeFornecimentoId) {
+        validarOfPertencenteDeUsuario(ordemDeFornecimentoId);
+
         AtomicReference<Artefato> artefatoReference = new AtomicReference<>();
 
         artefatoRepository.findById(artefatoDTO.getId()).ifPresent(artefato -> {
@@ -257,6 +261,11 @@ public class OrdemFornecimentoService {
             artefato.setArtefatoDeTest(artefatoDTO.isArtefatoDeTest());
             artefatoRepository.save(artefato);
             artefatoReference.set(artefato);
+
+            ordemDeFornecimentoRepository.findById(ordemDeFornecimentoId).ifPresent(ordemDeFornecimento -> {
+                ordemDeFornecimento.setLastModifiedDate(Instant.now());
+                ordemDeFornecimentoRepository.save(ordemDeFornecimento);
+            });
         });
 
         return artefatoMapper.toDto(artefatoReference.get());
@@ -271,6 +280,11 @@ public class OrdemFornecimentoService {
             arquivo.setComplexidade(artefatoDTO.getComplexidade());
             artefatoRepository.save(arquivo);
             artefatoReference.set(arquivo);
+
+            ordemDeFornecimentoRepository.findById(ordemDeFornecimentoId).ifPresent(ordemDeFornecimento -> {
+                ordemDeFornecimento.setLastModifiedDate(Instant.now());
+                ordemDeFornecimentoRepository.save(ordemDeFornecimento);
+            });
         });
 
         //return findOneOrdemFornecimento(ordemDeFornecimentoId).orElseGet(OrdemFornecimentoDTO::new);
@@ -281,6 +295,7 @@ public class OrdemFornecimentoService {
         AtomicReference<ArtefatoOrdemDeFornecimento> artefatoOrdemDeFornecimentoReference = new AtomicReference<>();
 
         artefatoOrdemDeFornecimentoRepository.findById(artefatoOrdemDeFornecimentoDTO.getId()).ifPresent(artefatoOrdemDeFornecimento -> {
+            artefatoOrdemDeFornecimento.getOrdemDeFornecimento().setLastModifiedDate(Instant.now());
             artefatoOrdemDeFornecimento.setEstado(artefatoOrdemDeFornecimentoDTO.getEstado());
             artefatoOrdemDeFornecimentoRepository.save(artefatoOrdemDeFornecimento);
             artefatoOrdemDeFornecimentoReference.set(artefatoOrdemDeFornecimento);
@@ -297,6 +312,7 @@ public class OrdemFornecimentoService {
 
         return ordemDeFornecimento.flatMap(ordemDeFornecimento1 -> {
             ordemDeFornecimento1.removeArtefatoOrdemDeFornecimento(artefatoOrdemDeFornecimento.get());
+            ordemDeFornecimento1.setLastModifiedDate(Instant.now());
             ordemDeFornecimentoRepository.save(ordemDeFornecimento1);
             return findOneOrdemFornecimento(ordemDeFornecimento1.getId());
         }).get();

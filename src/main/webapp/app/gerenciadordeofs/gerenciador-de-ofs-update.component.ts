@@ -108,7 +108,7 @@ export class GerenciadorDeOfsUpdateComponent implements OnInit {
   isArquivoTest(artefato: IArtefato): void {
     artefato.artefatoDeTest = !artefato.artefatoDeTest;
     artefato.complexidade = undefined;
-    this.gerenciadorDeOfsService.updateIsTestArquivo(artefato).subscribe(
+    this.gerenciadorDeOfsService.updateIsTestArquivo(this.ordemFornecimento!.ordemDeFornecimento!, artefato).subscribe(
       () => {},
       () => {
         artefato.artefatoDeTest = !artefato.artefatoDeTest;

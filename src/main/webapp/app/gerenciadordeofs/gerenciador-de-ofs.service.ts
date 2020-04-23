@@ -45,19 +45,24 @@ export class GerenciadorDeOfsService {
     return this.http.put<IOrdemFornecimento>(`${this.resourceUrl}/processar`, ordemFornecimento, { observe: 'response' });
   }
 
-  updateIsTestArquivo(arquivo: IArtefato): Observable<HttpResponse<IArtefato>> {
-    return this.http.put<IArtefato>(`${this.resourceUrl}/updateIsTestArquivo`, arquivo, { observe: 'response' });
-  }
-
-  updateComplexidade(servicoOf: IOrdemDeFornecimento, arquivo: IArtefato): Observable<EntityResponseType> {
-    return this.http.put<IOrdemFornecimento>(`${this.resourceUrl}/updateComplexidade`, arquivo, {
-      params: new HttpParams().append('servicoOfId', String(servicoOf.id)),
+  updateIsTestArquivo(ordemDeFornecimento: IOrdemDeFornecimento, artefato: IArtefato): Observable<HttpResponse<IArtefato>> {
+    return this.http.put<IArtefato>(`${this.resourceUrl}/updateIsTestArquivo`, artefato, {
+      params: new HttpParams().append('ordemDeFornecimentoId', String(ordemDeFornecimento.id)),
       observe: 'response'
     });
   }
 
-  updateEstadoArquivo(arquivoDaOf: IArtefatoOrdemDeFornecimento): Observable<HttpResponse<IArtefatoOrdemDeFornecimento>> {
-    return this.http.put<IArtefatoOrdemDeFornecimento>(`${this.resourceUrl}/updateEstadoArquivo`, arquivoDaOf, { observe: 'response' });
+  updateComplexidade(ordemDeFornecimento: IOrdemDeFornecimento, artefato: IArtefato): Observable<EntityResponseType> {
+    return this.http.put<IOrdemFornecimento>(`${this.resourceUrl}/updateComplexidade`, artefato, {
+      params: new HttpParams().append('ordemDeFornecimentoId', String(ordemDeFornecimento.id)),
+      observe: 'response'
+    });
+  }
+
+  updateEstadoArquivo(artefatoOrdemDeFornecimento: IArtefatoOrdemDeFornecimento): Observable<HttpResponse<IArtefatoOrdemDeFornecimento>> {
+    return this.http.put<IArtefatoOrdemDeFornecimento>(`${this.resourceUrl}/updateEstadoArquivo`, artefatoOrdemDeFornecimento, {
+      observe: 'response'
+    });
   }
 
   deletarArquivoDaOf(arquivoDaOf: IArtefatoOrdemDeFornecimento): Observable<EntityResponseType> {
