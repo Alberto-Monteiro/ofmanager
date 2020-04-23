@@ -253,6 +253,7 @@ public class OrdemFornecimentoService {
         AtomicReference<Artefato> artefatoReference = new AtomicReference<>();
 
         artefatoRepository.findById(artefatoDTO.getId()).ifPresent(artefato -> {
+            artefato.setComplexidade(null);
             artefato.setArtefatoDeTest(artefatoDTO.isArtefatoDeTest());
             artefatoRepository.save(artefato);
             artefatoReference.set(artefato);

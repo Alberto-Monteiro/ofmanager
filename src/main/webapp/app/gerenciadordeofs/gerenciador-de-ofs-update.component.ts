@@ -8,10 +8,14 @@ import { IUser } from 'app/core/user/user.model';
 import { IOrdemDeFornecimento } from 'app/shared/model/ordem-de-fornecimento.model';
 import { Artefato, IArtefato } from 'app/shared/model/artefato.model';
 import { ArtefatoOrdemDeFornecimento, IArtefatoOrdemDeFornecimento } from 'app/shared/model/artefato-ordem-de-fornecimento.model';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { LinhaArtefatoDeleteDialogComponent } from 'app/gerenciadordeofs/linha-artefato-delete-dialog.component';
+import { JhiEventManager } from 'ng-jhipster';
 
 @Component({
   selector: 'of-gerenciador-de-ofs-update',
-  templateUrl: './gerenciador-de-ofs-update.component.html'
+  templateUrl: './gerenciador-de-ofs-update.component.html',
+  styleUrls: ['./gerenciador-de-ofs.scss']
 })
 export class GerenciadorDeOfsUpdateComponent implements OnInit {
   isSaving = false;
@@ -27,7 +31,9 @@ export class GerenciadorDeOfsUpdateComponent implements OnInit {
   constructor(
     protected gerenciadorDeOfsService: GerenciadorDeOfsService,
     protected activatedRoute: ActivatedRoute,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    protected modalService: NgbModal,
+    protected eventManager: JhiEventManager
   ) {}
 
   ngOnInit(): void {
@@ -101,6 +107,7 @@ export class GerenciadorDeOfsUpdateComponent implements OnInit {
 
   isArquivoTest(artefato: IArtefato): void {
     artefato.artefatoDeTest = !artefato.artefatoDeTest;
+    artefato.complexidade = undefined;
     this.gerenciadorDeOfsService.updateIsTestArquivo(artefato).subscribe(
       () => {},
       () => {
@@ -132,9 +139,15 @@ export class GerenciadorDeOfsUpdateComponent implements OnInit {
   }
 
   deletarArquivoDaOf(artefatoOrdemDeFornecimento: IArtefatoOrdemDeFornecimento): void {
-    this.gerenciadorDeOfsService.deletarArquivoDaOf(artefatoOrdemDeFornecimento).subscribe(response => {
-      this.ordemFornecimento = response.body!;
-      this.updateForm(this.ordemFornecimento);
+    const modalRef = this.modalService.open(LinhaArtefatoDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
+    modalRef.componentInstance.artefato = this.getNomeDoArquivo(artefatoOrdemDeFornecimento.artefato!.localDoArtefato!);
+
+    const subscription = this.eventManager.subscribe('linhaArtefatoDelete', () => {
+      this.gerenciadorDeOfsService.deletarArquivoDaOf(artefatoOrdemDeFornecimento).subscribe(response => {
+        this.ordemFornecimento = response.body!;
+        this.updateForm(this.ordemFornecimento);
+        this.eventManager.destroy(subscription);
+      });
     });
   }
 
@@ -162,5 +175,58 @@ export class GerenciadorDeOfsUpdateComponent implements OnInit {
       .listaDosArquivos!.split(value1)
       .join(value2);
     this.editForm.patchValue({ listaDeArquivo: listaDosArquivos });
+  }
+
+  complexidadeIsVisivel(artefato: IArtefato, complexidade: string): boolean {
+    if (artefato.artefatoDeTest) return false;
+
+    switch (complexidade) {
+      case 'MUITO_BAIXA': {
+        return artefato.extensao!.includes('java');
+      }
+      case 'BAIXA': {
+        return (
+          artefato.extensao!.includes('css') ||
+          artefato.extensao!.includes('scss') ||
+          artefato.extensao!.includes('ts') ||
+          artefato.extensao!.includes('js') ||
+          artefato.extensao!.includes('json') ||
+          artefato.extensao!.includes('xml') ||
+          artefato.extensao!.includes('yaml') ||
+          artefato.extensao!.includes('yml') ||
+          artefato.extensao!.includes('java')
+        );
+      }
+      case 'MEDIA': {
+        return (
+          artefato.extensao!.includes('css') ||
+          artefato.extensao!.includes('scss') ||
+          artefato.extensao!.includes('ts') ||
+          artefato.extensao!.includes('js') ||
+          artefato.extensao!.includes('json') ||
+          artefato.extensao!.includes('xml') ||
+          artefato.extensao!.includes('yaml') ||
+          artefato.extensao!.includes('yml') ||
+          artefato.extensao!.includes('java')
+        );
+      }
+      case 'ALTA': {
+        return (
+          artefato.extensao!.includes('css') ||
+          artefato.extensao!.includes('scss') ||
+          artefato.extensao!.includes('ts') ||
+          artefato.extensao!.includes('js') ||
+          artefato.extensao!.includes('json') ||
+          artefato.extensao!.includes('xml') ||
+          artefato.extensao!.includes('yaml') ||
+          artefato.extensao!.includes('yml') ||
+          artefato.extensao!.includes('java')
+        );
+      }
+      case 'MUITO_ALTA': {
+        return artefato.extensao!.includes('java');
+      }
+    }
+    return false;
   }
 }
