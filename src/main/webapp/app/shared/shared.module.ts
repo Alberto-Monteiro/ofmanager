@@ -12,6 +12,7 @@ import { MaterialModule } from 'app/shared/material-module';
 import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client';
 import { LoadingBarModule } from '@ngx-loading-bar/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { ClipboardModule } from '@angular/cdk/clipboard';
 
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
 
@@ -37,7 +38,8 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
     LoadingBarHttpClientModule,
     LoadingBarModule,
     FlexLayoutModule,
-    NgxMaskModule
+    NgxMaskModule,
+    ClipboardModule
   ]
 })
 export class OfmanagerSharedModule {}

@@ -101,9 +101,12 @@
                         <li *ngFor="let artefatoOrdemDeFornecimento of mapArtefatoOrdemDeFornecimento.value" class="list-group-item">
                             <div>
                                 <div class="row">
-                                    <div class="p-3 col-6 align-self-center text-left d-inline"
+                                    <div class="p-0 col-6 align-self-center text-left d-inline btn"
+                                         ngbTooltip="O nome do arquivo foi copiado." triggers="click:blur" placement="right"
+                                         [cdkCopyToClipboard]="getNomeDoArquivo(artefatoOrdemDeFornecimento.artefato.localDoArtefato)"
                                          [ngClass]="{'estado-criando': artefatoOrdemDeFornecimento.estado === 'CRIANDO', 'estado-alterando': artefatoOrdemDeFornecimento.estado === 'ALTERANDO'}">
-                                        <h4 class="mb-0 btn-outline-dark" autoClose="false" container="body" placement="top" ngbTooltip="{{artefatoOrdemDeFornecimento.artefato.localDoArtefato}}">
+                                        <h4 class="m-0 p-3 btn-outline-dark"
+                                            autoClose="false" container="body" placement="top" ngbTooltip="{{artefatoOrdemDeFornecimento.artefato.localDoArtefato}}">
                                             {{getNomeDoArquivo(artefatoOrdemDeFornecimento.artefato.localDoArtefato)}}
                                         </h4>
                                     </div>
