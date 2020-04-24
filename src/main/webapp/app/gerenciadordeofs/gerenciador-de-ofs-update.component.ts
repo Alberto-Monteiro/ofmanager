@@ -25,7 +25,8 @@ export class GerenciadorDeOfsUpdateComponent implements OnInit {
   editForm = this.fb.group({
     numero: [null, [Validators.required, Validators.max(999999999), Validators.min(100)]],
     usuarioGestor: [null, [Validators.required]],
-    listaDeArquivo: [null, [Validators.required]]
+    listaDeArquivo: [null, [Validators.required]],
+    ustibb: []
   });
 
   constructor(
@@ -53,7 +54,8 @@ export class GerenciadorDeOfsUpdateComponent implements OnInit {
           value.id === (ordemFornecimento.ordemDeFornecimento!.gestorDaOf! ? ordemFornecimento.ordemDeFornecimento!.gestorDaOf!.id : 0)
       )[0],
       numero: ordemFornecimento.ordemDeFornecimento!.numero,
-      listaDeArquivo: ordemFornecimento.listaDosArquivos
+      listaDeArquivo: ordemFornecimento.listaDosArquivos,
+      ustibb: ordemFornecimento.ordemDeFornecimento!.valorUstibb
     });
   }
 
@@ -63,7 +65,8 @@ export class GerenciadorDeOfsUpdateComponent implements OnInit {
       ordemDeFornecimento: {
         id: this.ordemFornecimento!.ordemDeFornecimento!.id,
         gestorDaOf: this.editForm.get(['usuarioGestor'])!.value,
-        numero: this.editForm.get(['numero'])!.value
+        numero: this.editForm.get(['numero'])!.value,
+        valorUstibb: this.editForm.get(['ustibb'])!.value
       }
     };
   }
@@ -228,5 +231,9 @@ export class GerenciadorDeOfsUpdateComponent implements OnInit {
       }
     }
     return false;
+  }
+
+  salvarValorUstibb(valorUstibb?: string, ordemDeFornecimentoId?: number): void {
+    this.gerenciadorDeOfsService.salvarValorUstibb(Number(valorUstibb), ordemDeFornecimentoId).subscribe();
   }
 }

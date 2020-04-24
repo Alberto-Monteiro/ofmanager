@@ -18,6 +18,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -155,5 +156,18 @@ public class OrdemFornecimentoResource {
         } catch (IOException ex) {
             throw new RuntimeException("IOError writing file to output stream");
         }
+    }
+
+    @PutMapping("/gerenciador_de_ofs/updateValorUstibb")
+    public ResponseEntity<OrdemFornecimentoDTO> updateValorUstibb(@RequestBody BigDecimal valorUstibb, Long ordemDeFornecimentoId) {
+        if (ordemDeFornecimentoId == null) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+
+        OrdemFornecimentoDTO result = ordemFornecimentoService.updateValorUstibb(valorUstibb, ordemDeFornecimentoId);
+
+        return ResponseEntity.ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, ordemDeFornecimentoId.toString()))
+            .body(result);
     }
 }

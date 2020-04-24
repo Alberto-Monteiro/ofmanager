@@ -37,6 +37,11 @@
                             </mat-select>
                         </mat-form-field>
                     </span>
+
+                    <mat-form-field class="no-ng-invalid" appearance="outline">
+                        <mat-label>Valor da USTIBB</mat-label>
+                        <input #valorUstibb (change)="salvarValorUstibb(valorUstibb.value, ordemFornecimento!.ordemDeFornecimento!.id)" class="no-ng-invalid" matInput placeholder="Número da USTIBB" type="number" formControlName="ustibb">
+                    </mat-form-field>
                 </div>
 
                 <div class="form-group">

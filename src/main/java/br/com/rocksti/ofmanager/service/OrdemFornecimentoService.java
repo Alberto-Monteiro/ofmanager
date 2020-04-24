@@ -34,6 +34,7 @@ import javax.validation.Valid;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
@@ -202,6 +203,7 @@ public class OrdemFornecimentoService {
             ordemDeFornecimento.get().setDonoDaOf(userService.getUserWithAuthorities().orElse(null));
             ordemDeFornecimento.get().setNumero(ordemFornecimentoDTO.getOrdemDeFornecimento().getNumero());
         }
+        ordemDeFornecimento.get().setValorUstibb(ordemFornecimentoDTO.getOrdemDeFornecimento().getValorUstibb());
         ordemDeFornecimento.get().setGestorDaOf(ordemFornecimentoDTO.getOrdemDeFornecimento().getGestorDaOf());
     }
 
@@ -431,5 +433,20 @@ public class OrdemFornecimentoService {
         });
 
         return estruturaDoArquivoList;
+    }
+
+    public OrdemFornecimentoDTO updateValorUstibb(BigDecimal valorUstibb, Long ordemDeFornecimentoId) {
+        validarOfPertencenteDeUsuario(ordemDeFornecimentoId);
+
+        AtomicReference<OrdemFornecimentoDTO> ordemFornecimentoDTOAtomicReference = new AtomicReference<>();
+
+        ordemDeFornecimentoRepository.findById(ordemDeFornecimentoId).ifPresent(ordemDeFornecimento -> {
+            ordemDeFornecimento.setValorUstibb(valorUstibb);
+            ordemDeFornecimentoRepository.save(ordemDeFornecimento);
+
+            findOneOrdemFornecimento(ordemDeFornecimentoId).ifPresent(ordemFornecimentoDTOAtomicReference::set);
+        });
+
+        return ordemFornecimentoDTOAtomicReference.get();
     }
 }

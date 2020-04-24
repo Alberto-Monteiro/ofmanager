@@ -76,4 +76,11 @@ export class GerenciadorDeOfsService {
   downloadTxt(idServicoOf?: number): Observable<any> {
     return this.http.get(`${this.resourceUrl}/downloadTxt/${idServicoOf}`, { responseType: 'blob' });
   }
+
+  salvarValorUstibb(valorUstibb?: number, ordemDeFornecimentoId?: number): Observable<EntityResponseType> {
+    return this.http.put<IOrdemFornecimento>(`${this.resourceUrl}/updateValorUstibb`, valorUstibb, {
+      params: new HttpParams().append('ordemDeFornecimentoId', String(ordemDeFornecimentoId)),
+      observe: 'response'
+    });
+  }
 }
