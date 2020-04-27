@@ -1,9 +1,6 @@
 package br.com.rocksti.ofmanager.service;
 
-import br.com.rocksti.ofmanager.domain.Artefato;
-import br.com.rocksti.ofmanager.domain.ArtefatoOrdemDeFornecimento;
-import br.com.rocksti.ofmanager.domain.OrdemDeFornecimento;
-import br.com.rocksti.ofmanager.domain.User;
+import br.com.rocksti.ofmanager.domain.*;
 import br.com.rocksti.ofmanager.domain.enumeration.ComplexidadeArtefato;
 import br.com.rocksti.ofmanager.domain.enumeration.EstadoArtefato;
 import br.com.rocksti.ofmanager.domain.enumeration.EstadoOrdemDeFornecimento;
@@ -15,8 +12,6 @@ import br.com.rocksti.ofmanager.repository.ArtefatoRepository;
 import br.com.rocksti.ofmanager.repository.OrdemDeFornecimentoRepository;
 import br.com.rocksti.ofmanager.security.AuthoritiesConstants;
 import br.com.rocksti.ofmanager.service.dto.*;
-import br.com.rocksti.ofmanager.service.mapper.ArtefatoMapper;
-import br.com.rocksti.ofmanager.service.mapper.ArtefatoOrdemDeFornecimentoMapper;
 import br.com.rocksti.ofmanager.service.mapper.OrdemDeFornecimentoMapper;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
@@ -54,50 +49,49 @@ public class OrdemFornecimentoService {
 
     private final ArtefatoRepository artefatoRepository;
 
-    private final ArtefatoMapper artefatoMapper;
-
     private final ArtefatoOrdemDeFornecimentoRepository artefatoOrdemDeFornecimentoRepository;
-
-    private final ArtefatoOrdemDeFornecimentoMapper artefatoOrdemDeFornecimentoMapper;
 
     public OrdemFornecimentoService(OrdemDeFornecimentoRepository ordemDeFornecimentoRepository,
                                     OrdemDeFornecimentoMapper ordemDeFornecimentoMapper,
                                     UserService userService,
                                     ArtefatoRepository artefatoRepository,
-                                    ArtefatoMapper artefatoMapper,
-                                    ArtefatoOrdemDeFornecimentoRepository artefatoOrdemDeFornecimentoRepository,
-                                    ArtefatoOrdemDeFornecimentoMapper artefatoOrdemDeFornecimentoMapper) {
+                                    ArtefatoOrdemDeFornecimentoRepository artefatoOrdemDeFornecimentoRepository) {
         this.ordemDeFornecimentoRepository = ordemDeFornecimentoRepository;
         this.ordemDeFornecimentoMapper = ordemDeFornecimentoMapper;
         this.userService = userService;
         this.artefatoRepository = artefatoRepository;
-        this.artefatoMapper = artefatoMapper;
         this.artefatoOrdemDeFornecimentoRepository = artefatoOrdemDeFornecimentoRepository;
-        this.artefatoOrdemDeFornecimentoMapper = artefatoOrdemDeFornecimentoMapper;
     }
 
     private void validarOfPertencenteDeUsuario(Long idOrdemDeFornecimento) {
         if (idOrdemDeFornecimento != null) {
             userService.getUserWithAuthorities()
-                .filter(user -> user.getAuthorities().stream().noneMatch(authority -> authority.getName().equals(AuthoritiesConstants.ADMIN)
-                    || authority.getName().equals(AuthoritiesConstants.GESTOR_OF)))
-                .ifPresent(user -> ordemDeFornecimentoRepository.findById(idOrdemDeFornecimento).ifPresent(ordemDeFornecimento -> {
-                    if (!ordemDeFornecimento.getDonoDaOf().getId().equals(user.getId())) {
-                        throw new RuntimeException("Of pertencente a outro usuário");
-                    }
-                }));
+                .filter(user -> user.getAuthorities()
+                    .stream()
+                    .map(Authority::getName)
+                    .noneMatch(name -> Arrays.asList(AuthoritiesConstants.ADMIN, AuthoritiesConstants.GESTOR_OF).contains(name)))
+                .ifPresent(user -> ordemDeFornecimentoRepository.findById(idOrdemDeFornecimento).
+                    ifPresent(ordemDeFornecimento -> {
+                        if (!ordemDeFornecimento.getDonoDaOf().getId().equals(user.getId())) {
+                            throw new RuntimeException("Of pertencente a outro usuário");
+                        }
+                    }));
         }
     }
 
     @Transactional(readOnly = true)
     public Page<OrdemDeFornecimentoDTO> findAllByUser(Pageable pageable, FiltroPesquisaServicoOf filtroPesquisa) {
+        Long idUsuarioGestor = Optional.ofNullable(filtroPesquisa.getUsuarioGestor()).map(UserDTO::getId).orElse(null);
+
         return userService.getUserWithAuthorities()
             .filter(user -> user.getAuthorities()
                 .stream()
-                .noneMatch(authority -> authority.getName().equals(AuthoritiesConstants.ADMIN)
-                    || authority.getName().equals(AuthoritiesConstants.GESTOR_OF)))
-            .map(user -> ordemDeFornecimentoRepository.findAllByDonoDaOf_IdEqualsAndNumeroEquals(pageable, user.getId(), filtroPesquisa.getNumeroOF()).map(ordemDeFornecimentoMapper::toDto))
-            .orElse(ordemDeFornecimentoRepository.findAllByNumeroEqualsAndGestorDaOf_Id(pageable, filtroPesquisa.getNumeroOF(), Optional.ofNullable(filtroPesquisa.getUsuarioGestor()).map(UserDTO::getId).orElse(null)).map(ordemDeFornecimentoMapper::toDto));
+                .map(Authority::getName)
+                .noneMatch(name -> Arrays.asList(AuthoritiesConstants.ADMIN, AuthoritiesConstants.GESTOR_OF).contains(name)))
+            .map(user -> ordemDeFornecimentoRepository.findAllByDonoDaOf_IdEqualsAndNumeroEquals(pageable, user.getId(), filtroPesquisa.getNumeroOF())
+                .map(ordemDeFornecimentoMapper::toDto))
+            .orElse(ordemDeFornecimentoRepository.findAllByNumeroEqualsAndGestorDaOf_Id(pageable, filtroPesquisa.getNumeroOF(), idUsuarioGestor)
+                .map(ordemDeFornecimentoMapper::toDto));
     }
 
     @Transactional(readOnly = true)
@@ -120,16 +114,17 @@ public class OrdemFornecimentoService {
             });
     }
 
-    private User limpaDadosUsuario(User donoDaOf) {
-        return Optional.of(donoDaOf).map(user -> {
-            User user1 = new User();
-            user1.setId(user.getId());
-            user1.setFirstName(user.getFirstName());
-            user1.setLogin(user.getLogin());
-            return user1;
+    private User limpaDadosUsuario(User user) {
+        return Optional.of(user).map(user1 -> {
+            User userReturn = new User();
+            userReturn.setId(user1.getId());
+            userReturn.setFirstName(user1.getFirstName());
+            userReturn.setLogin(user1.getLogin());
+            return userReturn;
         }).get();
     }
 
+    @Transactional(readOnly = true)
     public List<UserDTO> getUsuariosGestor() {
         return userService.getUsersByAuthorities(AuthoritiesConstants.GESTOR_OF)
             .stream()
@@ -148,30 +143,30 @@ public class OrdemFornecimentoService {
 
         AtomicReference<OrdemDeFornecimentoDTO> ordemDeFornecimentoReference = new AtomicReference<>();
 
-        userService.getUserWithAuthorities(ordemFornecimentoDTO.getOrdemDeFornecimento().getGestorDaOf().getId()).ifPresent(user -> {
-            ordemDeFornecimentoRepository.findById(ordemFornecimentoDTO.getOrdemDeFornecimento().getId()).ifPresent(ordemDeFornecimento -> {
-                ordemDeFornecimento.setGestorDaOf(user);
-                ordemDeFornecimentoReference.set(ordemDeFornecimentoMapper.toDto(ordemDeFornecimentoRepository.saveAndFlush(ordemDeFornecimento)));
-            });
-        });
+        userService.getUserWithAuthorities(ordemFornecimentoDTO.getOrdemDeFornecimento().getGestorDaOf().getId())
+            .ifPresent(user ->
+                ordemDeFornecimentoRepository.findById(ordemFornecimentoDTO.getOrdemDeFornecimento().getId())
+                    .ifPresent(ordemDeFornecimento -> {
+                        ordemDeFornecimento.setGestorDaOf(user);
+                        OrdemDeFornecimento ordemDeFornecimento1 = ordemDeFornecimentoRepository.save(ordemDeFornecimento);
+                        OrdemDeFornecimentoDTO ordemDeFornecimentoDTO = ordemDeFornecimentoMapper.toDto(ordemDeFornecimento1);
+                        ordemDeFornecimentoReference.set(ordemDeFornecimentoDTO);
+                    })
+            );
 
         return findOneOrdemFornecimento(ordemFornecimentoDTO.getOrdemDeFornecimento().getId()).orElseGet(OrdemFornecimentoDTO::new);
     }
 
     public OrdemDeFornecimentoDTO updateEstadoDaOf(OrdemDeFornecimentoDTO ordemDeFornecimentoDTO) {
-        userService.getUserWithAuthorities()
-            .filter(user -> user.getAuthorities().stream().noneMatch(authority -> authority.getName().equals(AuthoritiesConstants.ADMIN)
-                || authority.getName().equals(AuthoritiesConstants.GESTOR_OF)))
-            .ifPresent(user -> {
-                throw new RuntimeException("O estado da OF só pode ser editado pelo gestor");
-            });
-
         AtomicReference<OrdemDeFornecimentoDTO> ordemDeFornecimentoReference = new AtomicReference<>();
 
-        ordemDeFornecimentoRepository.findById(ordemDeFornecimentoDTO.getId()).ifPresent(ordemDeFornecimento -> {
-            ordemDeFornecimento.setEstado(ordemDeFornecimentoDTO.getEstado());
-            ordemDeFornecimentoReference.set(ordemDeFornecimentoMapper.toDto(ordemDeFornecimentoRepository.saveAndFlush(ordemDeFornecimento)));
-        });
+        ordemDeFornecimentoRepository.findById(ordemDeFornecimentoDTO.getId())
+            .ifPresent(ordemDeFornecimento -> {
+                ordemDeFornecimento.setEstado(ordemDeFornecimentoDTO.getEstado());
+                OrdemDeFornecimento ordemDeFornecimento1 = ordemDeFornecimentoRepository.save(ordemDeFornecimento);
+                OrdemDeFornecimentoDTO ordemDeFornecimentoDTO1 = ordemDeFornecimentoMapper.toDto(ordemDeFornecimento1);
+                ordemDeFornecimentoReference.set(ordemDeFornecimentoDTO1);
+            });
 
         return ordemDeFornecimentoReference.get();
     }
@@ -179,145 +174,148 @@ public class OrdemFornecimentoService {
     public OrdemFornecimentoDTO processar(OrdemFornecimentoDTO ordemFornecimentoDTO) {
         validarOfPertencenteDeUsuario(ordemFornecimentoDTO.getOrdemDeFornecimento().getId());
 
-        final AtomicReference<OrdemDeFornecimento> ordemDeFornecimento = new AtomicReference<>(ordemDeFornecimentoRepository.findById(Optional.ofNullable(ordemFornecimentoDTO.getOrdemDeFornecimento().getId()).orElse(0L)).orElseGet(OrdemDeFornecimento::new));
+        Long ordemDeFornecimentoId = Optional.ofNullable(ordemFornecimentoDTO.getOrdemDeFornecimento().getId()).orElse(0L);
+        OrdemDeFornecimento ordemDeFornecimento = ordemDeFornecimentoRepository.findById(ordemDeFornecimentoId).orElseGet(OrdemDeFornecimento::new);
+        final AtomicReference<OrdemDeFornecimento> ordemDeFornecimentoAtomicReference = new AtomicReference<>(ordemDeFornecimento);
 
-        preparaServicoOf(ordemFornecimentoDTO, ordemDeFornecimento);
+        preparaOrdemDeFornecimento(ordemFornecimentoDTO, ordemDeFornecimentoAtomicReference.get());
 
-        List<String> listaCaminhoDosArquivos = getListaCaminhoDosArquivos(ordemFornecimentoDTO);
+        List<String> listaLocalArtefatosTextArea = getListaLocalArtefatosTextArea(ordemFornecimentoDTO);
 
-        List<Artefato> listaArquivosQueExistem = artefatoRepository.findByLocalDoArtefatoIn(listaCaminhoDosArquivos);
+        List<ArtefatoOrdemDeFornecimento> listaArtefatosDaOrdemDeFornecimento = ordemDeFornecimentoAtomicReference.get().getArtefatoOrdemDeFornecimentos();
 
-        List<Artefato> listaArquivosNovos = getListaArquivosNovos(listaCaminhoDosArquivos, listaArquivosQueExistem);
+        removerArtefatosDaLista(ordemDeFornecimento, listaLocalArtefatosTextArea, listaArtefatosDaOrdemDeFornecimento);
 
-        prepararArquivosDaOf(ordemDeFornecimento, listaCaminhoDosArquivos, listaArquivosQueExistem, listaArquivosNovos);
+        adicionarArtefatosNaLista(ordemDeFornecimento, listaLocalArtefatosTextArea, listaArtefatosDaOrdemDeFornecimento);
 
-        ordemDeFornecimento.get().setLastModifiedDate(Instant.now());
-        ordemDeFornecimentoRepository.save(ordemDeFornecimento.get());
+        ordemDeFornecimentoAtomicReference.get().setLastModifiedDate(Instant.now());
+        ordemDeFornecimentoRepository.save(ordemDeFornecimentoAtomicReference.get());
 
-        return findOneOrdemFornecimento(ordemDeFornecimento.get().getId()).orElseGet(OrdemFornecimentoDTO::new);
+        return findOneOrdemFornecimento(ordemDeFornecimentoAtomicReference.get().getId()).orElseGet(OrdemFornecimentoDTO::new);
     }
 
-    private void preparaServicoOf(OrdemFornecimentoDTO ordemFornecimentoDTO, AtomicReference<OrdemDeFornecimento> ordemDeFornecimento) {
-        if (ordemDeFornecimento.get().getId() == null) {
-            ordemDeFornecimento.get().setEstado(EstadoOrdemDeFornecimento.NOVA);
-            ordemDeFornecimento.get().setDonoDaOf(userService.getUserWithAuthorities().orElse(null));
-            ordemDeFornecimento.get().setNumero(ordemFornecimentoDTO.getOrdemDeFornecimento().getNumero());
+    private void preparaOrdemDeFornecimento(OrdemFornecimentoDTO ordemFornecimentoDTO, OrdemDeFornecimento ordemDeFornecimento) {
+        if (ordemDeFornecimento.getId() == null) {
+            ordemDeFornecimento.setEstado(EstadoOrdemDeFornecimento.NOVA);
+            ordemDeFornecimento.setDonoDaOf(userService.getUserWithAuthorities().orElse(null));
+            ordemDeFornecimento.setNumero(ordemFornecimentoDTO.getOrdemDeFornecimento().getNumero());
         }
-        ordemDeFornecimento.get().setValorUstibb(ordemFornecimentoDTO.getOrdemDeFornecimento().getValorUstibb());
-        ordemDeFornecimento.get().setGestorDaOf(ordemFornecimentoDTO.getOrdemDeFornecimento().getGestorDaOf());
+        ordemDeFornecimento.setValorUstibb(ordemFornecimentoDTO.getOrdemDeFornecimento().getValorUstibb());
+        ordemDeFornecimento.setGestorDaOf(ordemFornecimentoDTO.getOrdemDeFornecimento().getGestorDaOf());
     }
 
-    private List<String> getListaCaminhoDosArquivos(OrdemFornecimentoDTO ordemFornecimentoDTO) {
+    private List<String> getListaLocalArtefatosTextArea(OrdemFornecimentoDTO ordemFornecimentoDTO) {
         return Arrays.stream(ordemFornecimentoDTO.getListaDosArquivos().split("\n"))
             .filter(s -> s.length() > 5)
             .map(s -> s = s.replace("\\", "/").replace("\"", "").replace("'", ""))
             .collect(Collectors.toList());
     }
 
-    private List<Artefato> getListaArquivosNovos(List<String> listaCaminhoDosArquivos, List<Artefato> listaArquivosQueExistem) {
-        return listaCaminhoDosArquivos
+    private void removerArtefatosDaLista(OrdemDeFornecimento ordemDeFornecimento, List<String> listaLocalArtefatosTextArea, List<ArtefatoOrdemDeFornecimento> listaArtefatosDaOrdemDeFornecimento) {
+        List<ArtefatoOrdemDeFornecimento> listaParaRemover = listaArtefatosDaOrdemDeFornecimento
             .stream()
-            .filter(caminhoDoArquivo -> !listaArquivosQueExistem.stream().map(Artefato::getLocalDoArtefato).collect(Collectors.toList()).contains(caminhoDoArquivo))
-            .map(localDoArtefato -> {
-                Artefato artefato = new Artefato();
-                artefato.setArtefatoDeTest(false);
-                artefato.setLocalDoArtefato(localDoArtefato);
-                artefato.setExtensao(FilenameUtils.getExtension(localDoArtefato).toLowerCase());
-                return artefato;
-            })
+            .filter(artefatoOrdemDeFornecimento -> !listaLocalArtefatosTextArea.contains(artefatoOrdemDeFornecimento.getArtefato().getLocalDoArtefato()))
             .collect(Collectors.toList());
+        listaParaRemover.forEach(ordemDeFornecimento::removeArtefatoOrdemDeFornecimento);
+        artefatoOrdemDeFornecimentoRepository.deleteAll(listaParaRemover);
     }
 
-    private void prepararArquivosDaOf(AtomicReference<OrdemDeFornecimento> ordemDeFornecimento, List<String> listaCaminhoDosArquivos, List<Artefato> listaArtefatosQueExistem, List<Artefato> listaArtefatosNovos) {
-        List<Artefato> listaArtefatosPreparados = listaCaminhoDosArquivos
+    private void adicionarArtefatosNaLista(OrdemDeFornecimento ordemDeFornecimento, List<String> listaLocalArtefatosTextArea, List<ArtefatoOrdemDeFornecimento> listaArtefatosDaOrdemDeFornecimento) {
+        List<ArtefatoOrdemDeFornecimento> listaParaAdicionar = listaLocalArtefatosTextArea
             .stream()
-            .map(s -> listaArtefatosQueExistem
-                .stream()
-                .filter(artefato -> artefato.getLocalDoArtefato().equals(s))
-                .findFirst()
-                .orElseGet(() -> listaArtefatosNovos
-                    .stream()
-                    .filter(artefato -> artefato.getLocalDoArtefato().equals(s))
-                    .findFirst()
-                    .get()))
-            .collect(Collectors.toList());
+            .filter(s -> !listaArtefatosDaOrdemDeFornecimento.stream().map(ArtefatoOrdemDeFornecimento::getArtefato).map(Artefato::getLocalDoArtefato).collect(Collectors.toList()).contains(s))
+            .map(localDoArtefato -> {
 
-        ordemDeFornecimento.get().getArtefatoOrdemDeFornecimentos().clear();
-        listaArtefatosPreparados
-            .forEach(artefato -> {
+                Artefato artefato = artefatoRepository.findByLocalDoArtefato(localDoArtefato)
+                    .orElseGet(() -> {
+                        Artefato artefato1 = new Artefato();
+                        artefato1.setArtefatoDeTest(false);
+                        artefato1.setLocalDoArtefato(localDoArtefato);
+                        artefato1.setExtensao(FilenameUtils.getExtension(localDoArtefato).toLowerCase());
+                        return artefato1;
+                    });
+
                 ArtefatoOrdemDeFornecimento artefatoOrdemDeFornecimento = new ArtefatoOrdemDeFornecimento();
                 artefatoOrdemDeFornecimento.setArtefato(artefato);
                 artefatoOrdemDeFornecimento.setEstado(artefato.getId() == null ? EstadoArtefato.CRIANDO : EstadoArtefato.ALTERANDO);
 
-                ordemDeFornecimento.get().addArtefatoOrdemDeFornecimento(artefatoOrdemDeFornecimento);
-            });
+                if (artefato.getId() == null) {
+                    artefatoRepository.save(artefato);
+                }
+
+                return artefatoOrdemDeFornecimento;
+            })
+            .collect(Collectors.toList());
+        listaParaAdicionar.forEach(ordemDeFornecimento::addArtefatoOrdemDeFornecimento);
+        artefatoOrdemDeFornecimentoRepository.saveAll(listaParaAdicionar);
     }
 
-    public ArtefatoDTO updateIsTestArquivo(ArtefatoDTO artefatoDTO, Long ordemDeFornecimentoId) {
+    public void updateIsTestArquivo(ArtefatoDTO artefatoDTO, Long ordemDeFornecimentoId) {
         validarOfPertencenteDeUsuario(ordemDeFornecimentoId);
-
-        AtomicReference<Artefato> artefatoReference = new AtomicReference<>();
 
         artefatoRepository.findById(artefatoDTO.getId()).ifPresent(artefato -> {
             artefato.setComplexidade(null);
             artefato.setArtefatoDeTest(artefatoDTO.isArtefatoDeTest());
             artefatoRepository.save(artefato);
-            artefatoReference.set(artefato);
 
             ordemDeFornecimentoRepository.findById(ordemDeFornecimentoId).ifPresent(ordemDeFornecimento -> {
                 ordemDeFornecimento.setLastModifiedDate(Instant.now());
                 ordemDeFornecimentoRepository.save(ordemDeFornecimento);
             });
         });
-
-        return artefatoMapper.toDto(artefatoReference.get());
     }
 
-    public OrdemFornecimentoDTO updateComplexidade(ArtefatoDTO artefatoDTO, Long ordemDeFornecimentoId) {
+    public void updateComplexidade(ArtefatoDTO artefatoDTO, Long ordemDeFornecimentoId) {
         validarOfPertencenteDeUsuario(ordemDeFornecimentoId);
-
-        AtomicReference<Artefato> artefatoReference = new AtomicReference<>();
 
         artefatoRepository.findById(artefatoDTO.getId()).ifPresent(arquivo -> {
             arquivo.setComplexidade(artefatoDTO.getComplexidade());
             artefatoRepository.save(arquivo);
-            artefatoReference.set(arquivo);
 
             ordemDeFornecimentoRepository.findById(ordemDeFornecimentoId).ifPresent(ordemDeFornecimento -> {
                 ordemDeFornecimento.setLastModifiedDate(Instant.now());
                 ordemDeFornecimentoRepository.save(ordemDeFornecimento);
             });
         });
-
-        //return findOneOrdemFornecimento(ordemDeFornecimentoId).orElseGet(OrdemFornecimentoDTO::new);
-        return null;
     }
 
-    public ArtefatoOrdemDeFornecimentoDTO updateEstadoArquivo(ArtefatoOrdemDeFornecimentoDTO artefatoOrdemDeFornecimentoDTO) {
-        AtomicReference<ArtefatoOrdemDeFornecimento> artefatoOrdemDeFornecimentoReference = new AtomicReference<>();
+    public void updateEstadoArquivo(ArtefatoOrdemDeFornecimentoDTO artefatoOrdemDeFornecimentoDTO, Long ordemDeFornecimentoId) {
+        validarOfPertencenteDeUsuario(ordemDeFornecimentoId);
 
         artefatoOrdemDeFornecimentoRepository.findById(artefatoOrdemDeFornecimentoDTO.getId()).ifPresent(artefatoOrdemDeFornecimento -> {
             artefatoOrdemDeFornecimento.getOrdemDeFornecimento().setLastModifiedDate(Instant.now());
             artefatoOrdemDeFornecimento.setEstado(artefatoOrdemDeFornecimentoDTO.getEstado());
             artefatoOrdemDeFornecimentoRepository.save(artefatoOrdemDeFornecimento);
-            artefatoOrdemDeFornecimentoReference.set(artefatoOrdemDeFornecimento);
-        });
 
-        return artefatoOrdemDeFornecimentoMapper.toDto(artefatoOrdemDeFornecimentoReference.get());
+            ordemDeFornecimentoRepository.findById(ordemDeFornecimentoId).ifPresent(ordemDeFornecimento -> {
+                ordemDeFornecimento.setLastModifiedDate(Instant.now());
+                ordemDeFornecimentoRepository.save(ordemDeFornecimento);
+            });
+        });
     }
 
     public OrdemFornecimentoDTO deletarArquivoDaOf(Long id) {
-        Optional<ArtefatoOrdemDeFornecimento> artefatoOrdemDeFornecimento = artefatoOrdemDeFornecimentoRepository.findById(id);
-        Optional<OrdemDeFornecimento> ordemDeFornecimento = artefatoOrdemDeFornecimento.map(ArtefatoOrdemDeFornecimento::getOrdemDeFornecimento);
+        return artefatoOrdemDeFornecimentoRepository.findById(id)
+            .flatMap(artefatoOrdemDeFornecimento1 -> {
+                OrdemDeFornecimento ordemDeFornecimento = artefatoOrdemDeFornecimento1.getOrdemDeFornecimento();
 
-        ordemDeFornecimento.ifPresent(ordemDeFornecimento1 -> validarOfPertencenteDeUsuario(ordemDeFornecimento1.getId()));
+                validarOfPertencenteDeUsuario(ordemDeFornecimento.getId());
 
-        return ordemDeFornecimento.flatMap(ordemDeFornecimento1 -> {
-            ordemDeFornecimento1.removeArtefatoOrdemDeFornecimento(artefatoOrdemDeFornecimento.get());
-            ordemDeFornecimento1.setLastModifiedDate(Instant.now());
-            ordemDeFornecimentoRepository.save(ordemDeFornecimento1);
-            return findOneOrdemFornecimento(ordemDeFornecimento1.getId());
-        }).get();
+                ordemDeFornecimento.removeArtefatoOrdemDeFornecimento(artefatoOrdemDeFornecimento1);
+                ordemDeFornecimento.setLastModifiedDate(Instant.now());
+                ordemDeFornecimentoRepository.save(ordemDeFornecimento);
+
+                return findOneOrdemFornecimento(ordemDeFornecimento.getId());
+            }).orElse(null);
+    }
+
+    public void updateValorUstibb(BigDecimal valorUstibb, Long ordemDeFornecimentoId) {
+        validarOfPertencenteDeUsuario(ordemDeFornecimentoId);
+
+        ordemDeFornecimentoRepository.findById(ordemDeFornecimentoId).ifPresent(ordemDeFornecimento -> {
+            ordemDeFornecimento.setValorUstibb(valorUstibb);
+            ordemDeFornecimentoRepository.save(ordemDeFornecimento);
+        });
     }
 
     public XSSFWorkbook produzirConteudoDaPlanilha(OrdemFornecimentoDTO ordemFornecimento) throws IOException {
@@ -433,20 +431,5 @@ public class OrdemFornecimentoService {
         });
 
         return estruturaDoArquivoList;
-    }
-
-    public OrdemFornecimentoDTO updateValorUstibb(BigDecimal valorUstibb, Long ordemDeFornecimentoId) {
-        validarOfPertencenteDeUsuario(ordemDeFornecimentoId);
-
-        AtomicReference<OrdemFornecimentoDTO> ordemFornecimentoDTOAtomicReference = new AtomicReference<>();
-
-        ordemDeFornecimentoRepository.findById(ordemDeFornecimentoId).ifPresent(ordemDeFornecimento -> {
-            ordemDeFornecimento.setValorUstibb(valorUstibb);
-            ordemDeFornecimentoRepository.save(ordemDeFornecimento);
-
-            findOneOrdemFornecimento(ordemDeFornecimentoId).ifPresent(ordemFornecimentoDTOAtomicReference::set);
-        });
-
-        return ordemFornecimentoDTOAtomicReference.get();
     }
 }

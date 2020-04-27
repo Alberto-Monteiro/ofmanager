@@ -27,7 +27,7 @@
                     &nbsp;
                     &nbsp;
                     <span *ngIf="ordemFornecimento!.ordemDeFornecimento!.id">
-                        <mat-form-field *ofHasAnyAuthority="['ROLE_ADMIN', 'ROLE_GESTOR_OF']" appearance="outline">
+                        <mat-form-field appearance="outline">
                             <mat-label>Estado da OF</mat-label>
                             <mat-select [(value)]="ordemFornecimento!.ordemDeFornecimento!.estado">
                                 <mat-option (click)="atualizaEstadoDaOf(ordemFornecimento!.ordemDeFornecimento!, 'NOVA')" [value]="'NOVA'">Nova</mat-option>

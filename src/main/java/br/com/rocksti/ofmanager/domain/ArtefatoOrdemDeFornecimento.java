@@ -35,7 +35,7 @@ public class ArtefatoOrdemDeFornecimento implements Serializable {
     @Column(name = "created_date", updatable = false)
     private Instant createdDate = Instant.now();
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE})
+    @ManyToOne
     @JsonIgnoreProperties("artefatoOrdemDeFornecimentos")
     private Artefato artefato;
 

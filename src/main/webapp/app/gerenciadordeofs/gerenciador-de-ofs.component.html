@@ -85,12 +85,7 @@
                 <td>{{servicoOf.lastModifiedDate | date:'dd/MM/yy HH:mm'}} por <strong>{{servicoOf.lastModifiedBy}}</strong></td>
                 <td>{{servicoOf.valorUstibb}}</td>
                 <td>
-                    <mat-chip-list *ofHasAnyAuthority="['ROLE_USER']" aria-label="Fish selection">
-                        <mat-chip color="primary" selected><span
-                            jhiTranslate="{{ 'ofmanagerApp.EstadoOrdemDeFornecimento.' + servicoOf.estado }}">{{ servicoOf.estado }}</span>
-                        </mat-chip>
-                    </mat-chip-list>
-                    <mat-form-field *ofHasAnyAuthority="['ROLE_ADMIN', 'ROLE_GESTOR_OF']">
+                    <mat-form-field>
                         <mat-label></mat-label>
                         <mat-select [(value)]="servicoOf.estado">
                             <mat-option (click)="atualizaEstadoDaOf(servicoOf, 'NOVA')" [value]="'NOVA'">Nova</mat-option>

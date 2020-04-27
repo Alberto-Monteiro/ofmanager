@@ -45,22 +45,26 @@ export class GerenciadorDeOfsService {
     return this.http.put<IOrdemFornecimento>(`${this.resourceUrl}/processar`, ordemFornecimento, { observe: 'response' });
   }
 
-  updateIsTestArquivo(ordemDeFornecimento: IOrdemDeFornecimento, artefato: IArtefato): Observable<HttpResponse<IArtefato>> {
-    return this.http.put<IArtefato>(`${this.resourceUrl}/updateIsTestArquivo`, artefato, {
+  updateIsTestArquivo(ordemDeFornecimento: IOrdemDeFornecimento, artefato: IArtefato): Observable<HttpResponse<void>> {
+    return this.http.put<void>(`${this.resourceUrl}/updateIsTestArquivo`, artefato, {
       params: new HttpParams().append('ordemDeFornecimentoId', String(ordemDeFornecimento.id)),
       observe: 'response'
     });
   }
 
-  updateComplexidade(ordemDeFornecimento: IOrdemDeFornecimento, artefato: IArtefato): Observable<EntityResponseType> {
-    return this.http.put<IOrdemFornecimento>(`${this.resourceUrl}/updateComplexidade`, artefato, {
+  updateComplexidade(ordemDeFornecimento: IOrdemDeFornecimento, artefato: IArtefato): Observable<HttpResponse<void>> {
+    return this.http.put<void>(`${this.resourceUrl}/updateComplexidade`, artefato, {
       params: new HttpParams().append('ordemDeFornecimentoId', String(ordemDeFornecimento.id)),
       observe: 'response'
     });
   }
 
-  updateEstadoArquivo(artefatoOrdemDeFornecimento: IArtefatoOrdemDeFornecimento): Observable<HttpResponse<IArtefatoOrdemDeFornecimento>> {
-    return this.http.put<IArtefatoOrdemDeFornecimento>(`${this.resourceUrl}/updateEstadoArquivo`, artefatoOrdemDeFornecimento, {
+  updateEstadoArquivo(
+    ordemDeFornecimento: IOrdemDeFornecimento,
+    artefatoOrdemDeFornecimento: IArtefatoOrdemDeFornecimento
+  ): Observable<HttpResponse<void>> {
+    return this.http.put<void>(`${this.resourceUrl}/updateEstadoArquivo`, artefatoOrdemDeFornecimento, {
+      params: new HttpParams().append('ordemDeFornecimentoId', String(ordemDeFornecimento.id)),
       observe: 'response'
     });
   }
@@ -77,8 +81,8 @@ export class GerenciadorDeOfsService {
     return this.http.get(`${this.resourceUrl}/downloadTxt/${idServicoOf}`, { responseType: 'blob' });
   }
 
-  salvarValorUstibb(valorUstibb?: number, ordemDeFornecimentoId?: number): Observable<EntityResponseType> {
-    return this.http.put<IOrdemFornecimento>(`${this.resourceUrl}/updateValorUstibb`, valorUstibb, {
+  salvarValorUstibb(valorUstibb?: number, ordemDeFornecimentoId?: number): Observable<HttpResponse<void>> {
+    return this.http.put<void>(`${this.resourceUrl}/updateValorUstibb`, valorUstibb, {
       params: new HttpParams().append('ordemDeFornecimentoId', String(ordemDeFornecimentoId)),
       observe: 'response'
     });

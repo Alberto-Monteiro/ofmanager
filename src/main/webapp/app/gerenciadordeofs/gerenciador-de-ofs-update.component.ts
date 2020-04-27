@@ -133,7 +133,7 @@ export class GerenciadorDeOfsUpdateComponent implements OnInit {
   atualizaEstadoArquivo(artefatoOrdemDeFornecimento: ArtefatoOrdemDeFornecimento, estadoArtefato: any): void {
     const estadoArquivoAnterior = artefatoOrdemDeFornecimento.estado;
     artefatoOrdemDeFornecimento.estado = estadoArtefato;
-    this.gerenciadorDeOfsService.updateEstadoArquivo(artefatoOrdemDeFornecimento).subscribe(
+    this.gerenciadorDeOfsService.updateEstadoArquivo(this.ordemFornecimento!.ordemDeFornecimento!, artefatoOrdemDeFornecimento).subscribe(
       () => {},
       () => {
         artefatoOrdemDeFornecimento.estado = estadoArquivoAnterior;
@@ -149,8 +149,8 @@ export class GerenciadorDeOfsUpdateComponent implements OnInit {
       this.gerenciadorDeOfsService.deletarArquivoDaOf(artefatoOrdemDeFornecimento).subscribe(response => {
         this.ordemFornecimento = response.body!;
         this.updateForm(this.ordemFornecimento);
-        this.eventManager.destroy(subscription);
       });
+      this.eventManager.destroy(subscription);
     });
   }
 

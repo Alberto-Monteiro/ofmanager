@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Spring Data  repository for the Artefato entity.
@@ -13,5 +14,7 @@ import java.util.List;
 @Repository
 public interface ArtefatoRepository extends JpaRepository<Artefato, Long> {
 
-    List<Artefato> findByLocalDoArtefatoIn(List<String> localDoArtefatoList);
+    List<Artefato> findByLocalDoArtefatoIn(List<String> listaLocalArtefatos);
+
+    Optional<Artefato> findByLocalDoArtefato(String localArtefatos);
 }

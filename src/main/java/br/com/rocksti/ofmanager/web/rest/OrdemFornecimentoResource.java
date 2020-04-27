@@ -82,38 +82,42 @@ public class OrdemFornecimentoResource {
     }
 
     @PutMapping("/gerenciador_de_ofs/updateIsTestArquivo")
-    public ResponseEntity<ArtefatoDTO> updateIsTestArquivo(@Valid @RequestBody ArtefatoDTO artefatoDTO, Long ordemDeFornecimentoId) {
+    public ResponseEntity<Object> updateIsTestArquivo(@Valid @RequestBody ArtefatoDTO artefatoDTO, Long ordemDeFornecimentoId) {
         if (artefatoDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
 
+        ordemFornecimentoService.updateIsTestArquivo(artefatoDTO, ordemDeFornecimentoId);
+
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, artefatoDTO.getId().toString()))
-            .body(ordemFornecimentoService.updateIsTestArquivo(artefatoDTO, ordemDeFornecimentoId));
+            .body(null);
     }
 
     @PutMapping("/gerenciador_de_ofs/updateComplexidade")
-    public ResponseEntity<OrdemFornecimentoDTO> updateComplexidade(@Valid @RequestBody ArtefatoDTO artefatoDTO, Long ordemDeFornecimentoId) {
+    public ResponseEntity<Object> updateComplexidade(@Valid @RequestBody ArtefatoDTO artefatoDTO, Long ordemDeFornecimentoId) {
         if (artefatoDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
 
+        ordemFornecimentoService.updateComplexidade(artefatoDTO, ordemDeFornecimentoId);
+
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, artefatoDTO.getId().toString()))
-            .body(ordemFornecimentoService.updateComplexidade(artefatoDTO, ordemDeFornecimentoId));
+            .body(null);
     }
 
     @PutMapping("/gerenciador_de_ofs/updateEstadoArquivo")
-    public ResponseEntity<ArtefatoOrdemDeFornecimentoDTO> updateEstadoArquivo(@RequestBody ArtefatoOrdemDeFornecimentoDTO artefatoOrdemDeFornecimentoDTO) {
+    public ResponseEntity<Object> updateEstadoArquivo(@RequestBody ArtefatoOrdemDeFornecimentoDTO artefatoOrdemDeFornecimentoDTO, Long ordemDeFornecimentoId) {
         if (artefatoOrdemDeFornecimentoDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
 
-        ArtefatoOrdemDeFornecimentoDTO result = ordemFornecimentoService.updateEstadoArquivo(artefatoOrdemDeFornecimentoDTO);
+        ordemFornecimentoService.updateEstadoArquivo(artefatoOrdemDeFornecimentoDTO, ordemDeFornecimentoId);
 
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, artefatoOrdemDeFornecimentoDTO.getId().toString()))
-            .body(result);
+            .body(null);
     }
 
     @DeleteMapping("/gerenciador_de_ofs/deletarArquivoDaOf/{id}")
@@ -159,15 +163,15 @@ public class OrdemFornecimentoResource {
     }
 
     @PutMapping("/gerenciador_de_ofs/updateValorUstibb")
-    public ResponseEntity<OrdemFornecimentoDTO> updateValorUstibb(@RequestBody BigDecimal valorUstibb, Long ordemDeFornecimentoId) {
+    public ResponseEntity<Object> updateValorUstibb(@RequestBody BigDecimal valorUstibb, Long ordemDeFornecimentoId) {
         if (ordemDeFornecimentoId == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
 
-        OrdemFornecimentoDTO result = ordemFornecimentoService.updateValorUstibb(valorUstibb, ordemDeFornecimentoId);
+        ordemFornecimentoService.updateValorUstibb(valorUstibb, ordemDeFornecimentoId);
 
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, ordemDeFornecimentoId.toString()))
-            .body(result);
+            .body(null);
     }
 }
