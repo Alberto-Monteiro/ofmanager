@@ -23,7 +23,7 @@ export class GerenciadorDeOfsUpdateComponent implements OnInit {
   usuariosGestor?: IUser[] | null;
 
   editForm = this.fb.group({
-    numero: [null, [Validators.required, Validators.max(999999999), Validators.min(100)]],
+    numero: [null, [Validators.max(999999999), Validators.min(100)]],
     usuarioGestor: [null, [Validators.required]],
     listaDeArquivo: [null, [Validators.required]],
     ustibb: []
@@ -235,5 +235,12 @@ export class GerenciadorDeOfsUpdateComponent implements OnInit {
 
   salvarValorUstibb(valorUstibb?: string, ordemDeFornecimentoId?: number): void {
     this.gerenciadorDeOfsService.salvarValorUstibb(Number(valorUstibb), ordemDeFornecimentoId).subscribe();
+  }
+
+  goToLink(): void {
+    const url = `https://genti.intranet.bb.com.br/ccm/web/projects/Fabricas%20de%20Software#action=com.ibm.team.workitem.viewWorkItem&id=${
+      this.editForm.get('numero')!.value
+    }`;
+    window.open(url, '_blank');
   }
 }
