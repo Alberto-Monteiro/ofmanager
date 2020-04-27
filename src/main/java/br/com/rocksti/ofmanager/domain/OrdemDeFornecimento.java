@@ -64,7 +64,7 @@ public class OrdemDeFornecimento implements Serializable {
     @Column(name = "valor_ustibb", precision = 21, scale = 2)
     private BigDecimal valorUstibb;
 
-    @OneToMany(mappedBy = "ordemDeFornecimento")
+    @OneToMany(mappedBy = "ordemDeFornecimento", orphanRemoval = true)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private List<ArtefatoOrdemDeFornecimento> artefatoOrdemDeFornecimentos = new ArrayList<>();
 
