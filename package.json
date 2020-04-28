@@ -113,7 +113,8 @@
     "webpack-merge": "4.2.2",
     "webpack-notifier": "1.8.0",
     "workbox-webpack-plugin": "4.3.1",
-    "write-file-webpack-plugin": "4.5.1"
+    "write-file-webpack-plugin": "4.5.1",
+    "material-design-icons": "3.0.1"
   },
   "engines": {
     "node": ">=8.9.0"
