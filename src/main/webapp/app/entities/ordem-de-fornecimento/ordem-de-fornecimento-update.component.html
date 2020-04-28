@@ -15,16 +15,6 @@
                     <label class="form-control-label" jhiTranslate="ofmanagerApp.ordemDeFornecimento.numero" for="field_numero">Numero</label>
                     <input type="number" class="form-control" name="numero" id="field_numero"
                            formControlName="numero"/>
-                    <div *ngIf="editForm.get('numero')!.invalid && (editForm.get('numero')!.dirty || editForm.get('numero')!.touched)">
-                        <small class="form-text text-danger"
-                               *ngIf="editForm.get('numero')?.errors?.required" jhiTranslate="entity.validation.required">
-                        This field is required.
-                        </small>
-                        <small class="form-text text-danger"
-                            [hidden]="!editForm.get('numero')?.errors?.number" jhiTranslate="entity.validation.number">
-                            This field should be a number.
-                        </small>
-                    </div>
                 </div>
 
                 <div class="form-group">

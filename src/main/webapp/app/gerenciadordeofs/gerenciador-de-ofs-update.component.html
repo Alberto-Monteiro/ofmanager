@@ -11,6 +11,12 @@
                         <button *ngIf="!!editForm.get('numero')!.value && editForm.get('numero')!.valid" (click)="goToLink()" mat-button matSuffix mat-icon-button aria-label="Clear">
                             <mat-icon> home </mat-icon>
                         </button>
+                        <mat-error *ngIf="editForm.get('numero')!.hasError('max')">
+                            É um número muito grande para ser uma OF
+                        </mat-error>
+                        <mat-error *ngIf="editForm.get('numero')!.hasError('min')">
+                            É um número muito pequeno para ser uma OF
+                        </mat-error>
                     </mat-form-field>
                     &nbsp;
                     &nbsp;

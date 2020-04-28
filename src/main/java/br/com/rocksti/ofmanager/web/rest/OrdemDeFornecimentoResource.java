@@ -18,7 +18,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -52,7 +51,7 @@ public class OrdemDeFornecimentoResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/ordem-de-fornecimentos")
-    public ResponseEntity<OrdemDeFornecimentoDTO> createOrdemDeFornecimento(@Valid @RequestBody OrdemDeFornecimentoDTO ordemDeFornecimentoDTO) throws URISyntaxException {
+    public ResponseEntity<OrdemDeFornecimentoDTO> createOrdemDeFornecimento(@RequestBody OrdemDeFornecimentoDTO ordemDeFornecimentoDTO) throws URISyntaxException {
         log.debug("REST request to save OrdemDeFornecimento : {}", ordemDeFornecimentoDTO);
         if (ordemDeFornecimentoDTO.getId() != null) {
             throw new BadRequestAlertException("A new ordemDeFornecimento cannot already have an ID", ENTITY_NAME, "idexists");
@@ -73,7 +72,7 @@ public class OrdemDeFornecimentoResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/ordem-de-fornecimentos")
-    public ResponseEntity<OrdemDeFornecimentoDTO> updateOrdemDeFornecimento(@Valid @RequestBody OrdemDeFornecimentoDTO ordemDeFornecimentoDTO) throws URISyntaxException {
+    public ResponseEntity<OrdemDeFornecimentoDTO> updateOrdemDeFornecimento(@RequestBody OrdemDeFornecimentoDTO ordemDeFornecimentoDTO) throws URISyntaxException {
         log.debug("REST request to update OrdemDeFornecimento : {}", ordemDeFornecimentoDTO);
         if (ordemDeFornecimentoDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");

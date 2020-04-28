@@ -16,7 +16,6 @@ public class OrdemDeFornecimentoDTO implements Serializable {
 
     private Long id;
 
-    @NotNull
     private Integer numero;
 
     private EstadoOrdemDeFornecimento estado;

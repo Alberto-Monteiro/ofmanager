@@ -29,7 +29,7 @@ relationship ManyToOne {
 }
 
 entity OrdemDeFornecimento {
-	numero Integer required
+	numero Integer
     estado EstadoOrdemDeFornecimento
     observacaoDoGestor TextBlob
     createdBy String

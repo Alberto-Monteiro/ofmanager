@@ -174,25 +174,6 @@ public class OrdemDeFornecimentoResourceIT {
 
     @Test
     @Transactional
-    public void checkNumeroIsRequired() throws Exception {
-        int databaseSizeBeforeTest = ordemDeFornecimentoRepository.findAll().size();
-        // set the field null
-        ordemDeFornecimento.setNumero(null);
-
-        // Create the OrdemDeFornecimento, which fails.
-        OrdemDeFornecimentoDTO ordemDeFornecimentoDTO = ordemDeFornecimentoMapper.toDto(ordemDeFornecimento);
-
-        restOrdemDeFornecimentoMockMvc.perform(post("/api/ordem-de-fornecimentos")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(ordemDeFornecimentoDTO)))
-            .andExpect(status().isBadRequest());
-
-        List<OrdemDeFornecimento> ordemDeFornecimentoList = ordemDeFornecimentoRepository.findAll();
-        assertThat(ordemDeFornecimentoList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
     public void getAllOrdemDeFornecimentos() throws Exception {
         // Initialize the database
         ordemDeFornecimentoRepository.saveAndFlush(ordemDeFornecimento);

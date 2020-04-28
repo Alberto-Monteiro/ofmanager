@@ -200,6 +200,7 @@ public class OrdemFornecimentoService {
             ordemDeFornecimento.setDonoDaOf(userService.getUserWithAuthorities().orElse(null));
             ordemDeFornecimento.setNumero(ordemFornecimentoDTO.getOrdemDeFornecimento().getNumero());
         }
+        ordemDeFornecimento.setNumero(ordemFornecimentoDTO.getOrdemDeFornecimento().getNumero());
         ordemDeFornecimento.setValorUstibb(ordemFornecimentoDTO.getOrdemDeFornecimento().getValorUstibb());
         ordemDeFornecimento.setGestorDaOf(ordemFornecimentoDTO.getOrdemDeFornecimento().getGestorDaOf());
     }

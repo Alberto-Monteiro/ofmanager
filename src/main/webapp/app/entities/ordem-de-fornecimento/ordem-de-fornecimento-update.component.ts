@@ -24,7 +24,7 @@ export class OrdemDeFornecimentoUpdateComponent implements OnInit {
 
   editForm = this.fb.group({
     id: [],
-    numero: [null, [Validators.required]],
+    numero: [],
     estado: [],
     observacaoDoGestor: [],
     createdBy: [],
