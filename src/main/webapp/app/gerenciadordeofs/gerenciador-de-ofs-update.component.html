@@ -62,17 +62,19 @@
                     <p>
                     <p>
                     <div *ngIf="!editForm.invalid">
-                        <mat-form-field class="no-ng-invalid w-25" appearance="outline">
-                            <mat-label>Substituir</mat-label>
-                            <input #substituir1 class="no-ng-invalid" matInput placeholder="Substituir" type="text">
-                        </mat-form-field>
-                        <mat-form-field class="no-ng-invalid w-25" appearance="outline">
-                            <mat-label>Substituir</mat-label>
-                            <input #substituir2 class="no-ng-invalid" matInput placeholder="Substituir" type="text">
-                        </mat-form-field>
-                        <button type="button" class="btn btn-primary form-group" (click)="substituir(substituir1.value, substituir2.value)" [disabled]="editForm.invalid">
-                            <fa-icon icon="sync"></fa-icon>&nbsp;<span>Substituir</span>
-                        </button>
+                        <form>
+                            <mat-form-field class="no-ng-invalid w-25" appearance="outline">
+                                <mat-label>Substituir</mat-label>
+                                <input #substituir1 class="no-ng-invalid" matInput placeholder="Substituir" type="text" id="substituir1" autocomplete="substituir1">
+                            </mat-form-field>
+                            <mat-form-field class="no-ng-invalid w-25" appearance="outline">
+                                <mat-label>Substituir</mat-label>
+                                <input #substituir2 class="no-ng-invalid" matInput placeholder="Substituir" type="text" id="substituir2" autocomplete="substituir2">
+                            </mat-form-field>
+                            <button type="submit" class="btn btn-primary form-group" (click)="substituir(substituir1.value, substituir2.value)" [disabled]="editForm.invalid">
+                                <fa-icon icon="sync"></fa-icon>&nbsp;<span>Substituir</span>
+                            </button>
+                        </form>
                     </div>
                 </div>
 
