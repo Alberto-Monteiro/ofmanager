@@ -433,4 +433,13 @@ public class OrdemFornecimentoService {
 
         return estruturaDoArquivoList;
     }
+
+    public void salvarNumeroOf(Integer numeroOf, Long ordemDeFornecimentoId) {
+        validarOfPertencenteDeUsuario(ordemDeFornecimentoId);
+
+        ordemDeFornecimentoRepository.findById(ordemDeFornecimentoId).ifPresent(ordemDeFornecimento -> {
+            ordemDeFornecimento.setNumero(numeroOf);
+            ordemDeFornecimentoRepository.save(ordemDeFornecimento);
+        });
+    }
 }

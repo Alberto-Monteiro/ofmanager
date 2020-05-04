@@ -87,4 +87,11 @@ export class GerenciadorDeOfsService {
       observe: 'response'
     });
   }
+
+  salvarNumeroOf(numeroOf: number, ordemDeFornecimentoId?: number): Observable<HttpResponse<void>> {
+    return this.http.put<void>(`${this.resourceUrl}/salvarNumeroOf`, numeroOf, {
+      params: new HttpParams().append('ordemDeFornecimentoId', String(ordemDeFornecimentoId)),
+      observe: 'response'
+    });
+  }
 }

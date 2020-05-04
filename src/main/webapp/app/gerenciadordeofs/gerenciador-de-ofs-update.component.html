@@ -7,7 +7,7 @@
                 <div class="form-group">
                     <mat-form-field class="no-ng-invalid" appearance="outline">
                         <mat-label>Número da OF</mat-label>
-                        <input class="no-ng-invalid" matInput placeholder="Número da OF" id="field_numero" type="number" name="numero" formControlName="numero">
+                        <input (change)="salvarNumeroOf()" class="no-ng-invalid" matInput placeholder="Número da OF" id="field_numero" type="number" name="numero" formControlName="numero">
                         <button *ngIf="!!editForm.get('numero')!.value && editForm.get('numero')!.valid" (click)="goToLink()" mat-button matSuffix mat-icon-button aria-label="Clear">
                             <mat-icon> home </mat-icon>
                         </button>

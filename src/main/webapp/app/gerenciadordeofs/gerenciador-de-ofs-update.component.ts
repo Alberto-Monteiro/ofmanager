@@ -243,4 +243,12 @@ export class GerenciadorDeOfsUpdateComponent implements OnInit {
     }`;
     window.open(url, '_blank');
   }
+
+  salvarNumeroOf(): void {
+    if (this.editForm?.get('numero')?.valid && !!this.ordemFornecimento?.ordemDeFornecimento?.id) {
+      this.gerenciadorDeOfsService
+        .salvarNumeroOf(this.editForm?.get('numero')?.value, this.ordemFornecimento?.ordemDeFornecimento?.id)
+        .subscribe();
+    }
+  }
 }

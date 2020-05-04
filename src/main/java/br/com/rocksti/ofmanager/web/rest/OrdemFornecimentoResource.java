@@ -174,4 +174,17 @@ public class OrdemFornecimentoResource {
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, ordemDeFornecimentoId.toString()))
             .body(null);
     }
+
+    @PutMapping("/gerenciador_de_ofs/salvarNumeroOf")
+    public ResponseEntity<Object> salvarNumeroOf(@RequestBody Integer numeroOf, Long ordemDeFornecimentoId) {
+        if (ordemDeFornecimentoId == null) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+
+        ordemFornecimentoService.salvarNumeroOf(numeroOf, ordemDeFornecimentoId);
+
+        return ResponseEntity.ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, ordemDeFornecimentoId.toString()))
+            .body(null);
+    }
 }
