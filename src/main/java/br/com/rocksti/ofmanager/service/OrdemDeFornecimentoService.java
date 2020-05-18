@@ -5,7 +5,6 @@ import br.com.rocksti.ofmanager.repository.OrdemDeFornecimentoRepository;
 import br.com.rocksti.ofmanager.security.AuthoritiesConstants;
 import br.com.rocksti.ofmanager.service.dto.OrdemDeFornecimentoDTO;
 import br.com.rocksti.ofmanager.service.mapper.OrdemDeFornecimentoMapper;
-import br.com.rocksti.ofmanager.web.rest.errors.BadRequestAlertException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -91,7 +90,7 @@ public class OrdemDeFornecimentoService {
                 .anyMatch(authority -> authority.getName().equals(AuthoritiesConstants.ADMIN)
                     || authority.getName().equals(AuthoritiesConstants.GESTOR_OF)))
             .map(user -> {
-                ordemDeFornecimentoRepository.deleteById(id);
+        ordemDeFornecimentoRepository.deleteById(id);
                 return Optional.of(user);
             })
             .orElseGet(() -> {

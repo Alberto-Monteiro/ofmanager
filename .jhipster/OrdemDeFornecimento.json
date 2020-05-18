@@ -34,6 +34,10 @@
         {
             "fieldName": "valorUstibb",
             "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "dataDeEntrega",
+            "fieldType": "Instant"
         }
     ],
     "relationships": [
@@ -70,5 +74,7 @@
     "clientRootFolder": "",
     "applications": [
         "ofmanager"
-    ]
+    ],
+    "searchEngine": false,
+    "databaseType": "sql"
 }

@@ -1,4 +1,4 @@
-import { element, by, ElementFinder } from 'protractor';
+import { by, element, ElementFinder } from 'protractor';
 
 export class OrdemDeFornecimentoComponentsPage {
   createButton = element(by.id('jh-create-entity'));
@@ -37,6 +37,7 @@ export class OrdemDeFornecimentoUpdatePage {
   lastModifiedByInput = element(by.id('field_lastModifiedBy'));
   lastModifiedDateInput = element(by.id('field_lastModifiedDate'));
   valorUstibbInput = element(by.id('field_valorUstibb'));
+  dataDeEntregaInput = element(by.id('field_dataDeEntrega'));
 
   gestorDaOfSelect = element(by.id('field_gestorDaOf'));
   donoDaOfSelect = element(by.id('field_donoDaOf'));
@@ -114,6 +115,14 @@ export class OrdemDeFornecimentoUpdatePage {
 
   async getValorUstibbInput(): Promise<string> {
     return await this.valorUstibbInput.getAttribute('value');
+  }
+
+  async setDataDeEntregaInput(dataDeEntrega: string): Promise<void> {
+    await this.dataDeEntregaInput.sendKeys(dataDeEntrega);
+  }
+
+  async getDataDeEntregaInput(): Promise<string> {
+    return await this.dataDeEntregaInput.getAttribute('value');
   }
 
   async gestorDaOfSelectLastOption(): Promise<void> {

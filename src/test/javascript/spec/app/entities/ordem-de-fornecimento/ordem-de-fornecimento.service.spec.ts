@@ -1,4 +1,4 @@
-import { TestBed, getTestBed } from '@angular/core/testing';
+import { getTestBed, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import * as moment from 'moment';
 import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
@@ -34,7 +34,8 @@ describe('Service Tests', () => {
         currentDate,
         'AAAAAAA',
         currentDate,
-        0
+        0,
+        currentDate
       );
     });
 
@@ -43,7 +44,8 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             createdDate: currentDate.format(DATE_TIME_FORMAT),
-            lastModifiedDate: currentDate.format(DATE_TIME_FORMAT)
+            lastModifiedDate: currentDate.format(DATE_TIME_FORMAT),
+            dataDeEntrega: currentDate.format(DATE_TIME_FORMAT)
           },
           elemDefault
         );
@@ -60,7 +62,8 @@ describe('Service Tests', () => {
           {
             id: 0,
             createdDate: currentDate.format(DATE_TIME_FORMAT),
-            lastModifiedDate: currentDate.format(DATE_TIME_FORMAT)
+            lastModifiedDate: currentDate.format(DATE_TIME_FORMAT),
+            dataDeEntrega: currentDate.format(DATE_TIME_FORMAT)
           },
           elemDefault
         );
@@ -68,7 +71,8 @@ describe('Service Tests', () => {
         const expected = Object.assign(
           {
             createdDate: currentDate,
-            lastModifiedDate: currentDate
+            lastModifiedDate: currentDate,
+            dataDeEntrega: currentDate
           },
           returnedFromService
         );
@@ -90,7 +94,8 @@ describe('Service Tests', () => {
             createdDate: currentDate.format(DATE_TIME_FORMAT),
             lastModifiedBy: 'BBBBBB',
             lastModifiedDate: currentDate.format(DATE_TIME_FORMAT),
-            valorUstibb: 1
+            valorUstibb: 1,
+            dataDeEntrega: currentDate.format(DATE_TIME_FORMAT)
           },
           elemDefault
         );
@@ -98,7 +103,8 @@ describe('Service Tests', () => {
         const expected = Object.assign(
           {
             createdDate: currentDate,
-            lastModifiedDate: currentDate
+            lastModifiedDate: currentDate,
+            dataDeEntrega: currentDate
           },
           returnedFromService
         );
@@ -120,7 +126,8 @@ describe('Service Tests', () => {
             createdDate: currentDate.format(DATE_TIME_FORMAT),
             lastModifiedBy: 'BBBBBB',
             lastModifiedDate: currentDate.format(DATE_TIME_FORMAT),
-            valorUstibb: 1
+            valorUstibb: 1,
+            dataDeEntrega: currentDate.format(DATE_TIME_FORMAT)
           },
           elemDefault
         );
@@ -128,7 +135,8 @@ describe('Service Tests', () => {
         const expected = Object.assign(
           {
             createdDate: currentDate,
-            lastModifiedDate: currentDate
+            lastModifiedDate: currentDate,
+            dataDeEntrega: currentDate
           },
           returnedFromService
         );

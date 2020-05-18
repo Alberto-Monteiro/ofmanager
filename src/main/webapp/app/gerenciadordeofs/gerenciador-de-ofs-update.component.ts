@@ -11,6 +11,8 @@ import { ArtefatoOrdemDeFornecimento, IArtefatoOrdemDeFornecimento } from 'app/s
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { LinhaArtefatoDeleteDialogComponent } from 'app/gerenciadordeofs/linha-artefato-delete-dialog.component';
 import { JhiEventManager } from 'ng-jhipster';
+import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
+import * as moment from 'moment';
 
 @Component({
   selector: 'of-gerenciador-de-ofs-update',
@@ -27,7 +29,8 @@ export class GerenciadorDeOfsUpdateComponent implements OnInit {
     usuarioGestor: [null, [Validators.required]],
     listaDeArquivo: [null, [Validators.required]],
     ustibb: [],
-    observacoes: []
+    observacoes: [],
+    dataDeEntrega: []
   });
 
   constructor(
@@ -57,7 +60,10 @@ export class GerenciadorDeOfsUpdateComponent implements OnInit {
       numero: ordemFornecimento.ordemDeFornecimento!.numero,
       listaDeArquivo: ordemFornecimento.listaDosArquivos,
       ustibb: ordemFornecimento.ordemDeFornecimento!.valorUstibb,
-      observacoes: ordemFornecimento.ordemDeFornecimento?.observacaoDoGestor
+      observacoes: ordemFornecimento.ordemDeFornecimento?.observacaoDoGestor,
+      dataDeEntrega: ordemFornecimento.ordemDeFornecimento?.dataDeEntrega
+        ? moment(ordemFornecimento.ordemDeFornecimento?.dataDeEntrega).format(DATE_TIME_FORMAT)
+        : null
     });
   }
 
@@ -69,7 +75,10 @@ export class GerenciadorDeOfsUpdateComponent implements OnInit {
         gestorDaOf: this.editForm.get(['usuarioGestor'])!.value,
         numero: this.editForm.get(['numero'])!.value,
         valorUstibb: this.editForm.get(['ustibb'])!.value,
-        observacaoDoGestor: this.editForm.get(['observacoes'])!.value
+        observacaoDoGestor: this.editForm.get(['observacoes'])!.value,
+        dataDeEntrega: this.editForm.get(['dataDeEntrega'])?.value
+          ? moment(this.editForm.get(['dataDeEntrega'])!.value, DATE_TIME_FORMAT)
+          : undefined
       }
     };
   }
@@ -257,5 +266,11 @@ export class GerenciadorDeOfsUpdateComponent implements OnInit {
 
   salvarObservacoes(observacoes: string, ordemDeFornecimentoId: number): void {
     this.gerenciadorDeOfsService.salvarObservacoes(observacoes, ordemDeFornecimentoId).subscribe();
+  }
+
+  atualizaDataDeEntrega(): void {
+    this.editForm.patchValue({
+      dataDeEntrega: moment().format(DATE_TIME_FORMAT)
+    });
   }
 }

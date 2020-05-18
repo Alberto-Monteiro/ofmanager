@@ -32,6 +32,9 @@ public class OrdemDeFornecimentoDTO implements Serializable {
 
     private BigDecimal valorUstibb;
 
+    private Instant dataDeEntrega;
+
+
     private Long gestorDaOfId;
 
     private String gestorDaOfLogin;
@@ -118,6 +121,14 @@ public class OrdemDeFornecimentoDTO implements Serializable {
 
     public void setValorUstibb(BigDecimal valorUstibb) {
         this.valorUstibb = valorUstibb;
+    }
+
+    public Instant getDataDeEntrega() {
+        return dataDeEntrega;
+    }
+
+    public void setDataDeEntrega(Instant dataDeEntrega) {
+        this.dataDeEntrega = dataDeEntrega;
     }
 
     public Long getGestorDaOfId() {
@@ -217,6 +228,7 @@ public class OrdemDeFornecimentoDTO implements Serializable {
             ", lastModifiedBy='" + getLastModifiedBy() + "'" +
             ", lastModifiedDate='" + getLastModifiedDate() + "'" +
             ", valorUstibb=" + getValorUstibb() +
+            ", dataDeEntrega='" + getDataDeEntrega() + "'" +
             ", gestorDaOfId=" + getGestorDaOfId() +
             ", gestorDaOfLogin='" + getGestorDaOfLogin() + "'" +
             ", donoDaOfId=" + getDonoDaOfId() +

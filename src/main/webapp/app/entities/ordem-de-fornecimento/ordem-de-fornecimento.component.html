@@ -31,6 +31,7 @@
                     <th scope="col"  jhiSortBy="lastModifiedBy"><span jhiTranslate="ofmanagerApp.ordemDeFornecimento.lastModifiedBy">Last Modified By</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"  jhiSortBy="lastModifiedDate"><span jhiTranslate="ofmanagerApp.ordemDeFornecimento.lastModifiedDate">Last Modified Date</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"  jhiSortBy="valorUstibb"><span jhiTranslate="ofmanagerApp.ordemDeFornecimento.valorUstibb">Valor Ustibb</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="dataDeEntrega"><span jhiTranslate="ofmanagerApp.ordemDeFornecimento.dataDeEntrega">Data De Entrega</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"  jhiSortBy="gestorDaOfLogin"><span jhiTranslate="ofmanagerApp.ordemDeFornecimento.gestorDaOf">Gestor Da Of</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"  jhiSortBy="donoDaOfLogin"><span jhiTranslate="ofmanagerApp.ordemDeFornecimento.donoDaOf">Dono Da Of</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"></th>
@@ -47,6 +48,7 @@
                     <td>{{ ordemDeFornecimento.lastModifiedBy }}</td>
                     <td>{{ ordemDeFornecimento.lastModifiedDate | date:'medium' }}</td>
                     <td>{{ ordemDeFornecimento.valorUstibb }}</td>
+                    <td>{{ ordemDeFornecimento.dataDeEntrega | date:'medium' }}</td>
                     <td>
                         {{ ordemDeFornecimento.gestorDaOfLogin }}
                     </td>

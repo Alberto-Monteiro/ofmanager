@@ -13,6 +13,7 @@ export interface IOrdemDeFornecimento {
   lastModifiedBy?: string;
   lastModifiedDate?: Moment;
   valorUstibb?: number;
+  dataDeEntrega?: Moment;
   artefatoOrdemDeFornecimentos?: IArtefatoOrdemDeFornecimento[];
   gestorDaOfLogin?: string;
   gestorDaOfId?: number;
@@ -37,6 +38,7 @@ export class OrdemDeFornecimento implements IOrdemDeFornecimento {
     public lastModifiedBy?: string,
     public lastModifiedDate?: Moment,
     public valorUstibb?: number,
+    public dataDeEntrega?: Moment,
     public artefatoOrdemDeFornecimentos?: IArtefatoOrdemDeFornecimento[],
     public gestorDaOfLogin?: string,
     public gestorDaOfId?: number,

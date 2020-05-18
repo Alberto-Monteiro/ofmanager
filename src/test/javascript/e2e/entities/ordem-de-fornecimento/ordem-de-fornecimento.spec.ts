@@ -1,4 +1,4 @@
-import { browser, ExpectedConditions as ec, protractor, promise } from 'protractor';
+import { browser, ExpectedConditions as ec, promise, protractor } from 'protractor';
 import { NavBarPage, SignInPage } from '../../page-objects/jhi-page-objects';
 
 import {
@@ -56,6 +56,7 @@ describe('OrdemDeFornecimento e2e test', () => {
       ordemDeFornecimentoUpdatePage.setLastModifiedByInput('lastModifiedBy'),
       ordemDeFornecimentoUpdatePage.setLastModifiedDateInput('01/01/2001' + protractor.Key.TAB + '02:30AM'),
       ordemDeFornecimentoUpdatePage.setValorUstibbInput('5'),
+      ordemDeFornecimentoUpdatePage.setDataDeEntregaInput('01/01/2001' + protractor.Key.TAB + '02:30AM'),
       ordemDeFornecimentoUpdatePage.gestorDaOfSelectLastOption(),
       ordemDeFornecimentoUpdatePage.donoDaOfSelectLastOption()
     ]);
@@ -82,6 +83,10 @@ describe('OrdemDeFornecimento e2e test', () => {
       'Expected lastModifiedDate value to be equals to 2000-12-31'
     );
     expect(await ordemDeFornecimentoUpdatePage.getValorUstibbInput()).to.eq('5', 'Expected valorUstibb value to be equals to 5');
+    expect(await ordemDeFornecimentoUpdatePage.getDataDeEntregaInput()).to.contain(
+      '2001-01-01T02:30',
+      'Expected dataDeEntrega value to be equals to 2000-12-31'
+    );
 
     await ordemDeFornecimentoUpdatePage.save();
     expect(await ordemDeFornecimentoUpdatePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;

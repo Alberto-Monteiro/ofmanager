@@ -80,6 +80,7 @@ class OrdemDeFornecimentoGatlingTest extends Simulation {
                 , "lastModifiedBy":"SAMPLE_TEXT"
                 , "lastModifiedDate":"2020-01-01T00:00:00.000Z"
                 , "valorUstibb":"0"
+                , "dataDeEntrega":"2020-01-01T00:00:00.000Z"
                 }""")).asJson
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_ordemDeFornecimento_url"))).exitHereIfFailed

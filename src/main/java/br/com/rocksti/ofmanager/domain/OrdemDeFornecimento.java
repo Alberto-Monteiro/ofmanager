@@ -11,7 +11,6 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -62,6 +61,9 @@ public class OrdemDeFornecimento implements Serializable {
 
     @Column(name = "valor_ustibb", precision = 21, scale = 2)
     private BigDecimal valorUstibb;
+
+    @Column(name = "data_de_entrega")
+    private Instant dataDeEntrega;
 
     @OneToMany(mappedBy = "ordemDeFornecimento", orphanRemoval = true)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -188,6 +190,19 @@ public class OrdemDeFornecimento implements Serializable {
         this.valorUstibb = valorUstibb;
     }
 
+    public Instant getDataDeEntrega() {
+        return dataDeEntrega;
+    }
+
+    public OrdemDeFornecimento dataDeEntrega(Instant dataDeEntrega) {
+        this.dataDeEntrega = dataDeEntrega;
+        return this;
+    }
+
+    public void setDataDeEntrega(Instant dataDeEntrega) {
+        this.dataDeEntrega = dataDeEntrega;
+    }
+
     public List<ArtefatoOrdemDeFornecimento> getArtefatoOrdemDeFornecimentos() {
         return artefatoOrdemDeFornecimentos;
     }
@@ -268,6 +283,7 @@ public class OrdemDeFornecimento implements Serializable {
             ", lastModifiedBy='" + getLastModifiedBy() + "'" +
             ", lastModifiedDate='" + getLastModifiedDate() + "'" +
             ", valorUstibb=" + getValorUstibb() +
+            ", dataDeEntrega='" + getDataDeEntrega() + "'" +
             "}";
     }
 }

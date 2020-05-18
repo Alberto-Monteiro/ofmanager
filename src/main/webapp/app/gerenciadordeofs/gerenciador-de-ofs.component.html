@@ -66,6 +66,9 @@
                 <th scope="col" jhiSortBy="valorUstibb"><span>USTIBB</span>
                     <fa-icon [icon]="'sort'"></fa-icon>
                 </th>
+                <th scope="col" jhiSortBy="dataDeEntrega"><span>Data da entrega</span>
+                    <fa-icon [icon]="'sort'"></fa-icon>
+                </th>
                 <th scope="col" jhiSortBy="estado"><span>Estado</span>
                     <fa-icon [icon]="'sort'"></fa-icon>
                 </th>
@@ -84,6 +87,7 @@
                 <td>{{servicoOf.createdDate | date:'dd/MM/yy HH:mm'}}</td>
                 <td>{{servicoOf.lastModifiedDate | date:'dd/MM/yy HH:mm'}} por <strong>{{servicoOf.lastModifiedBy}}</strong></td>
                 <td>{{servicoOf.valorUstibb}}</td>
+                <td>{{servicoOf.dataDeEntrega | date:'dd/MM/yy HH:mm'}}</td>
                 <td>
                     <mat-form-field>
                         <mat-label></mat-label>

@@ -40,6 +40,10 @@
                 <dd>
                     <span>{{ ordemDeFornecimento.valorUstibb }}</span>
                 </dd>
+                <dt><span jhiTranslate="ofmanagerApp.ordemDeFornecimento.dataDeEntrega">Data De Entrega</span></dt>
+                <dd>
+                    <span>{{ ordemDeFornecimento.dataDeEntrega | date:'medium'}}</span>
+                </dd>
                 <dt><span jhiTranslate="ofmanagerApp.ordemDeFornecimento.gestorDaOf">Gestor Da Of</span></dt>
                 <dd>
                     {{ ordemDeFornecimento.gestorDaOfLogin }}

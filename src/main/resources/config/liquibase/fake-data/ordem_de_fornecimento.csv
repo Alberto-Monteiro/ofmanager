@@ -1,11 +1,11 @@
-id;numero;estado;observacao_do_gestor;created_by;created_date;last_modified_by;last_modified_date;valor_ustibb
-1;16110;REJEITADA;../fake-data/blob/hipster.txt;Synchronised Frozen;2020-04-16T17:09:55;programming;2020-04-16T10:21:01;1927
-2;12441;ACEITA;../fake-data/blob/hipster.txt;TCP Rubber;2020-04-15T19:33:19;synthesizing payment Graphic Interface;2020-04-15T23:20:40;97047
-3;55542;ACEITA;../fake-data/blob/hipster.txt;Virginia payment;2020-04-15T23:15:01;programming hacking;2020-04-15T20:23:02;14220
-4;50972;REJEITADA;../fake-data/blob/hipster.txt;bus;2020-04-16T06:43:03;Lodge matrix invoice;2020-04-15T23:24:08;14789
-5;52014;ANALISE;../fake-data/blob/hipster.txt;Data virtual;2020-04-16T07:05:42;Awesome Cotton Computer Gateway Fresh;2020-04-16T12:10:08;49867
-6;21968;ACEITA;../fake-data/blob/hipster.txt;neural Pizza;2020-04-16T13:18:29;systems array;2020-04-16T10:18:06;30248
-7;65242;REJEITADA;../fake-data/blob/hipster.txt;redundant Salad;2020-04-16T13:44:47;Frozen Architect North Carolina;2020-04-16T08:35:26;18503
-8;69946;NOVA;../fake-data/blob/hipster.txt;Dynamic bluetooth;2020-04-15T18:58:49;Division Legacy;2020-04-15T18:02:43;95641
-9;9071;REJEITADA;../fake-data/blob/hipster.txt;Integration;2020-04-15T19:23:35;deposit;2020-04-15T21:06:28;43259
-10;21719;REJEITADA;../fake-data/blob/hipster.txt;panel next-generation;2020-04-15T18:05:13;Fantastic Directives;2020-04-15T18:48:00;32051
+id;numero;estado;observacao_do_gestor;created_by;created_date;last_modified_by;last_modified_date;valor_ustibb;data_de_entrega
+1;16110;REJEITADA;../fake-data/blob/hipster.txt;Synchronised Frozen;2020-04-16T17:09:55;programming;2020-04-16T10:21:01;1927;2020-05-18T14:30:49
+2;12441;ACEITA;../fake-data/blob/hipster.txt;TCP Rubber;2020-04-15T19:33:19;synthesizing payment Graphic Interface;2020-04-15T23:20:40;97047;2020-05-18T04:18:28
+3;55542;ACEITA;../fake-data/blob/hipster.txt;Virginia payment;2020-04-15T23:15:01;programming hacking;2020-04-15T20:23:02;14220;2020-05-18T05:15:59
+4;50972;REJEITADA;../fake-data/blob/hipster.txt;bus;2020-04-16T06:43:03;Lodge matrix invoice;2020-04-15T23:24:08;14789;2020-05-17T20:47:03
+5;52014;ANALISE;../fake-data/blob/hipster.txt;Data virtual;2020-04-16T07:05:42;Awesome Cotton Computer Gateway Fresh;2020-04-16T12:10:08;49867;2020-05-17T22:05:35
+6;21968;ACEITA;../fake-data/blob/hipster.txt;neural Pizza;2020-04-16T13:18:29;systems array;2020-04-16T10:18:06;30248;2020-05-18T06:51:10
+7;65242;REJEITADA;../fake-data/blob/hipster.txt;redundant Salad;2020-04-16T13:44:47;Frozen Architect North Carolina;2020-04-16T08:35:26;18503;2020-05-17T19:34:15
+8;69946;NOVA;../fake-data/blob/hipster.txt;Dynamic bluetooth;2020-04-15T18:58:49;Division Legacy;2020-04-15T18:02:43;95641;2020-05-18T07:07:02
+9;9071;REJEITADA;../fake-data/blob/hipster.txt;Integration;2020-04-15T19:23:35;deposit;2020-04-15T21:06:28;43259;2020-05-18T07:26:59
+10;21719;REJEITADA;../fake-data/blob/hipster.txt;panel next-generation;2020-04-15T18:05:13;Fantastic Directives;2020-04-15T18:48:00;32051;2020-05-18T09:07:09

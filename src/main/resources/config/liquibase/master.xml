@@ -23,4 +23,7 @@
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <include file="config/liquibase/changelog/20200417102200_insert_role_gestor.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200428172200_alter_column_numero_ordem_de_fornecimento.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200518173000_added_column_data_de_entrega.xml" relativeToChangelogFile="false"/>
+    <!-- Load sample data generated with Faker -->
+    <include file="config/liquibase/changelog/20200518183000_added_sample_data_faker.xml" relativeToChangelogFile="false"/>
 </databaseChangeLog>

@@ -55,6 +55,10 @@ export class OrdemDeFornecimentoService {
       lastModifiedDate:
         ordemDeFornecimento.lastModifiedDate && ordemDeFornecimento.lastModifiedDate.isValid()
           ? ordemDeFornecimento.lastModifiedDate.toJSON()
+          : undefined,
+      dataDeEntrega:
+        ordemDeFornecimento.dataDeEntrega && ordemDeFornecimento.dataDeEntrega.isValid()
+          ? ordemDeFornecimento.dataDeEntrega.toJSON()
           : undefined
     });
     return copy;
@@ -64,6 +68,7 @@ export class OrdemDeFornecimentoService {
     if (res.body) {
       res.body.createdDate = res.body.createdDate ? moment(res.body.createdDate) : undefined;
       res.body.lastModifiedDate = res.body.lastModifiedDate ? moment(res.body.lastModifiedDate) : undefined;
+      res.body.dataDeEntrega = res.body.dataDeEntrega ? moment(res.body.dataDeEntrega) : undefined;
     }
     return res;
   }
@@ -75,6 +80,7 @@ export class OrdemDeFornecimentoService {
         ordemDeFornecimento.lastModifiedDate = ordemDeFornecimento.lastModifiedDate
           ? moment(ordemDeFornecimento.lastModifiedDate)
           : undefined;
+        ordemDeFornecimento.dataDeEntrega = ordemDeFornecimento.dataDeEntrega ? moment(ordemDeFornecimento.dataDeEntrega) : undefined;
       });
     }
     return res;

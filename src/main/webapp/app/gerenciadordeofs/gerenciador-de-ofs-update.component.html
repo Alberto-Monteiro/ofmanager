@@ -46,6 +46,14 @@
                         <mat-label>Valor da USTIBB</mat-label>
                         <input #valorUstibb [readonly]="!ordemFornecimento!.ordemDeFornecimento!.id" (change)="salvarValorUstibb(valorUstibb.value, ordemFornecimento!.ordemDeFornecimento!.id)" class="no-ng-invalid" matInput placeholder="Número da USTIBB" type="number" formControlName="ustibb">
                     </mat-form-field>
+
+                    <mat-form-field class="no-ng-invalid w-25" appearance="outline">
+                        <mat-label>Foi entregue em</mat-label>
+                        <input class="no-ng-invalid" matInput type="datetime-local" id="field_dataDeEntrega" name="dataDeEntrega" formControlName="dataDeEntrega" placeholder="Data de entrega">
+                        <button (click)="atualizaDataDeEntrega()" mat-button matSuffix mat-icon-button aria-label="Clear">
+                            <mat-icon> alarm_add </mat-icon>
+                        </button>
+                    </mat-form-field>
                 </div>
 
                 <div class="from-group">

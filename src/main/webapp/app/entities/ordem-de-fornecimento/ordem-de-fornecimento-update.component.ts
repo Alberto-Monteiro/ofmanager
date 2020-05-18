@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import * as moment from 'moment';
 import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
-import { JhiDataUtils, JhiFileLoadError, JhiEventManager, JhiEventWithContent } from 'ng-jhipster';
+import { JhiDataUtils, JhiEventManager, JhiEventWithContent, JhiFileLoadError } from 'ng-jhipster';
 
 import { IOrdemDeFornecimento, OrdemDeFornecimento } from 'app/shared/model/ordem-de-fornecimento.model';
 import { OrdemDeFornecimentoService } from './ordem-de-fornecimento.service';
@@ -32,6 +32,7 @@ export class OrdemDeFornecimentoUpdateComponent implements OnInit {
     lastModifiedBy: [],
     lastModifiedDate: [],
     valorUstibb: [],
+    dataDeEntrega: [],
     gestorDaOfId: [],
     donoDaOfId: []
   });
@@ -51,6 +52,7 @@ export class OrdemDeFornecimentoUpdateComponent implements OnInit {
         const today = moment().startOf('day');
         ordemDeFornecimento.createdDate = today;
         ordemDeFornecimento.lastModifiedDate = today;
+        ordemDeFornecimento.dataDeEntrega = today;
       }
 
       this.updateForm(ordemDeFornecimento);
@@ -70,6 +72,7 @@ export class OrdemDeFornecimentoUpdateComponent implements OnInit {
       lastModifiedBy: ordemDeFornecimento.lastModifiedBy,
       lastModifiedDate: ordemDeFornecimento.lastModifiedDate ? ordemDeFornecimento.lastModifiedDate.format(DATE_TIME_FORMAT) : null,
       valorUstibb: ordemDeFornecimento.valorUstibb,
+      dataDeEntrega: ordemDeFornecimento.dataDeEntrega ? ordemDeFornecimento.dataDeEntrega.format(DATE_TIME_FORMAT) : null,
       gestorDaOfId: ordemDeFornecimento.gestorDaOfId,
       donoDaOfId: ordemDeFornecimento.donoDaOfId
     });
@@ -121,6 +124,9 @@ export class OrdemDeFornecimentoUpdateComponent implements OnInit {
         ? moment(this.editForm.get(['lastModifiedDate'])!.value, DATE_TIME_FORMAT)
         : undefined,
       valorUstibb: this.editForm.get(['valorUstibb'])!.value,
+      dataDeEntrega: this.editForm.get(['dataDeEntrega'])!.value
+        ? moment(this.editForm.get(['dataDeEntrega'])!.value, DATE_TIME_FORMAT)
+        : undefined,
       gestorDaOfId: this.editForm.get(['gestorDaOfId'])!.value,
       donoDaOfId: this.editForm.get(['donoDaOfId'])!.value
     };

@@ -1,16 +1,15 @@
 package br.com.rocksti.ofmanager.web.rest;
 
-import br.com.rocksti.ofmanager.RedisTestContainerExtension;
 import br.com.rocksti.ofmanager.OfmanagerApp;
+import br.com.rocksti.ofmanager.RedisTestContainerExtension;
 import br.com.rocksti.ofmanager.domain.OrdemDeFornecimento;
+import br.com.rocksti.ofmanager.domain.enumeration.EstadoOrdemDeFornecimento;
 import br.com.rocksti.ofmanager.repository.OrdemDeFornecimentoRepository;
 import br.com.rocksti.ofmanager.service.OrdemDeFornecimentoService;
 import br.com.rocksti.ofmanager.service.dto.OrdemDeFornecimentoDTO;
 import br.com.rocksti.ofmanager.service.mapper.OrdemDeFornecimentoMapper;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +19,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Base64Utils;
+
 import javax.persistence.EntityManager;
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -31,8 +30,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
-import br.com.rocksti.ofmanager.domain.enumeration.EstadoOrdemDeFornecimento;
 /**
  * Integration tests for the {@link OrdemDeFornecimentoResource} REST controller.
  */
@@ -66,6 +63,9 @@ public class OrdemDeFornecimentoResourceIT {
     private static final BigDecimal DEFAULT_VALOR_USTIBB = new BigDecimal(1);
     private static final BigDecimal UPDATED_VALOR_USTIBB = new BigDecimal(2);
 
+    private static final Instant DEFAULT_DATA_DE_ENTREGA = Instant.ofEpochMilli(0L);
+    private static final Instant UPDATED_DATA_DE_ENTREGA = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+
     @Autowired
     private OrdemDeFornecimentoRepository ordemDeFornecimentoRepository;
 
@@ -98,7 +98,8 @@ public class OrdemDeFornecimentoResourceIT {
             .createdDate(DEFAULT_CREATED_DATE)
             .lastModifiedBy(DEFAULT_LAST_MODIFIED_BY)
             .lastModifiedDate(DEFAULT_LAST_MODIFIED_DATE)
-            .valorUstibb(DEFAULT_VALOR_USTIBB);
+            .valorUstibb(DEFAULT_VALOR_USTIBB)
+            .dataDeEntrega(DEFAULT_DATA_DE_ENTREGA);
         return ordemDeFornecimento;
     }
     /**
@@ -116,7 +117,8 @@ public class OrdemDeFornecimentoResourceIT {
             .createdDate(UPDATED_CREATED_DATE)
             .lastModifiedBy(UPDATED_LAST_MODIFIED_BY)
             .lastModifiedDate(UPDATED_LAST_MODIFIED_DATE)
-            .valorUstibb(UPDATED_VALOR_USTIBB);
+            .valorUstibb(UPDATED_VALOR_USTIBB)
+            .dataDeEntrega(UPDATED_DATA_DE_ENTREGA);
         return ordemDeFornecimento;
     }
 
@@ -149,6 +151,7 @@ public class OrdemDeFornecimentoResourceIT {
         assertThat(testOrdemDeFornecimento.getLastModifiedBy()).isEqualTo(DEFAULT_LAST_MODIFIED_BY);
         assertThat(testOrdemDeFornecimento.getLastModifiedDate()).isEqualTo(DEFAULT_LAST_MODIFIED_DATE);
         assertThat(testOrdemDeFornecimento.getValorUstibb()).isEqualTo(DEFAULT_VALOR_USTIBB);
+        assertThat(testOrdemDeFornecimento.getDataDeEntrega()).isEqualTo(DEFAULT_DATA_DE_ENTREGA);
     }
 
     @Test
@@ -185,14 +188,15 @@ public class OrdemDeFornecimentoResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(ordemDeFornecimento.getId().intValue())))
             .andExpect(jsonPath("$.[*].numero").value(hasItem(DEFAULT_NUMERO)))
             .andExpect(jsonPath("$.[*].estado").value(hasItem(DEFAULT_ESTADO.toString())))
-            .andExpect(jsonPath("$.[*].observacaoDoGestor").value(hasItem(DEFAULT_OBSERVACAO_DO_GESTOR.toString())))
+            .andExpect(jsonPath("$.[*].observacaoDoGestor").value(hasItem(DEFAULT_OBSERVACAO_DO_GESTOR)))
             .andExpect(jsonPath("$.[*].createdBy").value(hasItem(DEFAULT_CREATED_BY)))
             .andExpect(jsonPath("$.[*].createdDate").value(hasItem(DEFAULT_CREATED_DATE.toString())))
             .andExpect(jsonPath("$.[*].lastModifiedBy").value(hasItem(DEFAULT_LAST_MODIFIED_BY)))
             .andExpect(jsonPath("$.[*].lastModifiedDate").value(hasItem(DEFAULT_LAST_MODIFIED_DATE.toString())))
-            .andExpect(jsonPath("$.[*].valorUstibb").value(hasItem(DEFAULT_VALOR_USTIBB.intValue())));
+            .andExpect(jsonPath("$.[*].valorUstibb").value(hasItem(DEFAULT_VALOR_USTIBB.intValue())))
+            .andExpect(jsonPath("$.[*].dataDeEntrega").value(hasItem(DEFAULT_DATA_DE_ENTREGA.toString())));
     }
-    
+
     @Test
     @Transactional
     public void getOrdemDeFornecimento() throws Exception {
@@ -206,12 +210,13 @@ public class OrdemDeFornecimentoResourceIT {
             .andExpect(jsonPath("$.id").value(ordemDeFornecimento.getId().intValue()))
             .andExpect(jsonPath("$.numero").value(DEFAULT_NUMERO))
             .andExpect(jsonPath("$.estado").value(DEFAULT_ESTADO.toString()))
-            .andExpect(jsonPath("$.observacaoDoGestor").value(DEFAULT_OBSERVACAO_DO_GESTOR.toString()))
+            .andExpect(jsonPath("$.observacaoDoGestor").value(DEFAULT_OBSERVACAO_DO_GESTOR))
             .andExpect(jsonPath("$.createdBy").value(DEFAULT_CREATED_BY))
             .andExpect(jsonPath("$.createdDate").value(DEFAULT_CREATED_DATE.toString()))
             .andExpect(jsonPath("$.lastModifiedBy").value(DEFAULT_LAST_MODIFIED_BY))
             .andExpect(jsonPath("$.lastModifiedDate").value(DEFAULT_LAST_MODIFIED_DATE.toString()))
-            .andExpect(jsonPath("$.valorUstibb").value(DEFAULT_VALOR_USTIBB.intValue()));
+            .andExpect(jsonPath("$.valorUstibb").value(DEFAULT_VALOR_USTIBB.intValue()))
+            .andExpect(jsonPath("$.dataDeEntrega").value(DEFAULT_DATA_DE_ENTREGA.toString()));
     }
 
     @Test
@@ -242,7 +247,8 @@ public class OrdemDeFornecimentoResourceIT {
             .createdDate(UPDATED_CREATED_DATE)
             .lastModifiedBy(UPDATED_LAST_MODIFIED_BY)
             .lastModifiedDate(UPDATED_LAST_MODIFIED_DATE)
-            .valorUstibb(UPDATED_VALOR_USTIBB);
+            .valorUstibb(UPDATED_VALOR_USTIBB)
+            .dataDeEntrega(UPDATED_DATA_DE_ENTREGA);
         OrdemDeFornecimentoDTO ordemDeFornecimentoDTO = ordemDeFornecimentoMapper.toDto(updatedOrdemDeFornecimento);
 
         restOrdemDeFornecimentoMockMvc.perform(put("/api/ordem-de-fornecimentos")
@@ -262,6 +268,7 @@ public class OrdemDeFornecimentoResourceIT {
         assertThat(testOrdemDeFornecimento.getLastModifiedBy()).isEqualTo(UPDATED_LAST_MODIFIED_BY);
         assertThat(testOrdemDeFornecimento.getLastModifiedDate()).isEqualTo(UPDATED_LAST_MODIFIED_DATE);
         assertThat(testOrdemDeFornecimento.getValorUstibb()).isEqualTo(UPDATED_VALOR_USTIBB);
+        assertThat(testOrdemDeFornecimento.getDataDeEntrega()).isEqualTo(UPDATED_DATA_DE_ENTREGA);
     }
 
     @Test

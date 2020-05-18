@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <!--
+            Load sample data generated with Faker.js
+            - This data can be easily edited using a CSV editor (or even MS Excel) and
+              is located in the 'src/main/resources/config/liquibase/fake-data' directory
+            - By default this data is applied when running with the JHipster 'dev' profile.
+              This can be customized by adding or removing 'faker' in the 'spring.liquibase.contexts'
+              Spring Boot configuration key.
+        -->
+    <changeSet id="20200416172000-1-data" author="jhipster" context="faker">
+        <loadData
+            file="config/liquibase/fake-data/ordem_de_fornecimento.csv"
+            separator=";"
+            tableName="ordem_de_fornecimento">
+            <column name="id" type="numeric"/>
+            <column name="numero" type="numeric"/>
+            <column name="estado" type="string"/>
+            <column name="observacao_do_gestor" type="clob"/>
+            <column name="created_by" type="string"/>
+            <column name="created_date" type="datetime"/>
+            <column name="last_modified_by" type="string"/>
+            <column name="last_modified_date" type="datetime"/>
+            <column name="valor_ustibb" type="numeric"/>
+            <column name="data_de_entrega" type="datetime"/>
+            <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
+        </loadData>
+    </changeSet>
+
+    <!--
+    Load sample data generated with Faker.js
+    - This data can be easily edited using a CSV editor (or even MS Excel) and
+      is located in the 'src/main/resources/config/liquibase/fake-data' directory
+    - By default this data is applied when running with the JHipster 'dev' profile.
+      This can be customized by adding or removing 'faker' in the 'spring.liquibase.contexts'
+      Spring Boot configuration key.
+-->
+    <changeSet id="20200416172100-1-data" author="jhipster" context="faker">
+        <loadData
+            file="config/liquibase/fake-data/artefato_ordem_de_fornecimento.csv"
+            separator=";"
+            tableName="artefato_ordem_de_fornecimento">
+            <column name="id" type="numeric"/>
+            <column name="estado" type="string"/>
+            <column name="created_date" type="datetime"/>
+            <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
+        </loadData>
+    </changeSet>
+
+    <!--
+    Load sample data generated with Faker.js
+    - This data can be easily edited using a CSV editor (or even MS Excel) and
+      is located in the 'src/main/resources/config/liquibase/fake-data' directory
+    - By default this data is applied when running with the JHipster 'dev' profile.
+      This can be customized by adding or removing 'faker' in the 'spring.liquibase.contexts'
+      Spring Boot configuration key.
+-->
+    <changeSet id="20200416172200-1-data" author="jhipster" context="faker">
+        <loadData
+            file="config/liquibase/fake-data/artefato.csv"
+            separator=";"
+            tableName="artefato">
+            <column name="id" type="numeric"/>
+            <column name="local_do_artefato" type="string"/>
+            <column name="extensao" type="string"/>
+            <column name="complexidade" type="string"/>
+            <column name="artefato_de_test" type="boolean"/>
+            <column name="created_date" type="datetime"/>
+            <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
+        </loadData>
+    </changeSet>
+
+</databaseChangeLog>

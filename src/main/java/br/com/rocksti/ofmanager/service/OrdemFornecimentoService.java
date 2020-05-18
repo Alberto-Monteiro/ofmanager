@@ -204,6 +204,7 @@ public class OrdemFornecimentoService {
         ordemDeFornecimento.setValorUstibb(ordemFornecimentoDTO.getOrdemDeFornecimento().getValorUstibb());
         ordemDeFornecimento.setGestorDaOf(ordemFornecimentoDTO.getOrdemDeFornecimento().getGestorDaOf());
         ordemDeFornecimento.setObservacaoDoGestor(ordemFornecimentoDTO.getOrdemDeFornecimento().getObservacaoDoGestor());
+        ordemDeFornecimento.setDataDeEntrega(ordemFornecimentoDTO.getOrdemDeFornecimento().getDataDeEntrega());
     }
 
     private List<String> getListaLocalArtefatosTextArea(OrdemFornecimentoDTO ordemFornecimentoDTO) {
