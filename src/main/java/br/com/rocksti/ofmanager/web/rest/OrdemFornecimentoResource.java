@@ -187,4 +187,17 @@ public class OrdemFornecimentoResource {
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, ordemDeFornecimentoId.toString()))
             .body(null);
     }
+
+    @PutMapping("/gerenciador_de_ofs/salvarObservacoes")
+    public ResponseEntity<Object> salvarObservacoes(@RequestBody(required = false) String observacoes, Long ordemDeFornecimentoId) {
+        if (ordemDeFornecimentoId == null) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+
+        ordemFornecimentoService.salvarObservacoes(observacoes, ordemDeFornecimentoId);
+
+        return ResponseEntity.ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, ordemDeFornecimentoId.toString()))
+            .body(null);
+    }
 }

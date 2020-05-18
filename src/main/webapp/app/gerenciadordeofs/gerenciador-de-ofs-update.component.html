@@ -48,6 +48,13 @@
                     </mat-form-field>
                 </div>
 
+                <div class="from-group">
+                    <mat-form-field class="w-100 no-ng-invalid" appearance="outline">
+                        <mat-label>Observações</mat-label>
+                        <textarea #observacoes (change)="salvarObservacoes(observacoes.value, ordemFornecimento?.ordemDeFornecimento?.id)" class="no-ng-invalid" matInput placeholder="Observações" rows="3" id="field_observacoes" name="observacoes" formControlName="observacoes"></textarea>
+                    </mat-form-field>
+                </div>
+
                 <div class="form-group">
                     <mat-form-field class="w-100 no-ng-invalid" appearance="outline">
                         <mat-label>Listas dos arquivos</mat-label>

@@ -94,4 +94,11 @@ export class GerenciadorDeOfsService {
       observe: 'response'
     });
   }
+
+  salvarObservacoes(observacoes: string, ordemDeFornecimentoId: number): Observable<HttpResponse<void>> {
+    return this.http.put<void>(`${this.resourceUrl}/salvarObservacoes`, observacoes, {
+      params: new HttpParams().append('ordemDeFornecimentoId', String(ordemDeFornecimentoId)),
+      observe: 'response'
+    });
+  }
 }

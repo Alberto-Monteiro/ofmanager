@@ -26,7 +26,8 @@ export class GerenciadorDeOfsUpdateComponent implements OnInit {
     numero: [null, [Validators.max(999999999), Validators.min(100)]],
     usuarioGestor: [null, [Validators.required]],
     listaDeArquivo: [null, [Validators.required]],
-    ustibb: []
+    ustibb: [],
+    observacoes: []
   });
 
   constructor(
@@ -55,7 +56,8 @@ export class GerenciadorDeOfsUpdateComponent implements OnInit {
       )[0],
       numero: ordemFornecimento.ordemDeFornecimento!.numero,
       listaDeArquivo: ordemFornecimento.listaDosArquivos,
-      ustibb: ordemFornecimento.ordemDeFornecimento!.valorUstibb
+      ustibb: ordemFornecimento.ordemDeFornecimento!.valorUstibb,
+      observacoes: ordemFornecimento.ordemDeFornecimento?.observacaoDoGestor
     });
   }
 
@@ -66,7 +68,8 @@ export class GerenciadorDeOfsUpdateComponent implements OnInit {
         id: this.ordemFornecimento!.ordemDeFornecimento!.id,
         gestorDaOf: this.editForm.get(['usuarioGestor'])!.value,
         numero: this.editForm.get(['numero'])!.value,
-        valorUstibb: this.editForm.get(['ustibb'])!.value
+        valorUstibb: this.editForm.get(['ustibb'])!.value,
+        observacaoDoGestor: this.editForm.get(['observacoes'])!.value
       }
     };
   }
@@ -250,5 +253,9 @@ export class GerenciadorDeOfsUpdateComponent implements OnInit {
         .salvarNumeroOf(this.editForm?.get('numero')?.value, this.ordemFornecimento?.ordemDeFornecimento?.id)
         .subscribe();
     }
+  }
+
+  salvarObservacoes(observacoes: string, ordemDeFornecimentoId: number): void {
+    this.gerenciadorDeOfsService.salvarObservacoes(observacoes, ordemDeFornecimentoId).subscribe();
   }
 }

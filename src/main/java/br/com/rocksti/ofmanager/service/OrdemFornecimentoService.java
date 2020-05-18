@@ -203,6 +203,7 @@ public class OrdemFornecimentoService {
         ordemDeFornecimento.setNumero(ordemFornecimentoDTO.getOrdemDeFornecimento().getNumero());
         ordemDeFornecimento.setValorUstibb(ordemFornecimentoDTO.getOrdemDeFornecimento().getValorUstibb());
         ordemDeFornecimento.setGestorDaOf(ordemFornecimentoDTO.getOrdemDeFornecimento().getGestorDaOf());
+        ordemDeFornecimento.setObservacaoDoGestor(ordemFornecimentoDTO.getOrdemDeFornecimento().getObservacaoDoGestor());
     }
 
     private List<String> getListaLocalArtefatosTextArea(OrdemFornecimentoDTO ordemFornecimentoDTO) {
@@ -439,6 +440,15 @@ public class OrdemFornecimentoService {
 
         ordemDeFornecimentoRepository.findById(ordemDeFornecimentoId).ifPresent(ordemDeFornecimento -> {
             ordemDeFornecimento.setNumero(numeroOf);
+            ordemDeFornecimentoRepository.save(ordemDeFornecimento);
+        });
+    }
+
+    public void salvarObservacoes(String observacoes, Long ordemDeFornecimentoId) {
+        validarOfPertencenteDeUsuario(ordemDeFornecimentoId);
+
+        ordemDeFornecimentoRepository.findById(ordemDeFornecimentoId).ifPresent(ordemDeFornecimento -> {
+            ordemDeFornecimento.setObservacaoDoGestor(observacoes);
             ordemDeFornecimentoRepository.save(ordemDeFornecimento);
         });
     }
