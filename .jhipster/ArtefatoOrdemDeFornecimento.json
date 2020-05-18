@@ -27,7 +27,7 @@
             "otherEntityField": "id"
         }
     ],
-    "changelogDate": "20200416172100",
+    "changelogDate": "20200518173100",
     "entityTableName": "artefato_ordem_de_fornecimento",
     "dto": "mapstruct",
     "pagination": "pagination",

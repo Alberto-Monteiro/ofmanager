@@ -2,10 +2,10 @@
   "ofmanagerApp": {
     "EstadoOrdemDeFornecimento": {
       "null": "",
-      "NOVA": "Nova",
-      "ANALISE": "Análise",
-      "ACEITA": "Aceita",
-      "REJEITADA": "Rejeitada"
+      "NOVA": "NOVA",
+      "ANALISE": "ANALISE",
+      "ACEITA": "ACEITA",
+      "REJEITADA": "REJEITADA"
     }
   }
 }

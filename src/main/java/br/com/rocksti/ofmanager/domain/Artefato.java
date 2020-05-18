@@ -11,8 +11,6 @@ import java.util.Objects;
 import java.time.Instant;
 
 import br.com.rocksti.ofmanager.domain.enumeration.ComplexidadeArtefato;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
  * A Artefato.
@@ -20,7 +18,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Entity
 @Table(name = "artefato")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-@EntityListeners(AuditingEntityListener.class)
 public class Artefato implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -44,9 +41,8 @@ public class Artefato implements Serializable {
     @Column(name = "artefato_de_test")
     private Boolean artefatoDeTest;
 
-    @CreatedDate
-    @Column(name = "created_date", updatable = false)
-    private Instant createdDate = Instant.now();
+    @Column(name = "created_date")
+    private Instant createdDate;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {

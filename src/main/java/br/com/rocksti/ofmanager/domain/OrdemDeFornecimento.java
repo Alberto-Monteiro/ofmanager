@@ -1,21 +1,19 @@
 package br.com.rocksti.ofmanager.domain;
 
-import br.com.rocksti.ofmanager.domain.enumeration.EstadoOrdemDeFornecimento;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+
 import java.io.Serializable;
+import java.util.Objects;
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
+
+import br.com.rocksti.ofmanager.domain.enumeration.EstadoOrdemDeFornecimento;
 
 /**
  * A OrdemDeFornecimento.
@@ -23,7 +21,6 @@ import java.util.List;
 @Entity
 @Table(name = "ordem_de_fornecimento")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-@EntityListeners(AuditingEntityListener.class)
 public class OrdemDeFornecimento implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -43,28 +40,24 @@ public class OrdemDeFornecimento implements Serializable {
     @Column(name = "observacao_do_gestor")
     private String observacaoDoGestor;
 
-    @CreatedBy
-    @Column(name = "created_by", length = 50, updatable = false)
+    @Column(name = "created_by")
     private String createdBy;
 
-    @CreatedDate
-    @Column(name = "created_date", updatable = false)
-    private Instant createdDate = Instant.now();
+    @Column(name = "created_date")
+    private Instant createdDate;
 
-    @LastModifiedBy
-    @Column(name = "last_modified_by", length = 50)
+    @Column(name = "last_modified_by")
     private String lastModifiedBy;
 
-    @LastModifiedDate
     @Column(name = "last_modified_date")
-    private Instant lastModifiedDate = Instant.now();
+    private Instant lastModifiedDate;
 
     @Column(name = "valor_ustibb", precision = 21, scale = 2)
     private BigDecimal valorUstibb;
 
-    @OneToMany(mappedBy = "ordemDeFornecimento", orphanRemoval = true)
+    @OneToMany(mappedBy = "ordemDeFornecimento")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private List<ArtefatoOrdemDeFornecimento> artefatoOrdemDeFornecimentos = new ArrayList<>();
+    private Set<ArtefatoOrdemDeFornecimento> artefatoOrdemDeFornecimentos = new HashSet<>();
 
     @ManyToOne
     @JsonIgnoreProperties("ordemDeFornecimentos")
@@ -187,11 +180,11 @@ public class OrdemDeFornecimento implements Serializable {
         this.valorUstibb = valorUstibb;
     }
 
-    public List<ArtefatoOrdemDeFornecimento> getArtefatoOrdemDeFornecimentos() {
+    public Set<ArtefatoOrdemDeFornecimento> getArtefatoOrdemDeFornecimentos() {
         return artefatoOrdemDeFornecimentos;
     }
 
-    public OrdemDeFornecimento artefatoOrdemDeFornecimentos(List<ArtefatoOrdemDeFornecimento> artefatoOrdemDeFornecimentos) {
+    public OrdemDeFornecimento artefatoOrdemDeFornecimentos(Set<ArtefatoOrdemDeFornecimento> artefatoOrdemDeFornecimentos) {
         this.artefatoOrdemDeFornecimentos = artefatoOrdemDeFornecimentos;
         return this;
     }
@@ -208,7 +201,7 @@ public class OrdemDeFornecimento implements Serializable {
         return this;
     }
 
-    public void setArtefatoOrdemDeFornecimentos(List<ArtefatoOrdemDeFornecimento> artefatoOrdemDeFornecimentos) {
+    public void setArtefatoOrdemDeFornecimentos(Set<ArtefatoOrdemDeFornecimento> artefatoOrdemDeFornecimentos) {
         this.artefatoOrdemDeFornecimentos = artefatoOrdemDeFornecimentos;
     }
 

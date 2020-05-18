@@ -1,6 +1,6 @@
 {
   "global": {
-    "title": "OF Manager",
+    "title": "Ofmanager",
     "browsehappy": "Você está usando um navegador <strong>desatualizado</strong>. Favor <a href=\"http://browsehappy.com/?locale=pt_BR\">atualize o seu navegador</a> para ter uma experiência melhor.",
     "menu": {
       "home": "Início",
@@ -134,8 +134,6 @@
     "emailexists": "E-mail já está cadastrado!",
     "idexists": "Novo(a) {{entityName}} não pode ter um identificador",
     "idnull": "Identificador inválido",
-    "ordemDeFornecimentoNaoPertencente": "Of pertencente a outro usuário",
-    "ordemDeFornecimentoEstadoEditadoGestor": "O estado da OF só pode ser editado pelo gestor",
     "file": {
       "could.not.extract": "Could not extract file",
       "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""

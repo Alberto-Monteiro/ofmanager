@@ -2,11 +2,11 @@
   "ofmanagerApp": {
     "ComplexidadeArtefato": {
       "null": "",
-      "MUITO_BAIXA": "Muito baixa",
-      "BAIXA": "Baixa",
-      "MEDIA": "Média",
-      "ALTA": "Alta",
-      "MUITO_ALTA": "Muito alta"
+      "MUITO_BAIXA": "MUITO_BAIXA",
+      "BAIXA": "BAIXA",
+      "MEDIA": "MEDIA",
+      "ALTA": "ALTA",
+      "MUITO_ALTA": "MUITO_ALTA"
     }
   }
 }

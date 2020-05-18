@@ -58,7 +58,7 @@
             "otherEntityField": "login"
         }
     ],
-    "changelogDate": "20200416172000",
+    "changelogDate": "20200518173000",
     "entityTableName": "ordem_de_fornecimento",
     "dto": "mapstruct",
     "pagination": "pagination",

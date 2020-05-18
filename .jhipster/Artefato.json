@@ -30,7 +30,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200416172200",
+    "changelogDate": "20200518173200",
     "entityTableName": "artefato",
     "dto": "mapstruct",
     "pagination": "pagination",

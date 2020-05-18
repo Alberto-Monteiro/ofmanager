@@ -16,10 +16,6 @@ public interface OrdemDeFornecimentoMapper extends EntityMapper<OrdemDeFornecime
     @Mapping(source = "gestorDaOf.login", target = "gestorDaOfLogin")
     @Mapping(source = "donoDaOf.id", target = "donoDaOfId")
     @Mapping(source = "donoDaOf.login", target = "donoDaOfLogin")
-    @Mapping(source = "donoDaOf.firstName", target = "donoDaOfFirstName")
-    @Mapping(source = "donoDaOf.lastName", target = "donoDaOfLastName")
-    @Mapping(source = "gestorDaOf.firstName", target = "gestorDaOfFirstName")
-    @Mapping(source = "gestorDaOf.lastName", target = "gestorDaOfLastName")
     OrdemDeFornecimentoDTO toDto(OrdemDeFornecimento ordemDeFornecimento);
 
     @Mapping(target = "artefatoOrdemDeFornecimentos", ignore = true)

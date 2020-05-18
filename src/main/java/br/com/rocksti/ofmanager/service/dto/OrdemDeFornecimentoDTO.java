@@ -1,19 +1,17 @@
 package br.com.rocksti.ofmanager.service.dto;
 
-import br.com.rocksti.ofmanager.domain.enumeration.EstadoOrdemDeFornecimento;
-
-import javax.persistence.Lob;
-import javax.validation.constraints.NotNull;
+import java.time.Instant;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.Instant;
 import java.util.Objects;
+import javax.persistence.Lob;
+import br.com.rocksti.ofmanager.domain.enumeration.EstadoOrdemDeFornecimento;
 
 /**
  * A DTO for the {@link br.com.rocksti.ofmanager.domain.OrdemDeFornecimento} entity.
  */
 public class OrdemDeFornecimentoDTO implements Serializable {
-
+    
     private Long id;
 
     private Integer numero;
@@ -33,6 +31,7 @@ public class OrdemDeFornecimentoDTO implements Serializable {
 
     private BigDecimal valorUstibb;
 
+
     private Long gestorDaOfId;
 
     private String gestorDaOfLogin;
@@ -40,15 +39,7 @@ public class OrdemDeFornecimentoDTO implements Serializable {
     private Long donoDaOfId;
 
     private String donoDaOfLogin;
-
-    private String donoDaOfFirstName;
-
-    private String donoDaOfLastName;
-
-    private String gestorDaOfFirstName;
-
-    private String gestorDaOfLastName;
-
+    
     public Long getId() {
         return id;
     }
@@ -153,38 +144,6 @@ public class OrdemDeFornecimentoDTO implements Serializable {
         this.donoDaOfLogin = userLogin;
     }
 
-    public String getDonoDaOfFirstName() {
-        return donoDaOfFirstName;
-    }
-
-    public void setDonoDaOfFirstName(String donoDaOfFirstName) {
-        this.donoDaOfFirstName = donoDaOfFirstName;
-    }
-
-    public String getDonoDaOfLastName() {
-        return donoDaOfLastName;
-    }
-
-    public void setDonoDaOfLastName(String donoDaOfLastName) {
-        this.donoDaOfLastName = donoDaOfLastName;
-    }
-
-    public String getGestorDaOfFirstName() {
-        return gestorDaOfFirstName;
-    }
-
-    public void setGestorDaOfFirstName(String gestorDaOfFirstName) {
-        this.gestorDaOfFirstName = gestorDaOfFirstName;
-    }
-
-    public String getGestorDaOfLastName() {
-        return gestorDaOfLastName;
-    }
-
-    public void setGestorDaOfLastName(String gestorDaOfLastName) {
-        this.gestorDaOfLastName = gestorDaOfLastName;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -222,10 +181,6 @@ public class OrdemDeFornecimentoDTO implements Serializable {
             ", gestorDaOfLogin='" + getGestorDaOfLogin() + "'" +
             ", donoDaOfId=" + getDonoDaOfId() +
             ", donoDaOfLogin='" + getDonoDaOfLogin() + "'" +
-            ", donoDaOfFirstName='" + getDonoDaOfFirstName() + "'" +
-            ", donoDaOfLastName='" + getDonoDaOfLastName() + "'" +
-            ", gestorDaOfFirstName='" + getGestorDaOfFirstName() + "'" +
-            ", gestorDaOfLastName='" + getGestorDaOfLastName() + "'" +
             "}";
     }
 }

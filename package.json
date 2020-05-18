@@ -1,6 +1,6 @@
 {
   "name": "ofmanager",
-  "version": "0.2.1",
+  "version": "0.0.1-SNAPSHOT",
   "description": "Description for ofmanager",
   "private": true,
   "license": "UNLICENSED",
@@ -31,20 +31,9 @@
     "rxjs": "6.5.3",
     "swagger-ui-dist": "3.24.3",
     "tslib": "1.10.0",
-    "zone.js": "0.10.2",
-    "ngx-mask": "9.0.1",
-    "ngx-toastr": "12.0.1",
-    "@angular/animations": "9.1.2",
-    "@angular/material": "9.2.1",
-    "@angular/cdk": "9.2.1",
-    "@ngx-loading-bar/core": "4.2.0",
-    "@ngx-loading-bar/http-client": "4.2.0",
-    "@angular/flex-layout": "9.0.0-beta.29",
-    "@brunoc/ngx-viacep": "2.1.2",
-    "file-saver": "2.0.2"
+    "zone.js": "0.10.2"
   },
   "devDependencies": {
-    "@types/file-saver": "2.0.1",
     "@angular/cli": "9.0.4",
     "@angular/compiler-cli": "9.0.4",
     "@ngtools/webpack": "9.0.4",
@@ -113,8 +102,7 @@
     "webpack-merge": "4.2.2",
     "webpack-notifier": "1.8.0",
     "workbox-webpack-plugin": "4.3.1",
-    "write-file-webpack-plugin": "4.5.1",
-    "material-design-icons": "3.0.1"
+    "write-file-webpack-plugin": "4.5.1"
   },
   "engines": {
     "node": ">=8.9.0"
