@@ -1,6 +1,9 @@
 @import 'bootstrap-variables';
 @import '~bootstrap/scss/functions';
 @import '~bootstrap/scss/variables';
+@import '~ngx-toastr/toastr';
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
+@import '~material-design-icons/iconfont/material-icons.css';
 
 /* ==============================================================
 Bootstrap tweaks
@@ -193,3 +196,7 @@ ui bootstrap tweaks
 }
 
 /* jhipster-needle-scss-add-main JHipster will add new css style */
+
+.no-ng-invalid:not(ng-invalid) {
+  border-left: 0px solid red;
+}

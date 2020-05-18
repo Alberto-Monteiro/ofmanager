@@ -1,16 +1,14 @@
 package br.com.rocksti.ofmanager.domain;
 
+import br.com.rocksti.ofmanager.domain.enumeration.EstadoArtefato;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
-
 import java.io.Serializable;
-import java.util.Objects;
 import java.time.Instant;
-
-import br.com.rocksti.ofmanager.domain.enumeration.EstadoArtefato;
 
 /**
  * A ArtefatoOrdemDeFornecimento.
@@ -30,8 +28,9 @@ public class ArtefatoOrdemDeFornecimento implements Serializable {
     @Column(name = "estado")
     private EstadoArtefato estado;
 
-    @Column(name = "created_date")
-    private Instant createdDate;
+    @CreatedDate
+    @Column(name = "created_date", updatable = false)
+    private Instant createdDate = Instant.now();
 
     @ManyToOne
     @JsonIgnoreProperties("artefatoOrdemDeFornecimentos")

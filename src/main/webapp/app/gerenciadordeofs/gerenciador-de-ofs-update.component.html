@@ -1,0 +1,173 @@
+<ngx-loading-bar></ngx-loading-bar>
+<div class="row justify-content-center">
+    <div class="col-9">
+        <form name="editForm" role="form" novalidate [formGroup]="editForm">
+            <h2 id="of-servico-of-heading">Criar ou editar OF</h2>
+            <div>
+                <div class="form-group">
+                    <mat-form-field class="no-ng-invalid" appearance="outline">
+                        <mat-label>Número da OF</mat-label>
+                        <input (change)="salvarNumeroOf()" class="no-ng-invalid" matInput placeholder="Número da OF" id="field_numero" type="number" name="numero" formControlName="numero">
+                        <button *ngIf="!!editForm.get('numero')!.value && editForm.get('numero')!.valid" (click)="goToLink()" mat-button matSuffix mat-icon-button aria-label="Clear">
+                            <mat-icon> home </mat-icon>
+                        </button>
+                        <mat-error *ngIf="editForm.get('numero')!.hasError('max')">
+                            É um número muito grande para ser uma OF
+                        </mat-error>
+                        <mat-error *ngIf="editForm.get('numero')!.hasError('min')">
+                            É um número muito pequeno para ser uma OF
+                        </mat-error>
+                    </mat-form-field>
+                    &nbsp;
+                    &nbsp;
+                    <mat-form-field class="no-ng-invalid" appearance="outline">
+                        <mat-label>Gestor da OF</mat-label>
+                        <mat-select class="no-ng-invalid" formControlName="usuarioGestor" (selectionChange)="!!ordemFornecimento!.ordemDeFornecimento!.id?atualizaGestorDaOf():0;">
+                            <mat-option *ngFor="let usuarioGestor of usuariosGestor" [value]="usuarioGestor">
+                                {{usuarioGestor.firstName}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    &nbsp;
+                    &nbsp;
+                    <span *ngIf="ordemFornecimento!.ordemDeFornecimento!.id">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Estado da OF</mat-label>
+                            <mat-select [(value)]="ordemFornecimento!.ordemDeFornecimento!.estado">
+                                <mat-option (click)="atualizaEstadoDaOf(ordemFornecimento!.ordemDeFornecimento!, 'NOVA')" [value]="'NOVA'">Nova</mat-option>
+                                <mat-option (click)="atualizaEstadoDaOf(ordemFornecimento!.ordemDeFornecimento!, 'ANALISE')" [value]="'ANALISE'">Análise</mat-option>
+                                <mat-option (click)="atualizaEstadoDaOf(ordemFornecimento!.ordemDeFornecimento!, 'ACEITA')" [value]="'ACEITA'">Aceita</mat-option>
+                                <mat-option (click)="atualizaEstadoDaOf(ordemFornecimento!.ordemDeFornecimento!, 'REJEITADA')" [value]="'REJEITADA'">Rejeitada</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </span>
+
+                    <mat-form-field class="no-ng-invalid" appearance="outline">
+                        <mat-label>Valor da USTIBB</mat-label>
+                        <input #valorUstibb [readonly]="!ordemFornecimento!.ordemDeFornecimento!.id" (change)="salvarValorUstibb(valorUstibb.value, ordemFornecimento!.ordemDeFornecimento!.id)" class="no-ng-invalid" matInput placeholder="Número da USTIBB" type="number" formControlName="ustibb">
+                    </mat-form-field>
+                </div>
+
+                <div class="form-group">
+                    <mat-form-field class="w-100 no-ng-invalid" appearance="outline">
+                        <mat-label>Listas dos arquivos</mat-label>
+                        <textarea class="no-ng-invalid" matInput placeholder="Listas dos arquivos" rows="10" id="field_lista_arquivo" name="listaDeAqruivos" formControlName="listaDeArquivo"></textarea>
+                    </mat-form-field>
+                    <mat-chip-list *ngIf="ordemFornecimento!.ordemDeFornecimento!.id" aria-label="Fish selection">
+                        <mat-chip color="primary" selected>
+                            <span>Total de arquivos: {{ordemFornecimento!.ordemDeFornecimento!.artefatoOrdemDeFornecimentos!.length}}</span>
+                        </mat-chip>
+                    </mat-chip-list>
+                    <p>
+                    <p>
+                    <p>
+                    <div *ngIf="!editForm.invalid">
+                        <form>
+                            <mat-form-field class="no-ng-invalid w-25" appearance="outline">
+                                <mat-label>Substituir</mat-label>
+                                <input #substituir1 class="no-ng-invalid" matInput placeholder="Substituir" type="text" id="substituir1" autocomplete="substituir1">
+                            </mat-form-field>
+                            <mat-form-field class="no-ng-invalid w-25" appearance="outline">
+                                <mat-label>Substituir</mat-label>
+                                <input #substituir2 class="no-ng-invalid" matInput placeholder="Substituir" type="text" id="substituir2" autocomplete="substituir2">
+                            </mat-form-field>
+                            <button type="submit" class="btn btn-primary form-group" (click)="substituir(substituir1.value, substituir2.value)" [disabled]="editForm.invalid">
+                                <fa-icon icon="sync"></fa-icon>&nbsp;<span>Substituir</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <br>
+
+                <of-alert-error></of-alert-error>
+
+                <button type="button" id="cancel-save" class="btn btn-secondary form-group" (click)="previousState()">
+                    <fa-icon icon="chevron-left"></fa-icon>&nbsp;<span>Voltar</span>
+                </button>
+                <button type="button" id="processar" class="btn btn-primary form-group" (click)="processar()" [disabled]="editForm.invalid">
+                    <fa-icon icon="sync"></fa-icon>&nbsp;<span>Processar</span>
+                </button>
+                <button type="button" id="download" class="btn btn-success form-group" (click)="download()" [disabled]="!ordemFornecimento!.ordemDeFornecimento!.id">
+                    <fa-icon icon="download"></fa-icon>&nbsp;<span>Download XLSX</span>
+                </button>
+                <button type="button" id="downloadTxt" class="btn btn-success form-group" (click)="downloadTxt()" [disabled]="!ordemFornecimento!.ordemDeFornecimento!.id">
+                    <fa-icon icon="download"></fa-icon>&nbsp;<span>Download TXT</span>
+                </button>
+
+                <div class="form-group">
+                    <ngb-alert [dismissible]="false">
+                        <strong>
+                            A complexidade do arquivo quando selecionada fica gravada no mesmo para ser compartilhada em outras OFs.<br>
+                            Quando marcado o checkbox "Test" será informado para outras OFs que o arquivo é de teste.
+                        </strong>
+                    </ngb-alert>
+                </div>
+
+                <div *ngFor="let mapArtefatoOrdemDeFornecimento of ordemFornecimento!.mapArtefatoOrdemDeFornecimento! | keyvalue" class="card form-group">
+                    <div class="card-header">
+                        <h3>{{mapArtefatoOrdemDeFornecimento.key}}</h3>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li *ngFor="let artefatoOrdemDeFornecimento of mapArtefatoOrdemDeFornecimento.value" class="list-group-item">
+                            <div>
+                                <div class="row">
+                                    <div class="p-0 col-6 align-self-center text-left d-inline btn"
+                                         ngbTooltip="O nome do arquivo foi copiado." triggers="click:blur" placement="right"
+                                         [cdkCopyToClipboard]="getNomeDoArquivo(artefatoOrdemDeFornecimento.artefato.localDoArtefato)"
+                                         [ngClass]="{'estado-criando': artefatoOrdemDeFornecimento.estado === 'CRIANDO', 'estado-alterando': artefatoOrdemDeFornecimento.estado === 'ALTERANDO'}">
+                                        <h4 class="m-0 p-3 btn-outline-dark"
+                                            autoClose="false" container="body" placement="top" ngbTooltip="{{artefatoOrdemDeFornecimento.artefato.localDoArtefato}}">
+                                            {{getNomeDoArquivo(artefatoOrdemDeFornecimento.artefato.localDoArtefato)}}
+                                        </h4>
+                                    </div>
+                                    <div class="col-6 align-self-center text-right d-inline-block">
+                                        <div class="d-inline-block">
+                                            <mat-checkbox *ngIf="podeSerArquivoDeTest(mapArtefatoOrdemDeFornecimento.key)" (change)="dropdownComplexidade.replaceWith(dropdownComplexidade); isArquivoTest(artefatoOrdemDeFornecimento.artefato);" [checked]="artefatoOrdemDeFornecimento.artefato.artefatoDeTest">Test</mat-checkbox>
+                                        </div>
+                                        <div #dropdownComplexidade ngbDropdown class="d-inline-block">
+                                            <button style="width: 150px" class="btn btn-outline-dark" id="dropdownComplexidade" ngbDropdownToggle
+                                                    [ngClass]="{
+                                                        'complexidade-na': !artefatoOrdemDeFornecimento.artefato!.complexidade,
+                                                        'complexidade-muito-baixa': artefatoOrdemDeFornecimento.artefato!.complexidade === 'MUITO_BAIXA',
+                                                        'complexidade-baixa': artefatoOrdemDeFornecimento.artefato!.complexidade === 'BAIXA',
+                                                        'complexidade-media': artefatoOrdemDeFornecimento.artefato!.complexidade === 'MEDIA',
+                                                        'complexidade-alta': artefatoOrdemDeFornecimento.artefato!.complexidade === 'ALTA',
+                                                        'complexidade-muito-alta': artefatoOrdemDeFornecimento.artefato!.complexidade === 'MUITO_ALTA'
+                                                    }">
+                                                {{!artefatoOrdemDeFornecimento.artefato!.complexidade ? 'Complexidade' : ('ofmanagerApp.ComplexidadeArtefato.' + artefatoOrdemDeFornecimento.artefato!.complexidade) | translate}}
+                                            </button>
+                                            <div ngbDropdownMenu aria-labelledby="dropdownComplexidade">
+                                                <button class="complexidade-na" ngbDropdownItem (click)="atualizaComplexidade(artefatoOrdemDeFornecimento.artefato, null)">N/A</button>
+                                                <button *ngIf="complexidadeIsVisivel(artefatoOrdemDeFornecimento.artefato, 'MUITO_BAIXA')" class="complexidade-muito-baixa" ngbDropdownItem (click)="atualizaComplexidade(artefatoOrdemDeFornecimento.artefato, 'MUITO_BAIXA')">Muito Baixa</button>
+                                                <button *ngIf="complexidadeIsVisivel(artefatoOrdemDeFornecimento.artefato, 'BAIXA')" class="complexidade-baixa" ngbDropdownItem (click)="atualizaComplexidade(artefatoOrdemDeFornecimento.artefato, 'BAIXA')">Baixa</button>
+                                                <button *ngIf="complexidadeIsVisivel(artefatoOrdemDeFornecimento.artefato, 'MEDIA')" class="complexidade-media" ngbDropdownItem (click)="atualizaComplexidade(artefatoOrdemDeFornecimento.artefato, 'MEDIA')">Media</button>
+                                                <button *ngIf="complexidadeIsVisivel(artefatoOrdemDeFornecimento.artefato, 'ALTA')" class="complexidade-alta" ngbDropdownItem (click)="atualizaComplexidade(artefatoOrdemDeFornecimento.artefato, 'ALTA')">Alta</button>
+                                                <button *ngIf="complexidadeIsVisivel(artefatoOrdemDeFornecimento.artefato, 'MUITO_ALTA')" class="complexidade-muito-alta" ngbDropdownItem (click)="atualizaComplexidade(artefatoOrdemDeFornecimento.artefato, 'MUITO_ALTA')">Muito Alta</button>
+                                            </div>
+                                        </div>
+                                        <div ngbDropdown class="d-inline-block">
+                                            <button style="width: 150px" class="btn btn-outline-dark" id="dropdownEstadoArquivo" ngbDropdownToggle
+                                                    [ngClass]="{'estado-criando': artefatoOrdemDeFornecimento.estado === 'CRIANDO', 'estado-alterando': artefatoOrdemDeFornecimento.estado === 'ALTERANDO'}">
+                                                {{!artefatoOrdemDeFornecimento.estado ? 'Finalidade' : ('ofmanagerApp.EstadoArtefato.' + artefatoOrdemDeFornecimento.estado) | translate}}
+                                            </button>
+                                            <div ngbDropdownMenu aria-labelledby="dropdownEstadoArquivo">
+                                                <button class="estado-criando" ngbDropdownItem (click)="atualizaEstadoArquivo(artefatoOrdemDeFornecimento, 'CRIANDO')">{{ 'ofmanagerApp.EstadoArtefato.CRIANDO' | translate }}</button>
+                                                <button class="estado-alterando" ngbDropdownItem (click)="atualizaEstadoArquivo(artefatoOrdemDeFornecimento, 'ALTERANDO')">{{ 'ofmanagerApp.EstadoArtefato.ALTERANDO' | translate }}</button>
+                                            </div>
+                                        </div>
+                                        <div class="d-inline-block">
+                                            <button type="button" class="btn btn-danger" title="Apagar linha" (click)="deletarArquivoDaOf(artefatoOrdemDeFornecimento)">
+                                                <fa-icon [icon]="'times'"></fa-icon>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

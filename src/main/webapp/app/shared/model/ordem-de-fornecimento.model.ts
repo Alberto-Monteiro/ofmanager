@@ -1,6 +1,7 @@
 import { Moment } from 'moment';
 import { IArtefatoOrdemDeFornecimento } from 'app/shared/model/artefato-ordem-de-fornecimento.model';
 import { EstadoOrdemDeFornecimento } from 'app/shared/model/enumerations/estado-ordem-de-fornecimento.model';
+import { IUser } from 'app/core/user/user.model';
 
 export interface IOrdemDeFornecimento {
   id?: number;
@@ -17,6 +18,12 @@ export interface IOrdemDeFornecimento {
   gestorDaOfId?: number;
   donoDaOfLogin?: string;
   donoDaOfId?: number;
+  donoDaOfFirstName?: string;
+  donoDaOfLastName?: string;
+  gestorDaOfFirstName?: string;
+  gestorDaOfLastName?: string;
+  gestorDaOf?: IUser;
+  donoDaOf?: IUser;
 }
 
 export class OrdemDeFornecimento implements IOrdemDeFornecimento {
@@ -34,6 +41,12 @@ export class OrdemDeFornecimento implements IOrdemDeFornecimento {
     public gestorDaOfLogin?: string,
     public gestorDaOfId?: number,
     public donoDaOfLogin?: string,
-    public donoDaOfId?: number
+    public donoDaOfId?: number,
+    public donoDaOfFirstName?: string,
+    public donoDaOfLastName?: string,
+    public gestorDaOfFirstName?: string,
+    public gestorDaOfLastName?: string,
+    public gestorDaOf?: IUser,
+    public donoDaOf?: IUser
   ) {}
 }
