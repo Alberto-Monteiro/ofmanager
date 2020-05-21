@@ -453,4 +453,13 @@ public class OrdemFornecimentoService {
             ordemDeFornecimentoRepository.save(ordemDeFornecimento);
         });
     }
+
+    public void salvarDataDeEntrega(Instant dataDeEntrega, Long ordemDeFornecimentoId) {
+        validarOfPertencenteDeUsuario(ordemDeFornecimentoId);
+
+        ordemDeFornecimentoRepository.findById(ordemDeFornecimentoId).ifPresent(ordemDeFornecimento -> {
+            ordemDeFornecimento.setDataDeEntrega(dataDeEntrega);
+            ordemDeFornecimentoRepository.save(ordemDeFornecimento);
+        });
+    }
 }

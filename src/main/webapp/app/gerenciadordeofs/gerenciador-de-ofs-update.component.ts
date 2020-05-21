@@ -268,7 +268,28 @@ export class GerenciadorDeOfsUpdateComponent implements OnInit {
     this.gerenciadorDeOfsService.salvarObservacoes(observacoes, ordemDeFornecimentoId).subscribe();
   }
 
-  atualizaDataDeEntrega(): void {
+  salvarDataDeEntrega(): void {
+    const moment1: string = moment(this.ordemFornecimento?.ordemDeFornecimento?.dataDeEntrega, DATE_TIME_FORMAT).format(DATE_TIME_FORMAT);
+    const moment2: string = moment(this.editForm.get(['dataDeEntrega'])!.value, DATE_TIME_FORMAT)
+      .utc(false)
+      .format(DATE_TIME_FORMAT);
+
+    if (moment1 !== moment2) {
+      this.gerenciadorDeOfsService
+        .salvarDataDeEntrega(
+          moment(this.editForm.get(['dataDeEntrega'])!.value, DATE_TIME_FORMAT),
+          this.ordemFornecimento?.ordemDeFornecimento?.id
+        )
+        .subscribe(() => {
+          if (this.ordemFornecimento?.ordemDeFornecimento) {
+            // @ts-ignore
+            this.ordemFornecimento?.ordemDeFornecimento?.dataDeEntrega = moment2;
+          }
+        });
+    }
+  }
+
+  getDataAtual(): void {
     this.editForm.patchValue({
       dataDeEntrega: moment().format(DATE_TIME_FORMAT)
     });

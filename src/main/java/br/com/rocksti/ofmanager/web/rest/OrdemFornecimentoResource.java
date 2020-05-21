@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -195,6 +196,19 @@ public class OrdemFornecimentoResource {
         }
 
         ordemFornecimentoService.salvarObservacoes(observacoes, ordemDeFornecimentoId);
+
+        return ResponseEntity.ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, ordemDeFornecimentoId.toString()))
+            .body(null);
+    }
+
+    @PutMapping("/gerenciador_de_ofs/salvarDataDeEntrega")
+    public ResponseEntity<Object> salvarDataDeEntrega(@RequestBody(required = false) Instant dataDeEntrega, Long ordemDeFornecimentoId) {
+        if (ordemDeFornecimentoId == null) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+
+        ordemFornecimentoService.salvarDataDeEntrega(dataDeEntrega, ordemDeFornecimentoId);
 
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, ordemDeFornecimentoId.toString()))

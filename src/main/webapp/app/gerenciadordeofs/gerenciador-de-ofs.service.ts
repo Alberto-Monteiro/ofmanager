@@ -8,6 +8,7 @@ import { IUser } from 'app/core/user/user.model';
 import { IOrdemDeFornecimento } from 'app/shared/model/ordem-de-fornecimento.model';
 import { IArtefato } from 'app/shared/model/artefato.model';
 import { IArtefatoOrdemDeFornecimento } from 'app/shared/model/artefato-ordem-de-fornecimento.model';
+import { Moment } from 'moment';
 
 type EntityResponseType = HttpResponse<IOrdemFornecimento>;
 
@@ -97,6 +98,13 @@ export class GerenciadorDeOfsService {
 
   salvarObservacoes(observacoes: string, ordemDeFornecimentoId: number): Observable<HttpResponse<void>> {
     return this.http.put<void>(`${this.resourceUrl}/salvarObservacoes`, observacoes, {
+      params: new HttpParams().append('ordemDeFornecimentoId', String(ordemDeFornecimentoId)),
+      observe: 'response'
+    });
+  }
+
+  salvarDataDeEntrega(dataDeEntrega: Moment, ordemDeFornecimentoId?: number): Observable<HttpResponse<void>> {
+    return this.http.put<void>(`${this.resourceUrl}/salvarDataDeEntrega`, dataDeEntrega, {
       params: new HttpParams().append('ordemDeFornecimentoId', String(ordemDeFornecimentoId)),
       observe: 'response'
     });
