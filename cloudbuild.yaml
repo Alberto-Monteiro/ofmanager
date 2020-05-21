@@ -70,7 +70,7 @@ steps:
         args:
             - -c
             - |
-                tar -czf /tmp/m2-cache.tar.gz /root/.m2/ &&
+                tar -czf /tmp/m2-cache.tar.gz .m2 &&
                 gsutil cp /tmp/m2-cache.tar.gz gs://${_GCS_CACHE_BUCKET}/m2-cache.tar.gz
         volumes:
             -   name: user.home
@@ -84,7 +84,7 @@ steps:
         args:
             - -c
             - |
-                tar -czf /tmp/jib-cache.tar.gz /root/.cache/ &&
+                tar -czf /tmp/jib-cache.tar.gz .cache &&
                 gsutil cp /tmp/jib-cache.tar.gz gs://${_GCS_CACHE_BUCKET}/jib-cache.tar.gz
         volumes:
             -   name: user.home
