@@ -20,13 +20,13 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.Valid;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
@@ -51,16 +51,20 @@ public class OrdemFornecimentoService {
 
     private final ArtefatoOrdemDeFornecimentoRepository artefatoOrdemDeFornecimentoRepository;
 
+    private final ApplicationContext applicationContext;
+
     public OrdemFornecimentoService(OrdemDeFornecimentoRepository ordemDeFornecimentoRepository,
                                     OrdemDeFornecimentoMapper ordemDeFornecimentoMapper,
                                     UserService userService,
                                     ArtefatoRepository artefatoRepository,
-                                    ArtefatoOrdemDeFornecimentoRepository artefatoOrdemDeFornecimentoRepository) {
+                                    ArtefatoOrdemDeFornecimentoRepository artefatoOrdemDeFornecimentoRepository,
+                                    ApplicationContext applicationContext) {
         this.ordemDeFornecimentoRepository = ordemDeFornecimentoRepository;
         this.ordemDeFornecimentoMapper = ordemDeFornecimentoMapper;
         this.userService = userService;
         this.artefatoRepository = artefatoRepository;
         this.artefatoOrdemDeFornecimentoRepository = artefatoOrdemDeFornecimentoRepository;
+        this.applicationContext = applicationContext;
     }
 
     private void validarOfPertencenteDeUsuario(Long idOrdemDeFornecimento) {
@@ -322,13 +326,8 @@ public class OrdemFornecimentoService {
     }
 
     public XSSFWorkbook produzirConteudoDaPlanilha(OrdemFornecimentoDTO ordemFornecimento) throws IOException {
-        String localDoArquivo =
-            Optional.of(System.getProperty("os.name"))
-                .filter(s -> s.toLowerCase().contains("windows"))
-                .map(s -> "src/main/resources/templates/OF-nova.xlsx")
-                .orElse("/app/resources/templates/OF-nova.xlsx");
 
-        InputStream planilha = new FileInputStream(localDoArquivo);
+        InputStream planilha = applicationContext.getResource("classpath:/templates/OF-nova.xlsx").getInputStream();
 
         XSSFWorkbook workbook = new XSSFWorkbook(planilha);
 

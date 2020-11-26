@@ -196,50 +196,14 @@ export class GerenciadorDeOfsUpdateComponent implements OnInit {
     if (artefato.artefatoDeTest) return false;
 
     switch (complexidade) {
-      case 'MUITO_BAIXA': {
-        return artefato.extensao!.includes('java');
-      }
       case 'BAIXA': {
-        return (
-          artefato.extensao!.includes('css') ||
-          artefato.extensao!.includes('scss') ||
-          artefato.extensao!.includes('ts') ||
-          artefato.extensao!.includes('js') ||
-          artefato.extensao!.includes('json') ||
-          artefato.extensao!.includes('xml') ||
-          artefato.extensao!.includes('yaml') ||
-          artefato.extensao!.includes('yml') ||
-          artefato.extensao!.includes('java')
-        );
+        return artefato.extensao!.includes('css') || artefato.extensao!.includes('scss');
       }
       case 'MEDIA': {
-        return (
-          artefato.extensao!.includes('css') ||
-          artefato.extensao!.includes('scss') ||
-          artefato.extensao!.includes('ts') ||
-          artefato.extensao!.includes('js') ||
-          artefato.extensao!.includes('json') ||
-          artefato.extensao!.includes('xml') ||
-          artefato.extensao!.includes('yaml') ||
-          artefato.extensao!.includes('yml') ||
-          artefato.extensao!.includes('java')
-        );
+        return artefato.extensao!.includes('css') || artefato.extensao!.includes('scss');
       }
       case 'ALTA': {
-        return (
-          artefato.extensao!.includes('css') ||
-          artefato.extensao!.includes('scss') ||
-          artefato.extensao!.includes('ts') ||
-          artefato.extensao!.includes('js') ||
-          artefato.extensao!.includes('json') ||
-          artefato.extensao!.includes('xml') ||
-          artefato.extensao!.includes('yaml') ||
-          artefato.extensao!.includes('yml') ||
-          artefato.extensao!.includes('java')
-        );
-      }
-      case 'MUITO_ALTA': {
-        return artefato.extensao!.includes('java');
+        return artefato.extensao!.includes('css') || artefato.extensao!.includes('scss');
       }
     }
     return false;
