@@ -246,8 +246,7 @@ export class GerenciadorDeOfsUpdateComponent implements OnInit {
         )
         .subscribe(() => {
           if (this.ordemFornecimento?.ordemDeFornecimento) {
-            // @ts-ignore
-            this.ordemFornecimento?.ordemDeFornecimento?.dataDeEntrega = moment2;
+            this.ordemFornecimento.ordemDeFornecimento.dataDeEntrega = moment('2020-11-26T16:41').utc();
           }
         });
     }
