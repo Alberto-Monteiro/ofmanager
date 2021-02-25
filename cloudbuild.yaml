@@ -49,7 +49,7 @@ steps:
 
     # Runs the Jib build.
     -   id: jib-build
-        name: gcr.io/cloud-builders/mvn:3.5.0-jdk-8
+        name: gcr.io/cloud-builders/mvn:latest
         args:
             - package
             - -Pprod
