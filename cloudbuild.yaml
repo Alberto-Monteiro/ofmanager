@@ -1,7 +1,7 @@
 substitutions:
     _IMAGE_NAME: ofmanager
 steps:
-    -   name: 'ubuntu'
+    -   name: gcr.io/cloud-builders/java/javac
         entrypoint: 'bash'
         args:
             - ./mvnw
