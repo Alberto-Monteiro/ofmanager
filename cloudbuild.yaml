@@ -3,6 +3,7 @@ substitutions:
 steps:
     -   name: gcr.io/cloud-builders/java/javac
         entrypoint: 'bash'
+        timeout: 1200s
         args:
             - ./mvnw
             - package
