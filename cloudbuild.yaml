@@ -3,7 +3,8 @@ substitutions:
     _IMAGE_NAME: ofmanager
 steps:
     # ------------------------------------------------------------------------------------------------------------------
-    -   name: 'gcr.io/cloud-builders/gsutil'
+    -   waitFor: [ '-' ]
+        name: 'gcr.io/cloud-builders/gsutil'
         id: 'Reading m2-cache'
         dir: '/root'
         entrypoint: 'bash'
@@ -14,7 +15,8 @@ steps:
         volumes:
             -   name: 'user.home'
                 path: '/root'
-    -   name: 'gcr.io/cloud-builders/gsutil'
+    -   waitFor: [ '-' ]
+        name: 'gcr.io/cloud-builders/gsutil'
         id: 'Reading jib-cache'
         dir: '/root'
         entrypoint: 'bash'
@@ -25,7 +27,6 @@ steps:
         volumes:
             -   name: 'user.home'
                 path: '/root'
-        waitFor: [ '-' ]
     # ------------------------------------------------------------------------------------------------------------------
     -   name: 'gcr.io/cloud-builders/java/javac'
         id: 'Building application'
@@ -34,9 +35,9 @@ steps:
         volumes:
             -   name: 'user.home'
                 path: '/root'
-        waitFor: [ '-' ]
     # ------------------------------------------------------------------------------------------------------------------
-    -   name: 'gcr.io/cloud-builders/gsutil'
+    -   waitFor: [ 'Building application' ]
+        name: 'gcr.io/cloud-builders/gsutil'
         id: 'writinging m2-cache'
         dir: '/root'
         entrypoint: 'bash'
@@ -47,7 +48,8 @@ steps:
         volumes:
             -   name: 'user.home'
                 path: '/root'
-    -   name: 'gcr.io/cloud-builders/gsutil'
+    -   waitFor: [ 'Building application' ]
+        name: 'gcr.io/cloud-builders/gsutil'
         id: 'writinging jib-cache'
         dir: '/root'
         entrypoint: 'bash'
