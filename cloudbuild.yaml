@@ -1,7 +1,54 @@
 substitutions:
+    _GCS_CACHE_BUCKET: maven_temp
     _IMAGE_NAME: ofmanager
 steps:
+    # ------------------------------------------------------------------------------------------------------------------
+    -   name: 'gcr.io/cloud-builders/gsutil'
+        dir: '/root'
+        entrypoint: 'bash'
+        args:
+            - '-c'
+            - |
+                (gsutil cp gs://${_GCS_CACHE_BUCKET}/m2-cache.tar.gz /tmp/m2-cache.tar.gz && tar -xzf /tmp/m2-cache.tar.gz) || echo 'm2-cache not found'
+        volumes:
+            -   name: 'user.home'
+                path: '/root'
+    -   name: 'gcr.io/cloud-builders/gsutil'
+        dir: '/root'
+        entrypoint: 'bash'
+        args:
+            - '-c'
+            - |
+                (gsutil cp gs://${_GCS_CACHE_BUCKET}/jib-cache.tar.gz /tmp/jib-cache.tar.gz && tar -xzf /tmp/jib-cache.tar.gz) || echo 'jib-cache not found'
+        volumes:
+            -   name: 'user.home'
+                path: '/root'
+        waitFor: [ '-' ]
+    # ------------------------------------------------------------------------------------------------------------------
     -   name: 'gcr.io/cloud-builders/java/javac'
         entrypoint: 'bash'
         args: [ './mvnw', 'package', '-Pprod', '-DskipTests', 'jib:build', '-Dimage=gcr.io/${PROJECT_ID}/${_IMAGE_NAME}' ]
+        waitFor: [ '-' ]
+    # ------------------------------------------------------------------------------------------------------------------
+    -   name: 'gcr.io/cloud-builders/gsutil'
+        dir: '/root'
+        entrypoint: 'bash'
+        args:
+            - '-c'
+            - |
+                tar -czf /tmp/m2-cache.tar.gz .m2 && gsutil cp /tmp/m2-cache.tar.gz gs://${_GCS_CACHE_BUCKET}/m2-cache.tar.gz
+        volumes:
+            -   name: 'user.home'
+                path: '/root'
+    -   name: 'gcr.io/cloud-builders/gsutil'
+        dir: '/root'
+        entrypoint: 'bash'
+        args:
+            - '-c'
+            - |
+                tar -czf /tmp/jib-cache.tar.gz .cache && gsutil cp /tmp/jib-cache.tar.gz gs://${_GCS_CACHE_BUCKET}/jib-cache.tar.gz
+        volumes:
+            -   name: 'user.home'
+                path: '/root'
+    # ------------------------------------------------------------------------------------------------------------------
 timeout: 1200s
