@@ -4,6 +4,7 @@ substitutions:
 steps:
     # ------------------------------------------------------------------------------------------------------------------
     -   name: 'gcr.io/cloud-builders/gsutil'
+        id: 'Reading m2-cache'
         dir: '/root'
         entrypoint: 'bash'
         args:
@@ -14,6 +15,7 @@ steps:
             -   name: 'user.home'
                 path: '/root'
     -   name: 'gcr.io/cloud-builders/gsutil'
+        id: 'Reading jib-cache'
         dir: '/root'
         entrypoint: 'bash'
         args:
@@ -26,11 +28,16 @@ steps:
         waitFor: [ '-' ]
     # ------------------------------------------------------------------------------------------------------------------
     -   name: 'gcr.io/cloud-builders/java/javac'
+        id: 'Building application'
         entrypoint: 'bash'
         args: [ './mvnw', 'package', '-Pprod', '-DskipTests', 'jib:build', '-Dimage=gcr.io/${PROJECT_ID}/${_IMAGE_NAME}' ]
+        volumes:
+            -   name: 'user.home'
+                path: '/root'
         waitFor: [ '-' ]
     # ------------------------------------------------------------------------------------------------------------------
     -   name: 'gcr.io/cloud-builders/gsutil'
+        id: 'writinging m2-cache'
         dir: '/root'
         entrypoint: 'bash'
         args:
@@ -41,6 +48,7 @@ steps:
             -   name: 'user.home'
                 path: '/root'
     -   name: 'gcr.io/cloud-builders/gsutil'
+        id: 'writinging jib-cache'
         dir: '/root'
         entrypoint: 'bash'
         args:
